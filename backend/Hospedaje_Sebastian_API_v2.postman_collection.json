@@ -1,0 +1,1281 @@
+{
+  "info": {
+    "_postman_id": "hospedaje-sebastian-v2",
+    "name": "🏨 Hospedaje Sebastian API - Complete",
+    "description": "# API REST para Sistema de Gestión Hotelera\n\n## 🚀 Características\n- ✅ Autenticación JWT automática\n- ✅ Tests automáticos en cada request\n- ✅ Variables de entorno configurables\n- ✅ Documentación completa\n- ✅ Ejemplos de respuestas\n\n## 📋 Uso\n1. Importa el entorno `Hospedaje_Sebastian_Environment.json`\n2. Ejecuta **Login** para obtener token automáticamente\n3. Los demás requests usarán el token guardado\n4. Revisa los tests después de cada request\n\n## 🔗 Variables\n- `{{baseUrl}}` = http://localhost:3000/api\n- `{{authToken}}` = Se guarda automáticamente tras login\n- `{{userId}}` = ID del usuario autenticado\n- `{{reservaId}}` = ID de última reserva creada\n\n---\n**Versión:** 2.0.0 | **Fecha:** 2026-02-26",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// 🔍 Pre-request global script",
+          "console.log('🚀 Ejecutando request a:', pm.request.url.toString());",
+          "",
+          "// Verificar si hay token guardado",
+          "const token = pm.environment.get('authToken');",
+          "if (!token && !pm.request.url.toString().includes('/auth/')) {",
+          "    console.warn('⚠️ No hay token de autenticación. Ejecuta Login primero.');",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// ✅ Test global script",
+          "pm.test('✅ Status code válido (2xx o 3xx)', function () {",
+          "    pm.expect(pm.response.code).to.be.within(200, 399);",
+          "});",
+          "",
+          "pm.test('⏱️ Response time razonable (< 2000ms)', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "💚 Health Check",
+      "description": "Endpoints para verificar el estado del servidor",
+      "item": [
+        {
+          "name": "👋 Welcome",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Respuesta contiene mensaje de bienvenida', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test('📝 Content-Type es JSON', function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Endpoint de bienvenida de la API"
+          },
+          "response": []
+        },
+        {
+          "name": "❤️ Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Status es healthy', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('healthy');",
+                  "});",
+                  "",
+                  "pm.test('🕒 Timestamp presente', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('timestamp');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Verifica que el servidor esté funcionando correctamente"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Autenticación",
+      "description": "Endpoints de registro, login y recuperación de contraseña",
+      "item": [
+        {
+          "name": "📝 Registro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.test('✅ Usuario registrado correctamente', function () {",
+                  "        const response = pm.response.json();",
+                  "        pm.expect(response).to.have.property('token');",
+                  "        pm.expect(response).to.have.property('user');",
+                  "    });",
+                  "    ",
+                  "    pm.test('💾 Token guardado en variable', function () {",
+                  "        const response = pm.response.json();",
+                  "        pm.environment.set('authToken', response.token);",
+                  "        pm.environment.set('userId', response.user.id);",
+                  "        pm.expect(pm.environment.get('authToken')).to.not.be.undefined;",
+                  "    });",
+                  "    ",
+                  "    console.log('🎉 Usuario registrado:', pm.response.json().user.email);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Password123!\",\n  \"nombre\": \"{{$randomFirstName}}\",\n  \"apellido\": \"{{$randomLastName}}\",\n  \"telefono\": \"+34 {{$randomPhoneNumber}}\",\n  \"cedulaIdentidad\": \"{{$randomInt}}A\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registro",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "registro"]
+            },
+            "description": "Registra un nuevo usuario en el sistema. Retorna token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "🔑 Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Login exitoso', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('token');",
+                  "    pm.expect(response).to.have.property('user');",
+                  "});",
+                  "",
+                  "pm.test('💾 Token guardado automáticamente', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('authToken', response.token);",
+                  "    pm.environment.set('userId', response.user.id);",
+                  "    pm.environment.set('userEmail', response.user.email);",
+                  "    pm.expect(pm.environment.get('authToken')).to.not.be.undefined;",
+                  "});",
+                  "",
+                  "pm.test('👤 Datos de usuario presentes', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.user).to.have.property('id');",
+                  "    pm.expect(response.user).to.have.property('email');",
+                  "    pm.expect(response.user).to.have.property('nombre');",
+                  "});",
+                  "",
+                  "console.log('🎉 Login exitoso:', pm.response.json().user.email);",
+                  "console.log('🔑 Token guardado en variable authToken');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hotel.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Inicia sesión con email y contraseña. Guarda automáticamente el token JWT en las variables."
+          },
+          "response": []
+        },
+        {
+          "name": "🔓 Solicitar Recuperación Contraseña",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Email de recuperación enviado', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('message');",
+                  "});",
+                  "",
+                  "console.log('📧 Email de recuperación enviado');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "Solicita un link de recuperación de contraseña por email"
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Validar Token Reset",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Token válido', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.valid).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/validate-reset-token/:token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "validate-reset-token", ":token"],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "tu_token_aqui"
+                }
+              ]
+            },
+            "description": "Valida que un token de recuperación sea válido"
+          },
+          "response": []
+        },
+        {
+          "name": "🔄 Resetear Contraseña",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Contraseña actualizada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('message');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"tu_token_de_recuperacion\",\n  \"newPassword\": \"NuevaPassword123!\",\n  \"confirmPassword\": \"NuevaPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
+            },
+            "description": "Restablece la contraseña usando el token de recuperación"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🛏️ Habitaciones",
+      "description": "Gestión de habitaciones del hotel",
+      "item": [
+        {
+          "name": "📋 Obtener Todas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Lista de habitaciones recibida', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('🏨 Habitaciones tienen estructura correcta', function () {",
+                  "    const response = pm.response.json();",
+                  "    if (response.length > 0) {",
+                  "        const habitacion = response[0];",
+                  "        pm.expect(habitacion).to.have.property('id');",
+                  "        pm.expect(habitacion).to.have.property('numero');",
+                  "        pm.expect(habitacion).to.have.property('tipo');",
+                  "        pm.expect(habitacion).to.have.property('precioNoche');",
+                  "    }",
+                  "});",
+                  "",
+                  "console.log('📊 Total de habitaciones:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones"]
+            },
+            "description": "Obtiene la lista completa de habitaciones"
+          },
+          "response": []
+        },
+        {
+          "name": "🔍 Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Habitación encontrada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Obtiene los detalles de una habitación específica"
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Obtener Disponibles",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Lista de disponibles recibida', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('🟢 Todas están disponibles', function () {",
+                  "    const response = pm.response.json();",
+                  "    response.forEach(habitacion => {",
+                  "        pm.expect(habitacion.estado).to.eql('DISPONIBLE');",
+                  "    });",
+                  "});",
+                  "",
+                  "console.log('🟢 Habitaciones disponibles:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones/disponibles",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones", "disponibles"]
+            },
+            "description": "Obtiene solo las habitaciones actualmente disponibles"
+          },
+          "response": []
+        },
+        {
+          "name": "➕ Crear Habitación",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Habitación creada', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.environment.set('habitacionId', response.id);",
+                  "});",
+                  "",
+                  "console.log('🎉 Habitación creada con ID:', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"{{$randomInt}}\",\n  \"tipo\": \"DOBLE\",\n  \"capacidad\": 2,\n  \"precioNoche\": {{$randomPrice}},\n  \"descripcion\": \"Habitación doble con vista panorámica\",\n  \"servicios\": [\"WiFi\", \"TV\", \"Aire acondicionado\", \"Minibar\"],\n  \"climatizacion\": true,\n  \"television\": true,\n  \"wifi\": true,\n  \"bano\": true,\n  \"minibar\": true,\n  \"imagen\": \"https://picsum.photos/800/600?random={{$randomInt}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones"]
+            },
+            "description": "Crea una nueva habitación (requiere autenticación admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "✏️ Actualizar Habitación",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Habitación actualizada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"precioNoche\": 75.00,\n  \"descripcion\": \"Habitación doble renovada con vista al mar\",\n  \"servicios\": [\"WiFi\", \"TV\", \"Aire acondicionado\", \"Minibar\", \"Balcón\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{habitacionId}}"
+                }
+              ]
+            },
+            "description": "Actualiza los datos de una habitación existente"
+          },
+          "response": []
+        },
+        {
+          "name": "🗑️ Eliminar Habitación",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Habitación eliminada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habitaciones/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["habitaciones", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "999"
+                }
+              ]
+            },
+            "description": "Elimina una habitación (requiere autenticación admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📅 Reservas",
+      "description": "Gestión de reservas de habitaciones",
+      "item": [
+        {
+          "name": "📋 Obtener Todas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Lista de reservas recibida', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "console.log('📊 Total de reservas:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservas",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas"]
+            },
+            "description": "Obtiene todas las reservas del sistema"
+          },
+          "response": []
+        },
+        {
+          "name": "👤 Mis Reservas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Mis reservas obtenidas', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "console.log('📊 Mis reservas:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservas/usuario/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", "usuario", "{{userId}}"]
+            },
+            "description": "Obtiene las reservas del usuario autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "🔍 Buscar por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Reserva encontrada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('codigoConfirmacion');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{reservaId}}"
+                }
+              ]
+            },
+            "description": "Obtiene detalles de una reserva específica"
+          },
+          "response": []
+        },
+        {
+          "name": "➕ Crear Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Reserva creada exitosamente', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('codigoConfirmacion');",
+                  "});",
+                  "",
+                  "pm.test('💾 ID de reserva guardado', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('reservaId', response.id);",
+                  "    pm.environment.set('codigoConfirmacion', response.codigoConfirmacion);",
+                  "    pm.expect(pm.environment.get('reservaId')).to.not.be.undefined;",
+                  "});",
+                  "",
+                  "pm.test('🎫 Código de confirmación generado', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.codigoConfirmacion).to.match(/^[A-Z0-9]{8}$/);",
+                  "});",
+                  "",
+                  "console.log('🎉 Reserva creada con código:', pm.response.json().codigoConfirmacion);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Calcular fechas para la reserva",
+                  "const hoy = new Date();",
+                  "const ingreso = new Date(hoy);",
+                  "ingreso.setDate(hoy.getDate() + 7); // 7 días desde hoy",
+                  "",
+                  "const salida = new Date(ingreso);",
+                  "salida.setDate(ingreso.getDate() + 3); // Estancia de 3 días",
+                  "",
+                  "pm.environment.set('fechaIngreso', ingreso.toISOString().split('T')[0]);",
+                  "pm.environment.set('fechaSalida', salida.toISOString().split('T')[0]);",
+                  "",
+                  "console.log('📅 Fechas calculadas:');",
+                  "console.log('  Ingreso:', pm.environment.get('fechaIngreso'));",
+                  "console.log('  Salida:', pm.environment.get('fechaSalida'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"{{userId}}\",\n  \"habitacionId\": \"1\",\n  \"fechaIngreso\": \"{{fechaIngreso}}\",\n  \"fechaSalida\": \"{{fechaSalida}}\",\n  \"huespedes\": 2,\n  \"nombreHuesped\": \"{{$randomFullName}}\",\n  \"telefonoContacto\": \"+34 {{$randomPhoneNumber}}\",\n  \"observaciones\": \"Llegada tardía, después de las 22:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reservas",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas"]
+            },
+            "description": "Crea una nueva reserva. El script pre-request calcula automáticamente las fechas."
+          },
+          "response": []
+        },
+        {
+          "name": "✏️ Actualizar Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Reserva actualizada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"huespedes\": 3,\n  \"observaciones\": \"Requiere cuna para bebé\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reservas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{reservaId}}"
+                }
+              ]
+            },
+            "description": "Actualiza los datos de una reserva existente"
+          },
+          "response": []
+        },
+        {
+          "name": "❌ Cancelar Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Reserva cancelada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.estado).to.eql('CANCELADA');",
+                  "});",
+                  "",
+                  "console.log('❌ Reserva cancelada');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservas/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{reservaId}}"
+                }
+              ]
+            },
+            "description": "Cancela una reserva existente"
+          },
+          "response": []
+        },
+        {
+          "name": "🔍 Buscar por Código",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Reserva encontrada por código', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('codigoConfirmacion');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservas/codigo/:codigo",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", "codigo", ":codigo"],
+              "variable": [
+                {
+                  "key": "codigo",
+                  "value": "{{codigoConfirmacion}}"
+                }
+              ]
+            },
+            "description": "Busca una reserva por su código de confirmación"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👥 Usuarios",
+      "description": "Gestión de usuarios del sistema",
+      "item": [
+        {
+          "name": "👤 Mi Perfil",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Perfil obtenido', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('email');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/perfil",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "perfil"]
+            },
+            "description": "Obtiene el perfil del usuario autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "✏️ Actualizar Perfil",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Perfil actualizado', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"{{$randomFirstName}}\",\n  \"apellido\": \"{{$randomLastName}}\",\n  \"telefono\": \"+34 {{$randomPhoneNumber}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/perfil",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "perfil"]
+            },
+            "description": "Actualiza los datos del perfil del usuario"
+          },
+          "response": []
+        },
+        {
+          "name": "🔒 Cambiar Contraseña",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Contraseña cambiada', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"passwordActual\": \"admin123\",\n  \"passwordNueva\": \"NewPassword123!\",\n  \"confirmarPassword\": \"NewPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/cambiar-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "cambiar-password"]
+            },
+            "description": "Cambia la contraseña del usuario autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "📋 Listar Todos (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Lista de usuarios obtenida', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "console.log('👥 Total de usuarios:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            },
+            "description": "Obtiene todos los usuarios (requiere rol admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💳 Pagos",
+      "description": "Gestión de pagos y métodos de pago",
+      "item": [
+        {
+          "name": "💰 Procesar Pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Pago procesado', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('estado');",
+                  "    pm.environment.set('pagoId', response.id);",
+                  "});",
+                  "",
+                  "pm.test('✅ Estado es COMPLETADO', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.estado).to.eql('COMPLETADO');",
+                  "});",
+                  "",
+                  "console.log('💰 Pago procesado con ID:', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservaId\": \"{{reservaId}}\",\n  \"monto\": 150.00,\n  \"metodoPago\": \"TARJETA\",\n  \"datosMetodoPago\": {\n    \"numeroTarjeta\": \"4532123456789012\",\n    \"nombreTitular\": \"{{$randomFullName}}\",\n    \"fechaExpiracion\": \"12/28\",\n    \"cvv\": \"123\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pagos",
+              "host": ["{{baseUrl}}"],
+              "path": ["pagos"]
+            },
+            "description": "Procesa un pago para una reserva"
+          },
+          "response": []
+        },
+        {
+          "name": "🔍 Consultar Pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Pago encontrado', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('monto');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pagos/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["pagos", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{pagoId}}"
+                }
+              ]
+            },
+            "description": "Consulta los detalles de un pago"
+          },
+          "response": []
+        },
+        {
+          "name": "📋 Pagos de Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Pagos obtenidos', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pagos/reserva/:reservaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["pagos", "reserva", ":reservaId"],
+              "variable": [
+                {
+                  "key": "reservaId",
+                  "value": "{{reservaId}}"
+                }
+              ]
+            },
+            "description": "Obtiene todos los pagos de una reserva"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💬 Chat Soporte",
+      "description": "Sistema de mensajería y soporte",
+      "item": [
+        {
+          "name": "📨 Enviar Mensaje",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Mensaje enviado', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.environment.set('mensajeId', response.id);",
+                  "});",
+                  "",
+                  "console.log('💬 Mensaje enviado con ID:', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mensaje\": \"Hola, necesito ayuda con mi reserva\",\n  \"tipo\": \"CONSULTA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat/mensajes",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat", "mensajes"]
+            },
+            "description": "Envía un mensaje al chat de soporte"
+          },
+          "response": []
+        },
+        {
+          "name": "📬 Mis Mensajes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Mensajes obtenidos', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "",
+                  "console.log('📬 Total de mensajes:', pm.response.json().length);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chat/mensajes",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat", "mensajes"]
+            },
+            "description": "Obtiene los mensajes del usuario autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "✅ Marcar como Leído",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('✅ Mensaje marcado como leído', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chat/mensajes/:id/leer",
+              "host": ["{{baseUrl}}"],
+              "path": ["chat", "mensajes", ":id", "leer"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{mensajeId}}"
+                }
+              ]
+            },
+            "description": "Marca un mensaje como leído"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reservaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "habitacionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pagoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "codigoConfirmacion",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

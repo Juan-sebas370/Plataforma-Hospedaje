@@ -1,0 +1,755 @@
+﻿.habitaciones-container {
+  min-height: 100vh;
+  padding: 2rem 0;
+  background: linear-gradient(to bottom, #F8F4EE 0%, #E8DCCB 100%);
+}
+
+/* Header */
+.habitaciones-header {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.habitaciones-header h1 {
+  padding: 2%;
+  /*font-size: 3rem;*/
+  margin-bottom: - 1rem;
+  animation: fadeInDown 0.8s ease;
+}
+
+.habitaciones-header p {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* Filtros */
+.filtros {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 2rem 2rem;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 0.8rem 2rem;
+  border: 2px solid #0E5A9C;
+  background: white;
+  color: #0E5A9C;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.filtro-btn:hover,
+.filtro-btn.active {
+  background: #0E5A9C;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 90, 156, 0.3);
+}
+
+/* Grid de Habitaciones */
+.habitaciones-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+/* Card de Habitación */
+.habitacion-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+  animation: fadeInUp 0.6s ease;
+}
+
+.habitacion-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+.habitacion-card.destacada {
+  border: 3px solid #0E5A9C;
+  position: relative;
+}
+
+/* Imagen de Habitación */
+.habitacion-imagen {
+  height: 250px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-color: #E8DCCB;
+}
+
+.habitacion-imagen.individual {
+  background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+}
+
+.habitacion-imagen.doble {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.habitacion-imagen.suite {
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+}
+
+.habitacion-imagen.familiar {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.habitacion-imagen.triple {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.habitacion-imagen.economica {
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255,255,255,0.95);
+  color: #333;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.badge.popular {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.badge.premium {
+  background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  color: white;
+}
+
+.badge.oferta {
+  background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Precio Tag */
+.precio-tag {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* Info de Habitación */
+.habitacion-info {
+  padding: 2rem;
+}
+
+.habitacion-info h3 {
+  color: #2B2B2B;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.descripcion {
+  color: #7A7A7A;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Características */
+.caracteristicas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.carac-item {
+  background: #F8F4EE;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2B2B2B;
+  text-align: center;
+}
+
+/* Amenidades */
+.amenidades {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.amenidades li {
+  padding: 0.5rem 0;
+  color: #27ae60;
+  font-weight: 500;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.amenidades li:last-child {
+  border-bottom: none;
+}
+
+/* Botón Reservar */
+.btn-reservar {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reservar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(14, 90, 156, 0.4);
+}
+
+/* Información Adicional */
+.info-adicional {
+  max-width: 1400px;
+  margin: 3rem auto 0;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.info-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.info-card h3 {
+  color: #2B2B2B;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.info-card p {
+  color: #7A7A7A;
+  line-height: 1.8;
+}
+
+/* Búsqueda */
+.busqueda-section {
+  padding: 0 2rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.busqueda-box {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.busqueda-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.busqueda-input:focus {
+  border-color: #0E5A9C;
+  box-shadow: 0 4px 20px rgba(14, 90, 156, 0.2);
+}
+
+.resultados-count {
+  display: block;
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Loading Spinner */
+.loading-container {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0E5A9C;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Error */
+.error-container {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #fff5f5;
+  border-radius: 10px;
+  margin: 2rem;
+  border: 1px solid #fed7d7;
+}
+
+.error-message {
+  color: #c53030;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-reintentar {
+  padding: 0.8rem 2rem;
+  background: #0E5A9C;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reintentar:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+}
+
+/* No Resultados */
+.no-resultados {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.no-resultados h3 {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.no-resultados p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-limpiar {
+  padding: 0.8rem 2rem;
+  background: #0E5A9C;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-limpiar:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+}
+
+/* Animaciones */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Media Queries - Comprehensive Breakpoint System */
+
+/* Extra Large Desktops (min-width: 1201px) */
+@media (min-width: 1201px) {
+  .habitaciones-header {
+    padding: 4rem 3rem;
+  }
+
+  .habitaciones-header h1 {
+    font-size: 3rem;
+  }
+
+  .habitaciones-header p {
+    font-size: 1.3rem;
+  }
+
+  .habitaciones-grid {
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
+    padding: 0 2rem 3rem;
+  }
+
+  .filtro-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+
+  .habitacion-info {
+    padding: 2.5rem;
+  }
+}
+
+/* Large Desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .habitaciones-header h1 {
+    font-size: 2.8rem;
+  }
+
+  .habitaciones-header p {
+    font-size: 1.2rem;
+  }
+
+  .habitaciones-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.25rem;
+  }
+}
+
+/* Medium Desktops (min-width: 1025px) and (max-width: 1200px) */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .habitaciones-header {
+    padding: 3.5rem 2.5rem;
+  }
+
+  .filtros {
+    padding: 0 2rem 2rem;
+  }
+
+  .habitacion-info {
+    padding: 2.25rem;
+  }
+}
+
+/* Small Desktops & Large Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .habitaciones-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .habitaciones-header p {
+    font-size: 1.15rem;
+  }
+
+  .habitaciones-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 0 1.5rem 2.5rem;
+  }
+
+  .filtros {
+    padding: 0 1.5rem 1.75rem;
+  }
+
+  .filtro-btn {
+    padding: 0.7rem 1.75rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablets & Above (min-width: 769px) and (max-width: 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .habitaciones-header {
+    padding: 3rem 2rem;
+  }
+
+  .busqueda-section {
+    padding: 0 1.5rem 1.75rem;
+  }
+
+  .habitacion-info {
+    padding: 2rem;
+  }
+
+  .caracteristicas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .habitaciones-header {
+    padding: 2.5rem 2rem;
+  }
+
+  .habitaciones-header h1 {
+    font-size: 2rem;
+  }
+  
+  .habitaciones-header p {
+    font-size: 1rem;
+  }
+  
+  .busqueda-section {
+    padding: 0 1rem 1.5rem;
+  }
+  
+  .busqueda-input {
+    font-size: 1rem;
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .habitaciones-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem 2rem;
+  }
+  
+  .caracteristicas {
+    grid-template-columns: 1fr;
+  }
+  
+  .filtros {
+    padding: 0 1rem 2rem;
+  }
+  
+  .filtro-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .habitacion-info h3 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Large Mobile & Small Tablets (min-width: 481px) and (max-width: 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .habitaciones-container {
+    padding: 2rem 0;
+  }
+
+  .habitaciones-header {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .habitaciones-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .habitacion-imagen {
+    height: 220px;
+  }
+
+  .caracteristicas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile Landscape (max-width: 480px) */
+@media (max-width: 480px) {
+  .habitaciones-container {
+    padding: 1.5rem 0;
+  }
+
+  .habitaciones-header {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .habitaciones-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .habitaciones-header p {
+    font-size: 0.95rem;
+  }
+
+  .filtros {
+    padding: 0 0.75rem 1.5rem;
+  }
+
+  .filtro-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .habitacion-imagen {
+    height: 200px;
+  }
+  
+  .habitacion-info {
+    padding: 1.5rem;
+  }
+
+  .habitacion-info h3 {
+    font-size: 1.2rem;
+  }
+
+  .descripcion {
+    font-size: 0.9rem;
+  }
+
+  .caracteristicas {
+    gap: 0.6rem;
+  }
+
+  .carac-item {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .info-adicional {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  .habitaciones-grid {
+    padding: 0 0.75rem 1.5rem;
+    gap: 1.5rem;
+  }
+}
+
+/* Extra Small Mobile (max-width: 320px) */
+@media (max-width: 320px) {
+  .habitaciones-container {
+    padding: 1rem 0;
+  }
+
+  .habitaciones-header {
+    padding: 1.5rem 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .habitaciones-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .habitaciones-header p {
+    font-size: 0.85rem;
+  }
+
+  .filtros {
+    padding: 0 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .filtro-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .habitaciones-grid {
+    padding: 0 0.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .habitacion-imagen {
+    height: 150px;
+  }
+
+  .badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    top: 10px;
+    left: 10px;
+  }
+
+  .precio-tag {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .habitacion-info {
+    padding: 1rem;
+  }
+
+  .habitacion-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .descripcion {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .caracteristicas {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .carac-item {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}

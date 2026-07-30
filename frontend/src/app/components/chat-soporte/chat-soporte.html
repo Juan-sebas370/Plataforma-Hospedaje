@@ -1,0 +1,98 @@
+﻿<div class="chat-soporte-container">
+  <!-- Header del Chat -->
+  <div class="chat-header">
+    <div class="info-agente">
+      <div class="avatar-agente"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="datos-agente">
+        <h3>{{ agenteSoporte }}</h3>
+        <p class="estado" [style.color]="getColorEstado()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 10 10" style="vertical-align:middle;margin-right:4px"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>{{ getEstadoConexion() }}
+        </p>
+      </div>
+    </div>
+    <div class="info-tiempos">
+      <p class="tiempo-respuesta"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{{ tiempoRespuesta }}</p>
+    </div>
+    <button class="btn-cerrar" (click)="cerrarChat()" title="Cerrar Chat"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+
+  <!-- Área de Mensajes -->
+  <div class="mensajes-container">
+    <div 
+      class="mensaje" 
+      *ngFor="let msg of mensajes"
+      [class.usuario]="msg.autor === 'usuario'"
+      [class.soporte]="msg.autor === 'soporte'">
+      
+      <div class="mensaje-avatar" *ngIf="msg.autor === 'soporte'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      
+      <div class="mensaje-contenido">
+        <p class="mensaje-texto">{{ msg.texto }}</p>
+        <span class="mensaje-hora">{{ formatearHora(msg.timestamp) }}</span>
+      </div>
+    </div>
+
+    <!-- Indicador de escritura -->
+    <div class="mensaje soporte" *ngIf="cargando">
+      <div class="mensaje-avatar"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="mensaje-contenido">
+        <div class="escritura-indicador">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Temas Rápidos (si es el primer mensaje) -->
+  <div class="temas-rapidos" *ngIf="mensajes.length === 1">
+    <p class="temas-titulo">Selecciona un tema o escribe tu pregunta:</p>
+    <div class="tema-buttons">
+      <button 
+        class="tema-btn"
+        *ngFor="let tema of temasRapidos"
+        (click)="enviarTemaRapido(tema)">
+        {{ tema }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Área de Entrada -->
+  <div class="chat-input-area">
+    <div class="input-wrapper">
+      <textarea
+        [(ngModel)]="nuevoMensaje"
+        (keyup)="onKeyUp($event)"
+        placeholder="Escribe tu mensaje aquí... (Enter para enviar, Shift+Enter para nueva línea)"
+        class="input-mensaje"
+        rows="3"
+        [disabled]="!conectado">
+      </textarea>
+      <button 
+        class="btn-enviar"
+        (click)="enviarMensaje()"
+        [disabled]="!nuevoMensaje.trim() || cargando || !conectado">
+        <span *ngIf="!cargando"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Enviar</span>
+        <span *ngIf="cargando">Enviando...</span>
+      </button>
+    </div>
+    <small class="info-input">
+      <span *ngIf="!conectado" class="desconectado">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Desconectado. Intenta reconectarte.
+      </span>
+      <span *ngIf="conectado" class="conectado">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Conectado
+      </span>
+    </small>
+  </div>
+
+  <!-- Pie de página del Chat -->
+  <div class="chat-footer">
+    <p>
+      Este chat está disponible <strong>24/7</strong>. Si necesitas documentación adicional,
+      <a href="mailto:soporte@hotelsebastion.com">envía un email</a>.
+    </p>
+  </div>
+</div>

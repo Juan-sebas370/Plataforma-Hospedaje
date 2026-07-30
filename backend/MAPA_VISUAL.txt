@@ -1,0 +1,286 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║     🏨 HOSPEDAJE SEBASTIAN - INFRAESTRUCTURA DE TESTING POSTMAN COMPLETA    ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+                            MAPA VISUAL COMPLETO
+
+
+                              ┌─────────────────┐
+                              │   POSTMAN APP   │
+                              │   (Desktop)     │
+                              └────────┬────────┘
+                                       │
+                    ┌──────────────────┼──────────────────┐
+                    │                  │                  │
+            ┌───────▼──────┐   ┌──────▼────────┐   ┌────▼────────┐
+            │  COLECCIÓN   │   │   AMBIENTES   │   │  GLOBALES   │
+            │   (1 file)   │   │  (4 files)    │   │  (included) │
+            └───────┬──────┘   └──────┬────────┘   └────┬────────┘
+                    │                   │                │
+                    │          ┌────────┼────────┐      │
+                    │          │        │        │      │
+            ┌──────▼──────┐  ┌─┴─┐  ┌──┴──┐  ┌──┴──┐  │
+            │ 30 endpoints│  │🟢 │  │🟡  │  │🔴  │  │
+            │ 80+ tests   │  │LCL│  │STG │  │PRD │  │
+            │ 6 folders   │  └───┘  └─────┘  └─────┘  │
+            └─────────────┘                           │
+                                                      │
+                                    ┌─────────────────┘
+                                    │
+                        ┌───────────▼────────────┐
+                        │   12 GLOBAL VARIABLES  │
+                        │  (appName, version...) │
+                        └────────────────────────┘
+
+
+
+
+              ┌──────────── EJECUCIÓN / AUTOMATIZACIÓN ───────────────┐
+              │                                                       │
+              │   3 FORMAS DIFERENTES DE EJECUTAR TESTS             │
+              │                                                       │
+     ┌────────▼────────┐  ┌────────────────┐  ┌────────────────┐  │
+     │  POSTMAN GUI    │  │  BATCH SCRIPT  │  │   BASH SCRIPT  │  │
+     │  (Visual)       │  │  (Windows)     │  │  (Linux/Mac)   │  │
+     │                 │  │                │  │                │  │
+     │  • Run button   │  │  run-tests.bat │  │  run-tests.sh  │  │
+     │  • See live     │  │  Auto-report   │  │  Auto-report   │  │
+     │  • Interactive  │  │  Easy to use   │  │  Easy to use   │  │
+     └─────────────────┘  └────────────────┘  └────────────────┘  │
+              │                                                       │
+              │                    ┌──────────────┐                 │
+              │                    │  NODE.JS     │                 │
+              │                    │  run-tests.js│                 │
+              │                    │  (Avanzado)  │                 │
+              │                    │  Multi-env   │                 │
+              │                    │  HTML+JSON   │                 │
+              │                    └──────────────┘                 │
+              │                                                       │
+              └───────────────────────────────────────────────────────┘
+                                   │
+                    ┌──────────────▼──────────────┐
+                    │   REPORTES GENERADOS        │
+                    │                             │
+                    │  ✅ HTML (Visual report)    │
+                    │  ✅ JSON (Datos)            │
+                    │  ✅ CSV  (Para Excel)       │
+                    │  ✅ Dashboard (Consolidado) │
+                    │                             │
+                    └─────────────────────────────┘
+
+
+
+
+                    ┌──────── FLUJO DE DATOS ────────┐
+                    │                                │
+                    │  LOGIN                         │
+                    │    ↓                           │
+                    │  [Get Token]                   │
+                    │    ↓                           │
+                    │  [Save to authToken]           │
+                    │    ↓                           │
+                    │  [Use in ALL other endpoints]  │
+                    │    ↓                           │
+                    │  [Automatic token refresh]     │
+                    │    ↓                           │
+                    │  ✅ Authenticated requests     │
+                    │                                │
+                    └────────────────────────────────┘
+
+
+
+
+            📚 DOCUMENTACIÓN DISPONIBLE (Elige cualquiera para empezar)
+
+     ┌────────────────────────────────────────────────────────────┐
+     │                                                            │
+     │  📖 INICIO_POSTMAN.md                                     │
+     │     └─ Centro de control (¡EMPIEZA AQUÍ!)               │
+     │                                                            │
+     │  📖 POSTMAN_SUMMARY.md                                    │
+     │     └─ Resumen visual (5 min)                            │
+     │                                                            │
+     │  📖 POSTMAN_GUIDE.md                                      │
+     │     └─ Guía básica (10 min)                              │
+     │                                                            │
+     │  📖 POSTMAN_COMPLETE_GUIDE.md ⭐ RECOMENDADO              │
+     │     ├─ Part 1: Quick Start                               │
+     │     ├─ Part 2: Tests Automáticos                         │
+     │     ├─ Part 3: Ambientes Múltiples                       │
+     │     ├─ Part 4: Automatización Scripts                    │
+     │     ├─ Part 5: Generación de Reportes                    │
+     │     └─ Part 6: CI/CD Pipeline                            │
+     │                                                            │
+     │  📖 FILE_INDEX.md                                         │
+     │     └─ Índice detallado (Referencia)                     │
+     │                                                            │
+     │  📖 QUICK_REFERENCE.sh                                    │
+     │     └─ Cheat sheet rápido (3 min)                        │
+     │                                                            │
+     │  📖 SETUP_CHECKLIST.txt                                   │
+     │     └─ Checklist interactivo                             │
+     │                                                            │
+     └────────────────────────────────────────────────────────────┘
+
+
+
+
+              ⚙️ FLUJO DE CONFIGURACIÓN INICIAL
+
+     Paso 1: IMPORTAR                Paso 2: SELECCIONAR
+     ┌──────────────────┐            ┌──────────────────┐
+     │ Abre Postman     │            │ Selecciona       │
+     │ File → Import    │───────────▶│ Ambiente Local   │
+     │ Elige 5 .json    │            │                  │
+     └──────────────────┘            └─────────┬────────┘
+                                               │
+                                    Paso 3: PRUEBA
+                                    ┌──────────────────┐
+                                    │ GET /health      │
+                                    │ Click: "Send"    │
+                                    │ Espera 200 OK    │
+                                    └─────────┬────────┘
+                                               │
+                                  Paso 4: EJECUTA
+                                  ┌──────────────────┐
+                                  │ Right-click      │
+                                  │ "Run collection" │
+                                  │ Mira tests ✅    │
+                                  └──────────────────┘
+
+
+
+
+              API ENDPOINTS ORGANIZADOS EN 6 CARPETAS
+
+     ┌────────────────────────────────────────────────┐
+     │                    30 ENDPOINTS                │
+     ├────────────────────────────────────────────────┤
+     │                                                │
+     │  💚 HEALTH CHECK (2)                          │
+     │     • GET /health                             │
+     │     • GET /api/status                         │
+     │                                                │
+     │  🔐 AUTENTICACIÓN (5)                         │
+     │     • POST /auth/login      ← TOKEN SAVER     │
+     │     • POST /auth/register                     │
+     │     • POST /auth/refresh                      │
+     │     • POST /auth/logout                       │
+     │     • GET /auth/me                            │
+     │                                                │
+     │  🛏️  HABITACIONES (6)                          │
+     │     • GET /habitaciones                       │
+     │     • GET /habitaciones/:id                   │
+     │     • POST /habitaciones                      │
+     │     • PUT /habitaciones/:id                   │
+     │     • DELETE /habitaciones/:id                │
+     │     • GET /habitaciones/disponibles           │
+     │                                                │
+     │  📅 RESERVAS (7)                              │
+     │     • GET /reservas                           │
+     │     • GET /reservas/:id                       │
+     │     • POST /reservas        ← SAVER           │
+     │     • PUT /reservas/:id                       │
+     │     • DELETE /reservas/:id                    │
+     │     • GET /reservas/usuario/:userId           │
+     │     • POST /reservas/confirmar                │
+     │                                                │
+     │  👥 USUARIOS (4)                              │
+     │     • GET /usuarios                           │
+     │     • GET /usuarios/:id                       │
+     │     • PUT /usuarios/:id                       │
+     │     • DELETE /usuarios/:id                    │
+     │                                                │
+     │  💳 PAGOS (3)                                 │
+     │     • POST /pagos                             │
+     │     • GET /pagos/:id                          │
+     │     • PUT /pagos/:id/estado                   │
+     │                                                │
+     │  💬 CHAT SOPORTE (3)                          │
+     │     • GET /soporte/mensajes                   │
+     │     • POST /soporte/mensaje                   │
+     │     • GET /soporte/ticket/:id                 │
+     │                                                │
+     └────────────────────────────────────────────────┘
+
+
+
+
+         📊 ESTADÍSTICAS FINALES DE TU SETUP
+
+     ┌──────────────────────────────────────────────────┐
+     │                                                  │
+     │  Componente                  Cantidad  Status    │
+     │  ────────────────────────────────────────────    │
+     │  Archivos JSON                5        ✅        │
+     │  Scripts de ejecución         3        ✅        │
+     │  Documentación               7        ✅        │
+     │  Endpoints API               30       ✅        │
+     │  Tests automáticos           80+      ✅        │
+     │  Ambientes                    4        ✅        │
+     │  Variables por entorno       11       ✅        │
+     │  Variables globales          12       ✅        │
+     │  Líneas de documentación    3000+     ✅        │
+     │  Ejemplos de CI/CD            3        ✅        │
+     │  ────────────────────────────────────────────    │
+     │  TOTAL COMPLETADO            100%     ✨        │
+     │                                                  │
+     └──────────────────────────────────────────────────┘
+
+
+
+
+         🎯 PRÓXIMAS ACCIONES RECOMENDADAS
+
+     A CORTO PLAZO (Hoy - 30 min)
+     ┌──────────────────────────────────┐
+     │ 1. Lee INICIO_POSTMAN.md         │
+     │ 2. Lee POSTMAN_SUMMARY.md        │
+     │ 3. Importa colección en Postman  │
+     │ 4. Ejecuta Health Check          │
+     │ 5. Ejecuta Login                 │
+     │ 6. ¡Todos los tests disponibles! │
+     └──────────────────────────────────┘
+
+     A MEDIANO PLAZO (Esta semana)
+     ┌──────────────────────────────────┐
+     │ 1. Instala Newman                │
+     │ 2. Ejecuta scripts (bat/sh/js)   │
+     │ 3. Genera reportes               │
+     │ 4. Lee guía completa             │
+     │ 5. Configura staging/prod        │
+     └──────────────────────────────────┘
+
+     A LARGO PLAZO (Este mes)
+     ┌──────────────────────────────────┐
+     │ 1. Integra con CI/CD             │
+     │ 2. Activa monitoreo continuo     │
+     │ 3. Configura alertas             │
+     │ 4. Dashboard en tiempo real      │
+     │ 5. Análisis de rendimiento       │
+     └──────────────────────────────────┘
+
+
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    ✨ INFRAESTRUCTURA 100% COMPLETA ✨                      ║
+║                                                                              ║
+║              Tu suite de testing está lista para usarse ahora!              ║
+║                                                                              ║
+║                👉 PRÓXIMO PASO: Lee INICIO_POSTMAN.md                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+Archivo: MAPA_VISUAL.txt
+Versión: 2.0.0 
+Fecha: Febrero 2026
+Status: ✅ COMPLETADO CON ÉXITO
+
+Tu infraestructura Postman está lista! 🚀

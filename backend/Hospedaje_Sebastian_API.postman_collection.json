@@ -1,0 +1,251 @@
+{
+  "info": {
+    "_postman_id": "hospedaje-sebastian-collection",
+    "name": "🏨 Hospedaje Sebastian API - Complete",
+    "description": "# API REST para Sistema de Gestión Hotelera\n\n## 🚀 Características\n- Autenticación JWT automática\n- Tests automáticos en cada request\n- Variables de entorno configurables\n- Documentación completa\n\n## 📋 Uso\n1. Importa el entorno `Hospedaje_Sebastian_Environment.json`\n2. Ejecuta Login para obtener token automáticamente\n3. Los demás requests usarán el token guardado\n\n## 🔗 Base URL\n`{{baseUrl}}` = http://localhost:3000/api\n\n---\n**Versión:** 2.0.0 | **Fecha:** 2026-02-26",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request global script",
+          "console.log('🚀 Ejecutando request a:', pm.request.url.toString());",
+          "",
+          "// Verificar si hay token guardado",
+          "const token = pm.environment.get('authToken');",
+          "if (!token && !pm.request.url.toString().includes('/auth/')) {",
+          "    console.warn('⚠️ No hay token de autenticación. Ejecuta Login primero.');",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test global script",
+          "pm.test('✅ Status code válido (2xx o 3xx)', function () {",
+          "    pm.expect(pm.response.code).to.be.within(200, 399);",
+          "});",
+          "",
+          "pm.test('⏱️ Response time razonable (< 2000ms)', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", ""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\",\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Pérez\",\n  \"telefono\": \"+34 666 555 444\",\n  \"cedulaIdentidad\": \"12345678A\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/registro",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "registro"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Habitaciones",
+      "item": [
+        {
+          "name": "Obtener todas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/habitaciones",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "habitaciones"]
+            }
+          }
+        },
+        {
+          "name": "Crear habitación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"101\",\n  \"tipo\": \"DOBLE\",\n  \"capacidad\": 2,\n  \"precioNoche\": 50.0,\n  \"descripcion\": \"Habitación doble con vista al mar\",\n  \"servicios\": [\"WiFi\", \"TV\", \"Aire acondicionado\"],\n  \"climatizacion\": true,\n  \"television\": true,\n  \"wifi\": true,\n  \"bano\": true,\n  \"minibar\": true\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/habitaciones",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "habitaciones"]
+            }
+          }
+        },
+        {
+          "name": "Obtener disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/habitaciones/disponibles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "habitaciones", "disponibles"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservas",
+      "item": [
+        {
+          "name": "Obtener todas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/reservas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reservas"]
+            }
+          }
+        },
+        {
+          "name": "Crear reserva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": \"usuario123\",\n  \"habitacionId\": \"habitacion456\",\n  \"fechaIngreso\": \"2026-03-01\",\n  \"fechaSalida\": \"2026-03-05\",\n  \"huespedes\": 2,\n  \"nombreHuesped\": \"Juan Pérez\",\n  \"telefonoContacto\": \"+34 666 555 444\",\n  \"observaciones\": \"Requiere cuna para bebé\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/reservas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reservas"]
+            }
+          }
+        },
+        {
+          "name": "Obtener por usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/reservas/usuario/usuario123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reservas", "usuario", "usuario123"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

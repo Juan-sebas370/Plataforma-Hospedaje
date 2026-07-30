@@ -1,0 +1,198 @@
+﻿<div class="perfil-container">
+  <div class="perfil-header">
+    <h1>Mi Perfil</h1>
+    <p class="miembro-desde">Miembro desde {{ usuario?.createdAt | date: 'MMMM yyyy' }}</p>
+  </div>
+
+  <!-- Zona de Foto de Perfil -->
+  <div class="foto-seccion">
+    <div class="foto-container">
+      <img [src]="fotoPreview || usuario?.foto || 'assets/avatar-default.png'" 
+           alt="Foto de perfil"
+           class="foto-perfil">
+      <div class="foto-overlay" *ngIf="editando">
+        <label for="fotoInput" class="foto-cambiar">
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Cambiar foto</span>
+          <input 
+            type="file" 
+            id="fotoInput" 
+            accept="image/*"
+            (change)="onFotoSeleccionada($event)"
+            style="display: none;">
+        </label>
+      </div>
+    </div>
+    <div class="info-foto">
+      <h2>{{ usuario?.nombre }}</h2>
+      <p class="email">{{ usuario?.email }}</p>
+    </div>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Botones de edición -->
+  <div class="botones-accion" *ngIf="!editando">
+    <button class="btn btn-primary" (click)="habilitarEdicion()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editar Perfil
+    </button>
+    <button class="btn btn-secondary" (click)="irACambiarContrasena()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar Contraseña
+    </button>
+  </div>
+
+  <!-- Formulario de Edición -->
+  <form [formGroup]="perfilForm" class="formulario">
+    <div class="form-section">
+      <h3>Información Personal</h3>
+      
+      <div class="form-group">
+        <label for="nombre">Nombre Completo *</label>
+        <input 
+          type="text" 
+          id="nombre"
+          formControlName="nombre"
+          class="form-control"
+          [class.is-invalid]="submitted && f['nombre'].errors">
+        <div *ngIf="submitted && f['nombre'].errors" class="error-text">
+          <span *ngIf="f['nombre'].errors['required']">El nombre es requerido</span>
+          <span *ngIf="f['nombre'].errors['minlength']">Mínimo 3 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico *</label>
+        <input 
+          type="email" 
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.is-invalid]="submitted && f['email'].errors"
+          [disabled]="true">
+        <small class="form-text">El correo no puede ser modificado</small>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono *</label>
+        <input 
+          type="tel" 
+          id="telefono"
+          formControlName="telefono"
+          class="form-control"
+          [class.is-invalid]="submitted && f['telefono'].errors"
+          placeholder="+1 234 567 8900">
+        <div *ngIf="submitted && f['telefono'].errors" class="error-text">
+          <span *ngIf="f['telefono'].errors['required']">El teléfono es requerido</span>
+          <span *ngIf="f['telefono'].errors['pattern']">Formato de teléfono inválido</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            id="fechaNacimiento"
+            formControlName="fechaNacimiento"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="ciudad">Ciudad *</label>
+          <input 
+            type="text" 
+            id="ciudad"
+            formControlName="ciudad"
+            class="form-control"
+            [class.is-invalid]="submitted && f['ciudad'].errors">
+          <div *ngIf="submitted && f['ciudad'].errors" class="error-text">
+            <span *ngIf="f['ciudad'].errors['required']">La ciudad es requerida</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="pais">País *</label>
+          <input 
+            type="text" 
+            id="pais"
+            formControlName="pais"
+            class="form-control"
+            [class.is-invalid]="submitted && f['pais'].errors">
+          <div *ngIf="submitted && f['pais'].errors" class="error-text">
+            <span *ngIf="f['pais'].errors['required']">El país es requerido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input 
+          type="text" 
+          id="direccion"
+          formControlName="direccion"
+          class="form-control"
+          placeholder="Calle y número">
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Biografía</label>
+        <textarea 
+          id="bio"
+          formControlName="bio"
+          class="form-control"
+          rows="4"
+          placeholder="Cuéntanos un poco sobre ti..."
+          maxlength="500"></textarea>
+        <small class="form-text">
+          {{ perfilForm.get('bio')?.value?.length || 0 }}/500 caracteres
+        </small>
+      </div>
+    </div>
+
+    <!-- Botones de Guardado -->
+    <div class="botones-guardar" *ngIf="editando">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="cancelarEdicion()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-success"
+        (click)="guardarCambios()"
+        [disabled]="loading">
+        <span *ngIf="!loading"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>Guardar Cambios</span>
+        <span *ngIf="loading">Guardando...</span>
+      </button>
+    </div>
+  </form>
+
+  <!-- Sección de Estadísticas -->
+  <div class="estadisticas-seccion">
+    <h3>Mi Actividad</h3>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-numero">{{ usuario?.totalReservas || 0 }}</span>
+        <span class="stat-label">Reservas Totales</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-numero">{{ usuario?.puntosAcumulados || 0 }}</span>
+        <span class="stat-label">Puntos Acumulados</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-numero">{{ usuario?.totalGastado | currency }}</span>
+        <span class="stat-label">Total Gastado</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-numero">{{ usuario?.resenas || 0 }}</span>
+        <span class="stat-label">Reseñas Escritas</span>
+      </div>
+    </div>
+  </div>
+</div>

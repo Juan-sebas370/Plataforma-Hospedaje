@@ -1,0 +1,8 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Las páginas con hero de pantalla completa no necesitan padding-top */
+/* El navbar es fixed y se superpone al contenido */

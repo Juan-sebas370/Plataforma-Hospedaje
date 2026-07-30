@@ -1,0 +1,63 @@
+/* ══════════════════════════════════════════════
+   HOSPEDAJE SEBASTIAN — Design Tokens
+   ══════════════════════════════════════════════ */
+:root {
+  --primary:       #0E5A9C;   /* Azul colonial */
+  --primary-dark:  #0A3D6D;   /* Azul oscuro — hover / títulos */
+  --accent:        #D1902C;   /* Dorado — botones / acentos */
+  --warm:          #C97C26;   /* Naranja madera — detalles */
+  --surface:       #FFFFFF;   /* Blanco — tarjetas */
+  --surface-soft:  #F8F4EE;   /* Crema — fondos */
+  --border:        #E8DCCB;   /* Borde crema */
+  --text:          #2B2B2B;   /* Texto principal */
+  --text-muted:    #666666;   /* Texto secundario */
+  --muted:         #7A7A7A;   /* Texto suave */
+
+  /* Gradientes reutilizables */
+  --grad-primary:  linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
+  --grad-surface:  linear-gradient(180deg, #FFFDF9 0%, #F8F4EE 100%);
+  --grad-accent:   linear-gradient(90deg, #0A3D6D 0%, #0E5A9C 100%);
+}
+
+/* Reset y estilos globales */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button:focus {
+  outline: none;
+}
+
+@media (max-width: 320px) {
+  body {
+    font-size: 14px;
+  }
+}
