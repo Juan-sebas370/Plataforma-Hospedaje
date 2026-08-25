@@ -35,6 +35,7 @@ export class Habitaciones implements OnInit {
   vistaGrilla: boolean = true;
   habitacionSeleccionada: Habitacion | null = null;
   mostrarDetalle: boolean = false;
+  imagenActivaIdx: number = 0;
 
   // Opciones de servicios
   serviciosDisponibles = [
@@ -49,6 +50,149 @@ export class Habitaciones implements OnInit {
     'Caja fuerte',
   ];
 
+  pisoResumen = [
+    {
+      piso: 1,
+      titulo: 'PISO 1',
+      descripcion:
+        'En el piso 1 se encuentran 3 habitaciones: 101, 102 y 103. Tiene capacidad para 8 personas, 3 camas dobles y 1 camarote.',
+      habitaciones: 3,
+      capacidad: 8,
+      camasDobles: 3,
+      camarotes: 1,
+      detalles: [
+        {
+          nombre: 'Habitación 101',
+          descripcion:
+            'Cama doble, camarote, baño privado, capacidad para 4 personas.',
+        },
+        {
+          nombre: 'Habitación 102',
+          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 103.',
+        },
+        {
+          nombre: 'Habitación 103',
+          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 102.',
+        },
+      ],
+    },
+    {
+      piso: 2,
+      titulo: 'PISO 2',
+      descripcion:
+        'En el piso 2 se encuentran 3 habitaciones: 201, 202 y 203. Tiene capacidad para 8 personas, 2 camas dobles y 2 camarotes.',
+      habitaciones: 3,
+      capacidad: 8,
+      camasDobles: 2,
+      camarotes: 2,
+      detalles: [
+        {
+          nombre: 'Habitación 201',
+          descripcion:
+            'Cama doble, camarote, baño privado, capacidad para 4 personas.',
+        },
+        {
+          nombre: 'Habitación 202',
+          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 203.',
+        },
+        {
+          nombre: 'Habitación 203',
+          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 202.',
+        },
+      ],
+    },
+  ];
+
+  serviciosGenerales = [
+    'Agua caliente en cada baño',
+    'Lencería completa: toallas, almohadas, sábanas y cobijas',
+    'Cocina equipada para preparar comidas',
+    'WiFi disponible en todo el espacio',
+    'Sala de estar y televisor en la sala',
+  ];
+
+  mezanineInfo = {
+    titulo: 'Mezanine',
+    descripcion:
+      'Sala de juegos con varios juegos de mesa y mesa de ping pong para uso de huéspedes.',
+  };
+
+  reservaTipos = [
+    {
+      tipo: 'Reserva individual',
+      descripcion:
+        'Tarifa por habitación para ocupación individual o pareja. Ideal para viajes cortos y estadías personales.',
+      condiciones: 'Disponible todo el año.',
+      horario: '3pm a 12am',
+      tarifas: [
+        { temporada: 'Alta', valor: '85.000' },
+        { temporada: 'Media', valor: '75.000' },
+        { temporada: 'Baja', valor: '65.000' },
+      ],
+    },
+    {
+      tipo: 'Grupo familiar',
+      descripcion:
+        'Para mínimo 6 personas y máximo 8 personas. Ideal para familias y grupos de viaje.',
+      condiciones: 'Disponible todo el año.',
+      horario: '3pm a 12am',
+      tarifas: [
+        { temporada: 'Alta', valor: '71.000' },
+        { temporada: 'Media', valor: '61.000' },
+        { temporada: 'Baja', valor: '51.000' },
+      ],
+    },
+    {
+      tipo: 'Pasadía',
+      descripcion:
+        'Para cumpleaños y celebraciones. Incluye sala comedor, una habitación, baño social y salón de juegos en el mezanine.',
+      condiciones: 'Solo temporada baja. Capacidad mínima 10 personas y máxima 15 personas.',
+      horario: '10am a 8pm',
+      tarifas: [
+        { temporada: 'Baja', valor: '40.000 - 41.000' },
+      ],
+    },
+    {
+      tipo: 'Reuniones de grupo',
+      descripcion:
+        'Reuniones de trabajo para empresarios y grupos de trabajo. Espacio cómodo para sesiones profesionales.',
+      condiciones: 'Disponible en temporadas media y baja.',
+      horario: '8am a 6pm',
+      tarifas: [
+        { temporada: 'Media', valor: 'Valor según paquete' },
+        { temporada: 'Baja', valor: 'Valor según paquete' },
+      ],
+    },
+  ];
+
+  temporadas = [
+    {
+      tipo: 'Alta',
+      puntos: [
+        'Vacaciones: Dic 15 a Ene 15 y Jun 15 a Jul 15',
+        'Semana Santa: viernes antes de Domingo de Ramos a Domingo de Pascua',
+        'Semana de receso: primera semana de octubre (viernes anterior a domingo de receso)',
+      ],
+    },
+    {
+      tipo: 'Media',
+      puntos: ['Sábados, domingos y festivos'],
+    },
+    {
+      tipo: 'Baja',
+      puntos: [
+        'Lunes a viernes, excepto festivos y el día anterior a Domingo de Ramos',
+      ],
+    },
+  ];
+
+  horarios = [
+    { nombre: 'Pasadía', horario: '10am a 8pm' },
+    { nombre: 'Reuniones de trabajo', horario: '8am a 6pm' },
+    { nombre: 'Reserva individual', horario: '3pm a 12am' },
+    { nombre: 'Grupo familiar', horario: '3pm a 12am' },
+  ];
+
   constructor(
     private habitacionService: HabitacionService,
     private router: Router,
@@ -58,17 +202,26 @@ export class Habitaciones implements OnInit {
   }
 
   ngOnInit() {
+    this.limpiarFiltros();
+    this.usarDatosEjemplo();
     this.cargarHabitaciones();
   }
 
   cargarHabitaciones() {
-    this.cargando = true;
+    this.cargando = this.habitacionesFiltradas.length === 0;
     this.error = '';
     
     this.habitacionService.obtenerTodas().subscribe({
       next: (habitaciones) => {
-        this.habitaciones = habitaciones;
-        this.aplicarFiltros();
+        const datos = Array.isArray(habitaciones) ? habitaciones : [];
+
+        if (datos.length >= 6) {
+          this.habitaciones = datos;
+          this.aplicarFiltros();
+        } else {
+          this.usarDatosEjemplo();
+        }
+
         this.cargando = false;
       },
       error: (err) => {
@@ -82,68 +235,118 @@ export class Habitaciones implements OnInit {
 
   usarDatosEjemplo() {
     this.habitaciones = [
+      // PISO 1 (ARRIBA) - 4 Habitaciones
       {
         id: 1,
         numero: '101',
-        tipo: 'Individual',
-        capacidad: 1,
-        precioNoche: 80000,
-        descripcion: 'Perfecta para viajeros solitarios. Cama individual, baño privado y todas las comodidades.',
-        servicios: ['WiFi gratis', 'Aire acondicionado', 'Escritorio', 'Caja fuerte'],
-        imagenes: [],
+        tipo: 'Doble',
+        piso: 1,
+        capacidad: 4,
+        precioNoche: 120000,
+        descripcion: 'Habitación principal del piso 1 con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
+        imagenes: ['assets/habitaciones/piso1/hab101.jpg'],
         estado: 'DISPONIBLE',
-        climatizacion: true,
-        television: true,
+        climatizacion: false,
+        television: false,
         wifi: true,
         bano: true,
         minibar: false
       },
       {
         id: 2,
-        numero: '201',
+        numero: '102',
         tipo: 'Doble',
+        piso: 1,
         capacidad: 2,
-        precioNoche: 120000,
-        descripcion: 'Espacio amplio con dos camas o cama king size. Ideal para parejas o amigos.',
-        servicios: ['WiFi premium', 'Smart TV', 'Minibar', 'Vista panorámica'],
-        imagenes: [],
+        precioNoche: 100000,
+        descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 103. Cómoda y tranquila.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada'],
+        imagenes: ['assets/habitaciones/piso1/hab102.jpg'],
         estado: 'DISPONIBLE',
-        climatizacion: true,
-        television: true,
+        climatizacion: false,
+        television: false,
         wifi: true,
-        bano: true,
-        minibar: true
+        bano: false,
+        minibar: false
       },
       {
         id: 3,
-        numero: '301',
-        tipo: 'Suite',
+        numero: '103',
+        tipo: 'Doble',
+        piso: 1,
         capacidad: 2,
-        precioNoche: 200000,
-        descripcion: 'Suite de lujo con sala de estar, jacuzzi y las mejores vistas del hotel.',
-        servicios: ['WiFi de alta velocidad', 'Jacuzzi privado', 'Servicio a la habitación 24/7', 'Terraza privada'],
-        imagenes: [],
+        precioNoche: 100000,
+        descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 102. Ambiente tranquilo y acogedor.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
+        imagenes: ['assets/habitaciones/piso1/hab103.jpg'],
         estado: 'DISPONIBLE',
-        climatizacion: true,
-        television: true,
+        climatizacion: false,
+        television: false,
+        wifi: true,
+        bano: false,
+        minibar: false
+      },
+      // PISO 2 (ABAJO) - 3 Habitaciones
+      {
+        id: 5,
+        numero: '201',
+        tipo: 'Individual',
+        piso: 2,
+        capacidad: 4,
+        precioNoche: 80000,
+        descripcion: 'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
+        imagenes: [
+          'assets/habitaciones/piso2/hab201.jpeg',
+          'assets/habitaciones/piso2/hab201-2.jpeg',
+          'assets/habitaciones/piso2/hab201-3.jpeg',
+        ],
+        estado: 'DISPONIBLE',
+        climatizacion: false,
+        television: false,
         wifi: true,
         bano: true,
-        minibar: true
+        minibar: false
       },
       {
-        id: 4,
-        numero: '102',
-        tipo: 'Familiar',
-        capacidad: 4,
-        precioNoche: 180000,
-        descripcion: 'Habitación espaciosa perfecta para familias. Dos camas matrimoniales y área de juegos.',
-        servicios: ['WiFi gratis', 'TV por cable', 'Área de juegos para niños', 'Sofá cama'],
-        imagenes: [],
+        id: 6,
+        numero: '202',
+        tipo: 'Doble',
+        piso: 2,
+        capacidad: 2,
+        precioNoche: 110000,
+        descripcion: 'Habitación doble acogedora con cama matrimonial. Comparte baño con la habitación 203. Perfecta para parejas.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada'],
+        imagenes: [
+          'assets/habitaciones/piso2/hab202.jpeg',
+          'assets/habitaciones/piso2/hab202-2.jpeg',
+          'assets/habitaciones/piso2/hab202-3.jpeg',
+        ],
         estado: 'DISPONIBLE',
-        climatizacion: true,
-        television: true,
+        climatizacion: false,
+        television: false,
         wifi: true,
-        bano: true,
+        bano: false,
+        minibar: false
+      },
+      {
+        id: 7,
+        numero: '203',
+        tipo: 'Doble',
+        piso: 2,
+        capacidad: 2,
+        precioNoche: 115000,
+        descripcion: 'Habitación doble con cama matrimonial y ambiente tranquilo. Comparte baño con la habitación 202. Vistas al entorno cafetero.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
+        imagenes: [
+          'assets/habitaciones/piso2/hab203.jpg',
+        ],
+        estado: 'DISPONIBLE',
+        climatizacion: false,
+        television: false,
+        wifi: true,
+        bano: false,
         minibar: false
       }
     ];
@@ -158,12 +361,14 @@ export class Habitaciones implements OnInit {
   aplicarFiltros() {
     let resultado = [...this.habitaciones];
 
-    // Filtrar por tipo
-    if (this.filtroActivo !== 'Todas') {
+    if (this.filtroActivo === 'Piso 1') {
+      resultado = resultado.filter(h => h.piso === 1);
+    } else if (this.filtroActivo === 'Piso 2') {
+      resultado = resultado.filter(h => h.piso === 2);
+    } else if (this.filtroActivo !== 'Todas') {
       resultado = resultado.filter(h => h.tipo === this.filtroActivo);
     }
 
-    // Filtrar por texto de búsqueda
     if (this.textoBusqueda.trim() !== '') {
       const busqueda = this.textoBusqueda.toLowerCase();
       resultado = resultado.filter(h =>
@@ -187,6 +392,40 @@ export class Habitaciones implements OnInit {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(precio);
+  }
+
+  precioPorPersona(habitacion: Habitacion): string {
+    const personas = habitacion.capacidad && habitacion.capacidad > 0 ? habitacion.capacidad : 1;
+    const precioPersona = Math.round(habitacion.precioNoche / personas);
+    return `Desde ${this.formatearPrecio(precioPersona)} por persona`;
+  }
+
+  tipoCama(tipo: string): string {
+    switch (tipo?.toLowerCase()) {
+      case 'individual':
+        return 'Cama individual';
+      case 'doble':
+        return 'Cama doble';
+      case 'suite':
+        return 'Cama king size';
+      case 'familiar':
+        return 'Cama doble + sofá cama';
+      default:
+        return 'Cama estándar';
+    }
+  }
+
+  tipoBano(tieneBano: boolean): string {
+    return tieneBano ? 'Baño privado' : 'Baño compartido';
+  }
+
+  tieneCocinaCompartida(habitacion: Habitacion): boolean {
+    return habitacion.servicios?.some((servicio) => /cocina/i.test(servicio));
+  }
+
+  getResumenDescripcion(descripcion: string): string {
+    const texto = descripcion ? descripcion.trim() : '';
+    return texto.length > 85 ? texto.slice(0, 82).trimEnd() + '...' : texto;
   }
 
   obtenerClaseImagen(tipo: string): string {
@@ -310,6 +549,7 @@ export class Habitaciones implements OnInit {
    */
   abrirDetalle(habitacion: Habitacion): void {
     this.habitacionSeleccionada = habitacion;
+    this.imagenActivaIdx = 0;
     this.mostrarDetalle = true;
     if (this.isBrowser) {
       document.body.style.overflow = 'hidden';
@@ -322,9 +562,22 @@ export class Habitaciones implements OnInit {
   cerrarDetalle(): void {
     this.mostrarDetalle = false;
     this.habitacionSeleccionada = null;
+    this.imagenActivaIdx = 0;
     if (this.isBrowser) {
       document.body.style.overflow = 'auto';
     }
+  }
+
+  prevImagen(): void {
+    if (!this.habitacionSeleccionada) return;
+    const total = this.habitacionSeleccionada.imagenes.length;
+    this.imagenActivaIdx = (this.imagenActivaIdx - 1 + total) % total;
+  }
+
+  nextImagen(): void {
+    if (!this.habitacionSeleccionada) return;
+    const total = this.habitacionSeleccionada.imagenes.length;
+    this.imagenActivaIdx = (this.imagenActivaIdx + 1) % total;
   }
 
   /**

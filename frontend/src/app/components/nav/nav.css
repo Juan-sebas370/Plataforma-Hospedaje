@@ -60,6 +60,28 @@
   letter-spacing: 1px;
 }
 
+.brand-logo {
+  height: 42px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.brand-text {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.1;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+.nav-brand:hover .brand-logo {
+  transform: scale(1.05);
+}
+
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }

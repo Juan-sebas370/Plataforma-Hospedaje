@@ -10,17 +10,19 @@
       <img [src]="fotoPreview || usuario?.foto || 'assets/avatar-default.png'" 
            alt="Foto de perfil"
            class="foto-perfil">
-      <div class="foto-overlay" *ngIf="editando">
-        <label for="fotoInput" class="foto-cambiar">
-          <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Cambiar foto</span>
-          <input 
-            type="file" 
-            id="fotoInput" 
-            accept="image/*"
-            (change)="onFotoSeleccionada($event)"
-            style="display: none;">
-        </label>
-      </div>
+      @if (editando) {
+        <div class="foto-overlay">
+          <label for="fotoInput" class="foto-cambiar">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Cambiar foto</span>
+            <input 
+              type="file" 
+              id="fotoInput" 
+              accept="image/*"
+              (change)="onFotoSeleccionada($event)"
+              style="display: none;">
+          </label>
+        </div>
+      }
     </div>
     <div class="info-foto">
       <h2>{{ usuario?.nombre }}</h2>
@@ -29,22 +31,28 @@
   </div>
 
   <!-- Mensajes de estado -->
-  <div *ngIf="successMessage" class="alert alert-success">
-    {{ successMessage }}
-  </div>
-  <div *ngIf="errorMessage" class="alert alert-error">
-    {{ errorMessage }}
-  </div>
+  @if (successMessage) {
+    <div class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+  }
 
   <!-- Botones de edición -->
-  <div class="botones-accion" *ngIf="!editando">
-    <button class="btn btn-primary" (click)="habilitarEdicion()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editar Perfil
-    </button>
-    <button class="btn btn-secondary" (click)="irACambiarContrasena()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar Contraseña
-    </button>
-  </div>
+  @if (!editando) {
+    <div class="botones-accion">
+      <button class="btn btn-primary" (click)="habilitarEdicion()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Editar Perfil
+      </button>
+      <button class="btn btn-secondary" (click)="irACambiarContrasena()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar Contraseña
+      </button>
+    </div>
+  }
 
   <!-- Formulario de Edición -->
   <form [formGroup]="perfilForm" class="formulario">
@@ -59,10 +67,16 @@
           formControlName="nombre"
           class="form-control"
           [class.is-invalid]="submitted && f['nombre'].errors">
-        <div *ngIf="submitted && f['nombre'].errors" class="error-text">
-          <span *ngIf="f['nombre'].errors['required']">El nombre es requerido</span>
-          <span *ngIf="f['nombre'].errors['minlength']">Mínimo 3 caracteres</span>
-        </div>
+        @if (submitted && f['nombre'].errors) {
+          <div class="error-text">
+            @if (f['nombre'].errors['required']) {
+              <span>El nombre es requerido</span>
+            }
+            @if (f['nombre'].errors['minlength']) {
+              <span>Mínimo 3 caracteres</span>
+            }
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -86,10 +100,16 @@
           class="form-control"
           [class.is-invalid]="submitted && f['telefono'].errors"
           placeholder="+1 234 567 8900">
-        <div *ngIf="submitted && f['telefono'].errors" class="error-text">
-          <span *ngIf="f['telefono'].errors['required']">El teléfono es requerido</span>
-          <span *ngIf="f['telefono'].errors['pattern']">Formato de teléfono inválido</span>
-        </div>
+        @if (submitted && f['telefono'].errors) {
+          <div class="error-text">
+            @if (f['telefono'].errors['required']) {
+              <span>El teléfono es requerido</span>
+            }
+            @if (f['telefono'].errors['pattern']) {
+              <span>Formato de teléfono inválido</span>
+            }
+          </div>
+        }
       </div>
 
       <div class="form-row">
@@ -110,9 +130,13 @@
             formControlName="ciudad"
             class="form-control"
             [class.is-invalid]="submitted && f['ciudad'].errors">
-          <div *ngIf="submitted && f['ciudad'].errors" class="error-text">
-            <span *ngIf="f['ciudad'].errors['required']">La ciudad es requerida</span>
-          </div>
+          @if (submitted && f['ciudad'].errors) {
+            <div class="error-text">
+              @if (f['ciudad'].errors['required']) {
+                <span>La ciudad es requerida</span>
+              }
+            </div>
+          }
         </div>
 
         <div class="form-group">
@@ -123,9 +147,13 @@
             formControlName="pais"
             class="form-control"
             [class.is-invalid]="submitted && f['pais'].errors">
-          <div *ngIf="submitted && f['pais'].errors" class="error-text">
-            <span *ngIf="f['pais'].errors['required']">El país es requerido</span>
-          </div>
+          @if (submitted && f['pais'].errors) {
+            <div class="error-text">
+              @if (f['pais'].errors['required']) {
+                <span>El país es requerido</span>
+              }
+            </div>
+          }
         </div>
       </div>
 
@@ -155,22 +183,27 @@
     </div>
 
     <!-- Botones de Guardado -->
-    <div class="botones-guardar" *ngIf="editando">
-      <button 
-        type="button" 
-        class="btn btn-secondary" 
-        (click)="cancelarEdicion()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cancelar
-      </button>
-      <button 
-        type="button" 
-        class="btn btn-success"
-        (click)="guardarCambios()"
-        [disabled]="loading">
-        <span *ngIf="!loading"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>Guardar Cambios</span>
-        <span *ngIf="loading">Guardando...</span>
-      </button>
-    </div>
+    @if (editando) {
+      <div class="botones-guardar">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cancelarEdicion()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-success"
+          (click)="guardarCambios()"
+          [disabled]="loading">
+          @if (!loading) {
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>Guardar Cambios</span>
+          } @else {
+            <span>Guardando...</span>
+          }
+        </button>
+      </div>
+    }
   </form>
 
   <!-- Sección de Estadísticas -->

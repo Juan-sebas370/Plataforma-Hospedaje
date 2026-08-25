@@ -32,6 +32,37 @@
   color: #bdc3c7;
 }
 
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.brand-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 14px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.brand-text {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.brand-description {
+  margin-top: 0;
+  color: #d4d4d4;
+}
+
 .footer-section ul {
   list-style: none;
   padding: 0;
@@ -116,6 +147,132 @@
 
 .social-link.tiktok:hover {
   background: #000000;
+}
+
+.footer-payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f7f8fa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.payment-icon-trust {
+  width: 16px;
+  height: 16px;
+  color: #f6c35b;
+  flex-shrink: 0;
+}
+
+.payment-icon-secure {
+  width: 16px;
+  height: 16px;
+  color: #74c0fc;
+  flex-shrink: 0;
+}
+
+.payment-logos {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.payment-logo-item {
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  padding: 0.3rem;
+  transition: all 0.3s ease;
+}
+
+.payment-logo-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.payment-logo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Responsive para tablet */
+@media (max-width: 1024px) {
+  .footer-payment-info {
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+
+  .payment-section-title {
+    font-size: 0.8rem;
+  }
+
+  .payment-logo-item {
+    width: 32px;
+    height: 24px;
+  }
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .footer-payment-info {
+    margin-top: 0.8rem;
+    gap: 0.8rem;
+  }
+
+  .payment-section-title {
+    font-size: 0.75rem;
+  }
+
+  .payment-logos {
+    gap: 0.4rem;
+  }
+
+  .payment-logo-item {
+    width: 30px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-payment-info {
+    margin-top: 0.8rem;
+    gap: 0.8rem;
+  }
+
+  .payment-section-title {
+    font-size: 0.75rem;
+  }
+
+  .payment-logos {
+    gap: 0.4rem;
+  }
+
+  .payment-logo-item {
+    width: 30px;
+    height: 22px;
+  }
 }
 
 .footer-bottom {

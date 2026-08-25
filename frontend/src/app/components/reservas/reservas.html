@@ -1,389 +1,866 @@
-<div class="reservas-container">
+﻿<div class="reservas-container">
 
   <!-- ══ HEADER ══════════════════════════════════════════════ -->
   <section class="reservas-header">
-    <div class="header-content">
-      <span class="header-tag">Filandia, Quindío</span>
-      <h1 *ngIf="modoVista === 'nueva'">Hacer una Reserva</h1>
-      <h1 *ngIf="modoVista === 'mis-reservas'">Mis Reservas</h1>
-      <p *ngIf="modoVista === 'nueva'">Elige tu modalidad, selecciona fechas y confirma tu estadía</p>
-      <p *ngIf="modoVista === 'mis-reservas'">Consulta y gestiona tus reservas en el Hospedaje Sebastián</p>
-    </div>
-    <!-- Tabs de navegación -->
-    <div class="header-tabs">
-      <button class="tab-btn" [class.active]="modoVista === 'nueva'" (click)="cambiarVista('nueva')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        Nueva reserva
-      </button>
-      <button class="tab-btn" [class.active]="modoVista === 'mis-reservas'" (click)="cambiarVista('mis-reservas')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Mis reservas
-      </button>
-    </div>
+    <span class="header-tag">Filandia, Quindío</span>
+    <h1>Reserva tu estadía</h1>
+    <p class="reservas-header__sub">Completa los pasos para confirmar tu reserva. Sin pagos en línea — todo se coordina directamente.</p>
   </section>
 
-  <!-- ══ MIS RESERVAS ═════════════════════════════════════════ -->
-  <div class="mis-reservas-wrapper" *ngIf="modoVista === 'mis-reservas'">
-    <!-- Filtros -->
-    <div class="filtros-bar">
-      <button class="filtro-chip" [class.active]="filtroSeleccionado === 'todas'" (click)="aplicarFiltro('todas')">
-        Todas ({{ misReservas.length }})
-      </button>
-      <button class="filtro-chip chip-confirmada" [class.active]="filtroSeleccionado === 'confirmada'" (click)="aplicarFiltro('confirmada')">
-        Confirmadas ({{ contarPorEstado('confirmada') }})
-      </button>
-      <button class="filtro-chip chip-pendiente" [class.active]="filtroSeleccionado === 'pendiente'" (click)="aplicarFiltro('pendiente')">
-        Pendientes ({{ contarPorEstado('pendiente') }})
-      </button>
-      <button class="filtro-chip chip-completada" [class.active]="filtroSeleccionado === 'completada'" (click)="aplicarFiltro('completada')">
-        Completadas ({{ contarPorEstado('completada') }})
-      </button>
-      <button class="filtro-chip chip-cancelada" [class.active]="filtroSeleccionado === 'cancelada'" (click)="aplicarFiltro('cancelada')">
-        Canceladas ({{ contarPorEstado('cancelada') }})
-      </button>
-    </div>
+  <!-- ══ WIZARD ══════════════════════════════════════════════ -->
+  <div class="wizard-wrapper">
 
-    <!-- Lista -->
-    <div class="reservas-lista" *ngIf="obtenerReservasFiltradas().length > 0; else sinReservasRef">
-      <div class="reserva-card" *ngFor="let r of obtenerReservasFiltradas()">
-        <div class="rc-left">
-          <div class="rc-num">{{ r.numeroReserva }}</div>
-          <div class="rc-tipo">{{ r.tipo }}</div>
-          <div class="rc-espacio">{{ r.espacio }}</div>
-        </div>
-        <div class="rc-fechas">
-          <div class="rc-fecha-item">
-            <span class="rc-fecha-label">Llegada</span>
-            <span class="rc-fecha-val">{{ r.fechaEntrada }}</span>
+    <!-- Stepper -->
+    <div class="stepper-bar">
+      <div class="stepper-inner">
+        @for (etapa of etapasVisibles; track etapa.id; let i = $index) {
+          <div class="step-item"
+               [class.step-item--active]="etapaActual === etapa.id"
+               [class.step-item--done]="etapaActual > etapa.id"
+               (click)="etapaActual > etapa.id ? irEtapa(etapa.id) : null">
+            <div class="step-bubble">
+              @if (etapaActual > etapa.id) {
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              } @else {
+                {{ i + 1 }}
+              }
+            </div>
+            <span class="step-name">{{ etapa.label }}</span>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A7A7A" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          <div class="rc-fecha-item">
-            <span class="rc-fecha-label">Salida</span>
-            <span class="rc-fecha-val">{{ r.fechaSalida }}</span>
-          </div>
-        </div>
-        <div class="rc-meta">
-          <div class="rc-huespedes">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            {{ r.huespedes }} personas
-          </div>
-          <div class="rc-temporada">Temporada {{ r.temporada }}</div>
-          <div class="rc-precio">{{ formatCOP(r.precioTotal) }}</div>
-        </div>
-        <div class="rc-right">
-          <span [class]="'estado-badge ' + obtenerClaseEstado(r.estado)">{{ r.estado | uppercase }}</span>
-          <button class="rc-btn-cancelar"
-            *ngIf="r.estado !== 'cancelada' && r.estado !== 'completada'"
-            (click)="cancelarReserva(r.id)">
-            Cancelar
-          </button>
-        </div>
+          @if (i < etapasVisibles.length - 1) {
+            <div class="step-connector" [class.step-connector--done]="etapaActual > etapa.id"></div>
+          }
+        }
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="((posicionVisible - 1) / (totalVisible - 1)) * 100"></div>
       </div>
     </div>
 
-    <ng-template #sinReservasRef>
-      <div class="sin-reservas">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E8DCCB" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <h3>No tienes reservas en este estado</h3>
-        <button class="btn-nueva-desde-lista" (click)="cambiarVista('nueva')">Hacer una reserva</button>
-      </div>
-    </ng-template>
-  </div>
 
-  <!-- ══ NUEVA RESERVA ════════════════════════════════════════ -->
-  <div class="nueva-reserva-wrapper" *ngIf="modoVista === 'nueva'">
-    <div class="form-col">
+    <!-- Layout principal del wizard: contenido + resumen lateral -->
+    <div class="wizard-layout">
+      <div class="wizard-main">
 
-      <!-- PASO 1: Tipo de reserva -->
-      <div class="form-bloque">
-        <div class="bloque-header">
-          <div class="bloque-num">1</div>
-          <div>
-            <h2>Tipo de reserva</h2>
-            <p>Selecciona la modalidad que mejor se adapte a tu visita</p>
+        <!-- ══════════════════════════════════════════
+             ETAPA 1 — TIPO DE RESERVA
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 1) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              <h2>¿Qué tipo de reserva deseas realizar?</h2>
+              <p>El tipo determina las preguntas del proceso y el precio.</p>
+            </div>
+            <div class="etapa-page__body">
+              <div class="tipo-grid">
+                @for (t of tiposReserva; track t.id) {
+                  <button class="tipo-card"
+                          [class.tipo-card--selected]="config.tipoReserva === t.id"
+                          (click)="config.tipoReserva = t.id; recalcular()">
+                    <div class="tipo-card__icono">
+                      @if (t.icon === 'user') {
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                      }
+                      @if (t.icon === 'users') {
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      }
+                      @if (t.icon === 'sun') {
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+                      }
+                      @if (t.icon === 'briefcase') {
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                      }
+                    </div>
+                    <div class="tipo-card__body">
+                      <strong>{{ t.nombre }}</strong>
+                      <p>{{ t.descripcion }}</p>
+                      <span class="tipo-card__horario">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {{ t.checkin }}
+                      </span>
+                    </div>
+                    <div class="tipo-card__check">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                  </button>
+                }
+              </div>
+            </div>
+            <div class="etapa-page__footer">
+              <div></div>
+              <button class="btn-sig" (click)="avanzar()" [disabled]="!puedeAvanzar()">
+                Siguiente: Fechas
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="tipos-selector">
-          <button *ngFor="let t of tiposReserva"
-            class="tipo-btn"
-            [class.active]="tipoSeleccionado === t.id"
-            (click)="seleccionarTipo(t.id)">
-            <div class="tipo-btn-icon">
-              <svg *ngIf="t.icon==='user'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <svg *ngIf="t.icon==='users'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <svg *ngIf="t.icon==='sun'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-              <svg *ngIf="t.icon==='briefcase'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            </div>
-            <div class="tipo-btn-text">
-              <strong>{{ t.nombre }}</strong>
-              <span>{{ t.descripcion }}</span>
-            </div>
-          </button>
-        </div>
+        }
 
-        <!-- Aviso pasadía -->
-        <div class="aviso-pasadia" *ngIf="form.tipoReserva === 'pasadia'">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          El pasadía está disponible únicamente en temporada alta o cuando la administración lo autorice.
-          Incluye: baño social, salón de juegos y zonas comunes. No incluye alojamiento.
-        </div>
-        <!-- Aviso grupo trabajo -->
-        <div class="aviso-grupal" *ngIf="form.tipoReserva === 'grupal'">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Incluye: equipo de proyección, tablero y espacios de trabajo habilitados. Ideal para conferencias, talleres y capacitaciones.
-        </div>
-      </div>
 
-      <!-- PASO 2: Espacio -->
-      <div class="form-bloque" *ngIf="mostrarSelectorEspacio()">
-        <div class="bloque-header">
-          <div class="bloque-num">2</div>
-          <div>
-            <h2>Elige el espacio</h2>
-            <p>Selecciona el piso o la casa completa según el tamaño de tu grupo</p>
+        <!-- ══════════════════════════════════════════
+             ETAPA 2 — FECHAS
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 2) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              @if (esPasadiaOGrupal()) {
+                <h2>¿Cuándo quieres venir?</h2>
+                <p>Selecciona la fecha de tu {{ config.tipoReserva === 'pasadia' ? 'pasadía' : 'jornada' }}.</p>
+              } @else {
+                <h2>¿Cuándo quieres hospedarte?</h2>
+                <p>Selecciona tu llegada y salida en el calendario.</p>
+              }
+            </div>
+            <div class="etapa-page__body">
+
+              <!-- Instrucción -->
+              <div class="cal-instruccion">
+                @if (!config.fechaEntrada) {
+                  <span class="cal-instruccion__dot cal-instruccion__dot--entrada"></span>
+                  Toca un día para elegir la <strong>fecha de {{ esPasadiaOGrupal() ? 'tu visita' : 'llegada' }}</strong>
+                } @else if (!config.fechaSalida && !esPasadiaOGrupal()) {
+                  <span class="cal-instruccion__dot cal-instruccion__dot--salida"></span>
+                  Ahora elige la <strong>fecha de salida</strong>
+                } @else {
+                  <span class="cal-instruccion__dot cal-instruccion__dot--ok"></span>
+                  @if (esPasadiaOGrupal()) {
+                    Fecha seleccionada: <strong>{{ formatFechaCorta(config.fechaEntrada) }}</strong>
+                  } @else {
+                    <strong>{{ formatFechaCorta(config.fechaEntrada) }}</strong> → <strong>{{ formatFechaCorta(config.fechaSalida) }}</strong> · {{ config.noches }} noche{{ config.noches > 1 ? 's' : '' }}
+                  }
+                  &nbsp;·&nbsp;<a class="cal-reset-link" (click)="config.fechaEntrada=''; config.fechaSalida=''; config.noches=0; recalcular()">Cambiar</a>
+                }
+              </div>
+
+              <!-- Píldoras de fechas -->
+              <div class="cal-fechas-sel">
+                <div class="cal-fecha-pill" [class.cal-fecha-pill--activa]="!config.fechaEntrada">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <div>
+                    <span class="cal-fecha-pill__label">{{ esPasadiaOGrupal() ? 'Fecha' : 'Llegada' }}</span>
+                    <strong>{{ config.fechaEntrada ? formatFechaCorta(config.fechaEntrada) : '–' }}</strong>
+                  </div>
+                </div>
+                @if (!esPasadiaOGrupal()) {
+                  <svg class="cal-fechas-sel__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C5B99A" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  <div class="cal-fecha-pill" [class.cal-fecha-pill--activa]="config.fechaEntrada && !config.fechaSalida">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <div>
+                      <span class="cal-fecha-pill__label">Salida</span>
+                      <strong>{{ config.fechaSalida ? formatFechaCorta(config.fechaSalida) : '–' }}</strong>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- Calendario -->
+              <div class="calendario">
+                <div class="cal-nav">
+                  <button class="cal-nav__btn" (click)="calMesAnterior()" type="button" aria-label="Mes anterior">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <span class="cal-nav__titulo">{{ MESES[calMes] }} {{ calAnio }}</span>
+                  <button class="cal-nav__btn" (click)="calMesSiguiente()" type="button" aria-label="Mes siguiente">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+                <div class="cal-grid cal-grid--header">
+                  @for (dia of DIAS_SEM; track dia) { <div class="cal-dia-sem">{{ dia }}</div> }
+                </div>
+                <div class="cal-grid cal-grid--dias">
+                  @for (celda of calDias; track $index) {
+                    @if (celda.fecha === null) {
+                      <div class="cal-celda cal-celda--vacia"></div>
+                    } @else {
+                      <button type="button" class="cal-celda"
+                        [class.cal-celda--hoy]="esDiaHoy(celda.fecha)"
+                        [class.cal-celda--entrada]="esDiaEntrada(celda.fecha)"
+                        [class.cal-celda--salida]="esDiaSalida(celda.fecha)"
+                        [class.cal-celda--rango]="esDiaEnRango(celda.fecha)"
+                        [class.cal-celda--disabled]="esDiaDeshabilitado(celda.fecha)"
+                        [class.cal-celda--alta]="!esDiaDeshabilitado(celda.fecha) && getTemporadaDia(celda.fecha) === 'alta'"
+                        [class.cal-celda--media]="!esDiaDeshabilitado(celda.fecha) && getTemporadaDia(celda.fecha) === 'media'"
+                        [class.cal-celda--baja]="!esDiaDeshabilitado(celda.fecha) && getTemporadaDia(celda.fecha) === 'baja'"
+                        (click)="seleccionarDia(celda.fecha)"
+                        [disabled]="esDiaDeshabilitado(celda.fecha)">
+                        <span class="cal-celda__num">{{ celda.num }}</span>
+                        <span class="cal-celda__temp-dot"></span>
+                      </button>
+                    }
+                  }
+                </div>
+              </div>
+
+              <!-- Leyenda -->
+              <div class="cal-leyenda">
+                <span class="cal-leyenda__item cal-leyenda__item--alta"><span class="cal-leyenda__dot"></span> Alta</span>
+                <span class="cal-leyenda__item cal-leyenda__item--media"><span class="cal-leyenda__dot"></span> Media</span>
+                <span class="cal-leyenda__item cal-leyenda__item--baja"><span class="cal-leyenda__dot"></span> Baja</span>
+              </div>
+
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Anterior
+              </button>
+              <button class="btn-sig" (click)="avanzar()" [disabled]="!puedeAvanzar()">
+                Siguiente: Personas
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="espacios-selector">
-          <label *ngFor="let e of espaciosFiltrados()" class="espacio-radio" [class.active]="form.espacio === e.id">
-            <input type="radio" name="espacio" [value]="e.id" [(ngModel)]="form.espacio" (change)="recalcular()" />
-            <div class="espacio-radio-content">
-              <div class="espacio-nombre">{{ e.nombre }}</div>
-              <div class="espacio-desc">{{ e.descripcion }}</div>
-              <div class="espacio-cap">Hasta {{ e.capacidadMax }} personas</div>
-              <div class="espacio-precio-hint">{{ formatCOP(getTarifaEspacio(e.id)) }}/noche en temp. {{ nombreTemporada }}</div>
-            </div>
-          </label>
-        </div>
-      </div>
+        }
 
-      <!-- PASO 3: Fechas y huéspedes -->
-      <div class="form-bloque">
-        <div class="bloque-header">
-          <div class="bloque-num">{{ mostrarSelectorEspacio() ? '3' : '2' }}</div>
-          <div>
-            <h2>Fechas y huéspedes</h2>
-            <p>
-              Temporada detectada:
-              <span class="temporada-pill" [class.alta]="temporada==='alta'" [class.media]="temporada==='media'" [class.baja]="temporada==='baja'">
-                {{ nombreTemporada }}
+
+        <!-- ══════════════════════════════════════════
+             ETAPA 3 — PERSONAS
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 3) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              <h2>¿Cuántas personas se hospedarán?</h2>
+              <p>Esto nos permite mostrarte solo los espacios que se adaptan a tu grupo.</p>
+            </div>
+            <div class="etapa-page__body">
+              <div class="personas-tabla">
+
+                <!-- Adultos -->
+                <div class="personas-fila">
+                  <div class="personas-fila__info">
+                    <strong>Adultos</strong>
+                    <span>18 años en adelante</span>
+                  </div>
+                  <div class="personas-counter">
+                    <button class="counter-btn" (click)="config.adultos > 1 ? config.adultos = config.adultos - 1 : null">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <span class="counter-val">{{ config.adultos }}</span>
+                    <button class="counter-btn" (click)="config.adultos = config.adultos < 20 ? config.adultos + 1 : 20">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="personas-divider"></div>
+
+                <!-- Niños 4–17 -->
+                <div class="personas-fila">
+                  <div class="personas-fila__info">
+                    <strong>Niños</strong>
+                    <span>4 a 17 años</span>
+                    <small class="tarifa-nino">60% de la tarifa adulto (4–10 años)</small>
+                  </div>
+                  <div class="personas-counter">
+                    <button class="counter-btn" (click)="config.ninos10 > 0 ? config.ninos10 = config.ninos10 - 1 : null">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <span class="counter-val">{{ config.ninos10 }}</span>
+                    <button class="counter-btn" (click)="config.ninos10 = config.ninos10 < 10 ? config.ninos10 + 1 : 10">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="personas-divider"></div>
+
+                <!-- Bebés -->
+                <div class="personas-fila">
+                  <div class="personas-fila__info">
+                    <strong>Bebés</strong>
+                    <span>0 a 3 años</span>
+                    <small class="gratis-tag">Gratis · Comparten cama con padres</small>
+                  </div>
+                  <div class="personas-counter">
+                    <button class="counter-btn" (click)="config.ninos3 > 0 ? config.ninos3 = config.ninos3 - 1 : null">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <span class="counter-val">{{ config.ninos3 }}</span>
+                    <button class="counter-btn" (click)="config.ninos3 = config.ninos3 < 5 ? config.ninos3 + 1 : 5">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Resumen total -->
+              <div class="personas-resumen-row">
+                <div class="personas-total-badge">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <strong>{{ totalPersonas }} {{ totalPersonas === 1 ? 'persona' : 'personas' }}</strong>
+                  <span>{{ config.adultos }} adulto{{ config.adultos > 1 ? 's' : '' }}
+                    @if (config.ninos10 > 0) { · {{ config.ninos10 }} niño{{ config.ninos10 > 1 ? 's' : '' }} }
+                    @if (config.ninos3 > 0)  { · {{ config.ninos3 }} bebé{{ config.ninos3 > 1 ? 's' : '' }} gratis }
+                  </span>
+                </div>
+              </div>
+
+              @if (!esPasadiaOGrupal()) {
+                <div class="capacidad-hint">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  En el siguiente paso verás las opciones disponibles para <strong>{{ totalPersonas }} personas</strong>.
+                </div>
+              }
+
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Anterior
+              </button>
+              <button class="btn-sig" (click)="avanzar()" [disabled]="!puedeAvanzar()">
+                @if (esPasadiaOGrupal()) { Ver resumen } @else { Ver espacios disponibles }
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+
+
+        <!-- ══════════════════════════════════════════
+             ETAPA 4 — ESPACIO (solo hospedaje)
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 4) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              <h2>¿Qué espacio necesitan?</h2>
+              <p>Opciones disponibles para <strong>{{ totalPersonas }} personas</strong>. Elige cómo quieres organizarte.</p>
+            </div>
+            <div class="etapa-page__body">
+
+              <!-- Modo de espacio -->
+              <div class="pregunta-bloque">
+                <h3 class="pregunta-titulo">¿Cómo deseas hospedarte?</h3>
+                <div class="modo-espacio-grid">
+                  @for (m of modoEspacioOpciones; track m.id) {
+                    <button class="modo-card"
+                            [class.modo-card--selected]="config.modoEspacio === m.id"
+                            (click)="config.modoEspacio = m.id; habitacionesSeleccionadas = []">
+                      <div class="modo-card__icono">
+                        @if (m.icon === 'bed') {
+                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M7 14v-3"/><path d="M17 14v-3"/></svg>
+                        }
+                        @if (m.icon === 'floor') {
+                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="12"/></svg>
+                        }
+                        @if (m.icon === 'home') {
+                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        }
+                      </div>
+                      <strong>{{ m.nombre }}</strong>
+                      <p>{{ m.descripcion }}</p>
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <!-- Habitaciones individuales -->
+              @if (config.modoEspacio === 'habitaciones') {
+                <div class="pregunta-bloque">
+                  <h3 class="pregunta-titulo">Selecciona tus habitaciones</h3>
+                  <p class="pregunta-sub">Capacidad requerida: {{ totalPersonas }} personas. Puedes combinar habitaciones de distintos pisos.</p>
+
+                  <!-- Piso 1 -->
+                  <div class="piso-grupo">
+                    <div class="piso-grupo-header">
+                      <span class="piso-grupo-tag">Piso 1</span>
+                      <span class="piso-grupo-info">3 habitaciones · hasta 8 personas</span>
+                    </div>
+                    <div class="hab-selector-grid">
+                      @for (hab of getHabitacionesPiso(1); track hab.id) {
+                        <button class="hab-card-sel" [class.hab-card-sel--active]="estaSeleccionada(hab.id)" (click)="toggleHabitacion(hab.id)">
+                          <div class="hab-card-sel__img" [style.backgroundImage]="'url(' + hab.imagen + ')'">
+                            @if (estaSeleccionada(hab.id)) {
+                              <div class="hab-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                            }
+                            <span class="hab-num-tag">Hab. {{ hab.numero }}</span>
+                          </div>
+                          <div class="hab-card-sel__body">
+                            <strong>{{ hab.nombre }}</strong>
+                            <p>{{ hab.descripcion }}</p>
+                            <div class="hab-chips">
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg> {{ hab.camas }}</span>
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/></svg> {{ hab.bano }}</span>
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> {{ hab.capacidad }} pers.</span>
+                            </div>
+                            <div class="hab-precio-tag">{{ formatCOP(hab.precio) }}<span>/noche</span></div>
+                          </div>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Piso 2 -->
+                  <div class="piso-grupo">
+                    <div class="piso-grupo-header">
+                      <span class="piso-grupo-tag piso-grupo-tag--2">Piso 2</span>
+                      <span class="piso-grupo-info">3 habitaciones · hasta 10 personas</span>
+                    </div>
+                    <div class="hab-selector-grid">
+                      @for (hab of getHabitacionesPiso(2); track hab.id) {
+                        <button class="hab-card-sel" [class.hab-card-sel--active]="estaSeleccionada(hab.id)" (click)="toggleHabitacion(hab.id)">
+                          <div class="hab-card-sel__img" [style.backgroundImage]="'url(' + hab.imagen + ')'">
+                            @if (estaSeleccionada(hab.id)) {
+                              <div class="hab-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                            }
+                            <span class="hab-num-tag">Hab. {{ hab.numero }}</span>
+                          </div>
+                          <div class="hab-card-sel__body">
+                            <strong>{{ hab.nombre }}</strong>
+                            <p>{{ hab.descripcion }}</p>
+                            <div class="hab-chips">
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg> {{ hab.camas }}</span>
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/></svg> {{ hab.bano }}</span>
+                              <span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> {{ hab.capacidad }} pers.</span>
+                            </div>
+                            <div class="hab-precio-tag">{{ formatCOP(hab.precio) }}<span>/noche</span></div>
+                          </div>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                  @if (habitacionesSeleccionadas.length > 0) {
+                    <div class="hab-seleccion-resumen">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      Seleccionadas: <strong>{{ getNombresHabitaciones() }}</strong>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Piso completo -->
+              @if (config.modoEspacio === 'piso') {
+                <div class="pregunta-bloque">
+                  <h3 class="pregunta-titulo">Opciones disponibles para {{ totalPersonas }} personas</h3>
+                  <div class="espacio-cards">
+                    @for (esp of getOpcionesEspacio(); track esp.id) {
+                      @if (esp.id !== 'completo') {
+                        <button class="espacio-card"
+                                [class.espacio-card--selected]="config.espacio === esp.id"
+                                (click)="seleccionarPiso(esp.id); recalcular()">
+                          <div class="espacio-card__header">
+                            <span class="espacio-card__nombre">{{ esp.nombre }}</span>
+                            <span class="espacio-card__cap">{{ esp.capacidad }}</span>
+                          </div>
+                          <p class="espacio-card__detalle">{{ esp.detalle }}</p>
+                          <div class="espacio-card__precio">
+                            <span>desde</span>
+                            <strong>{{ formatCOP(precioNoche) }}</strong>
+                            <span>/noche</span>
+                          </div>
+                        </button>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Toda la casa -->
+              @if (config.modoEspacio === 'casa') {
+                <div class="pregunta-bloque">
+                  <div class="espacio-cards">
+                    <button class="espacio-card espacio-card--completo"
+                            [class.espacio-card--selected]="config.espacio === 'completo'"
+                            (click)="seleccionarPiso('completo'); recalcular()">
+                      <div class="espacio-card__badge">★ Exclusividad total</div>
+                      <div class="espacio-card__header">
+                        <span class="espacio-card__nombre">Casa completa</span>
+                        <span class="espacio-card__cap">Hasta 20 personas</span>
+                      </div>
+                      <p class="espacio-card__detalle">6 habitaciones · Ambos pisos · Máxima privacidad y exclusividad</p>
+                      <div class="espacio-card__precio">
+                        <span>desde</span>
+                        <strong>{{ formatCOP(precioNoche > 0 ? precioNoche : 1200000) }}</strong>
+                        <span>/noche</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              }
+
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Anterior
+              </button>
+              <button class="btn-sig" (click)="avanzar()" [disabled]="!puedeAvanzar()">
+                Ver resumen
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+
+
+        <!-- ══════════════════════════════════════════
+             ETAPA 5 — RESUMEN
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 5) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              <h2>Revisa tu reserva</h2>
+              <p>Verifica que todo esté correcto antes de ingresar tus datos.</p>
+            </div>
+            <div class="etapa-page__body">
+              <div class="resumen-detallado">
+
+                <!-- Tipo -->
+                <div class="resumen-seccion">
+                  <div class="resumen-seccion__label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    Tipo de reserva
+                  </div>
+                  <div class="resumen-seccion__valor">{{ getNombreTipo() }}</div>
+                  <button class="resumen-edit" (click)="irEtapa(1)">Cambiar</button>
+                </div>
+
+                <!-- Fechas -->
+                <div class="resumen-seccion">
+                  <div class="resumen-seccion__label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Fechas
+                  </div>
+                  <div class="resumen-seccion__valor">
+                    @if (esPasadiaOGrupal()) {
+                      {{ formatFechaCorta(config.fechaEntrada) }}
+                    } @else {
+                      {{ formatFechaCorta(config.fechaEntrada) }} → {{ formatFechaCorta(config.fechaSalida) }}
+                      <span class="resumen-noches">{{ config.noches }} noche{{ config.noches > 1 ? 's' : '' }}</span>
+                    }
+                  </div>
+                  <button class="resumen-edit" (click)="irEtapa(2)">Cambiar</button>
+                </div>
+
+                <!-- Personas -->
+                <div class="resumen-seccion">
+                  <div class="resumen-seccion__label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Personas
+                  </div>
+                  <div class="resumen-seccion__valor">
+                    {{ totalPersonas }} personas —
+                    {{ config.adultos }} adulto{{ config.adultos > 1 ? 's' : '' }}
+                    @if (config.ninos10 > 0) { · {{ config.ninos10 }} niño{{ config.ninos10 > 1 ? 's' : '' }} }
+                    @if (config.ninos3 > 0)  { · {{ config.ninos3 }} bebé{{ config.ninos3 > 1 ? 's' : '' }} }
+                  </div>
+                  <button class="resumen-edit" (click)="irEtapa(3)">Cambiar</button>
+                </div>
+
+                <!-- Espacio -->
+                @if (!esPasadiaOGrupal()) {
+                  <div class="resumen-seccion">
+                    <div class="resumen-seccion__label">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                      Espacio
+                    </div>
+                    <div class="resumen-seccion__valor">{{ getNombreEspacio() }}</div>
+                    <button class="resumen-edit" (click)="irEtapa(4)">Cambiar</button>
+                  </div>
+                }
+
+                <!-- Precio -->
+                <div class="resumen-precio-bloque">
+                  <div class="resumen-precio-row">
+                    <span>Alojamiento</span>
+                    <span>{{ formatCOP(precioNoche) }} × {{ config.noches }} noche{{ config.noches > 1 ? 's' : '' }}</span>
+                  </div>
+                  <div class="resumen-precio-row resumen-precio-row--total">
+                    <span>Total estimado</span>
+                    <strong>{{ formatCOP(precioTotal) }}</strong>
+                  </div>
+                  <div class="resumen-precio-row resumen-precio-row--anticipo">
+                    <span>Anticipo requerido (30%)</span>
+                    <strong>{{ formatCOP(precioTotal * 0.3) }}</strong>
+                  </div>
+                  <div class="resumen-temporada-tag temporada-tag--{{ temporada }}">
+                    Temporada {{ nombreTemporada }}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Modificar
+              </button>
+              <button class="btn-sig" (click)="avanzar()">
+                Todo correcto — Ingresar datos
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+
+
+        <!-- ══════════════════════════════════════════
+             ETAPA 6 — DATOS DEL HUÉSPED
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 6) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }}</span>
+              <h2>Información del responsable</h2>
+              <p>Solo después de decidir qué reservas. Estos datos son para enviarte la confirmación.</p>
+            </div>
+            <div class="etapa-page__body">
+              <div class="col-form">
+
+                <div class="form-section">
+                  <h4 class="form-section-title">Información personal</h4>
+                  <div class="form-grid">
+                    <div class="campo">
+                      <label>Nombre <span class="req">*</span></label>
+                      <input type="text" [(ngModel)]="datos.nombre" placeholder="Juan" />
+                    </div>
+                    <div class="campo">
+                      <label>Apellido <span class="req">*</span></label>
+                      <input type="text" [(ngModel)]="datos.apellido" placeholder="Pérez" />
+                    </div>
+                    <div class="campo campo--full">
+                      <label>Correo electrónico <span class="req">*</span></label>
+                      <input type="email" [(ngModel)]="datos.email" placeholder="correo@ejemplo.com" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <h4 class="form-section-title">Documento de identidad</h4>
+                  <div class="form-grid">
+                    <div class="campo">
+                      <label>Tipo <span class="req">*</span></label>
+                      <select [(ngModel)]="datos.tipoDocumento">
+                        <option value="">Seleccionar</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PA">Pasaporte</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="NIT">NIT</option>
+                        <option value="otros">Otros</option>
+                      </select>
+                    </div>
+                    <div class="campo">
+                      <label>Número <span class="req">*</span></label>
+                      <input type="text" [(ngModel)]="datos.numeroDocumento" placeholder="123456789" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <h4 class="form-section-title">Contacto</h4>
+                  <div class="form-grid">
+                    <div class="campo campo--full">
+                      <label>Teléfono <span class="req">*</span></label>
+                      <div class="telefono-wrap">
+                        <select [(ngModel)]="datos.codigoPais" class="codigo-pais">
+                          <option value="+57">+57 CO</option>
+                          <option value="+1">+1 US</option>
+                          <option value="+34">+34 ES</option>
+                          <option value="+52">+52 MX</option>
+                          <option value="+54">+54 AR</option>
+                          <option value="+55">+55 BR</option>
+                          <option value="+56">+56 CL</option>
+                          <option value="+51">+51 PE</option>
+                          <option value="+58">+58 VE</option>
+                        </select>
+                        <input type="tel" [(ngModel)]="datos.telefono" placeholder="300 123 4567" />
+                      </div>
+                    </div>
+                    <div class="campo">
+                      <label>País de residencia</label>
+                      <select [(ngModel)]="datos.pais">
+                        <option value="CO">Colombia</option>
+                        <option value="AR">Argentina</option>
+                        <option value="BR">Brasil</option>
+                        <option value="CL">Chile</option>
+                        <option value="EC">Ecuador</option>
+                        <option value="ES">España</option>
+                        <option value="MX">México</option>
+                        <option value="PE">Perú</option>
+                        <option value="US">Estados Unidos</option>
+                        <option value="VE">Venezuela</option>
+                        <option value="OT">Otro</option>
+                      </select>
+                    </div>
+                    <div class="campo campo--full">
+                      <label>Solicitudes especiales <span class="campo-opt">(opcional)</span></label>
+                      <textarea [(ngModel)]="datos.observaciones" rows="3" placeholder="Ej: llegamos tarde, traemos bebé, necesitamos cuna..."></textarea>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Anterior
+              </button>
+              <button class="btn-sig" (click)="avanzar()" [disabled]="!puedeAvanzar()">
+                Continuar al pago
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+
+
+        <!-- ══════════════════════════════════════════
+             ETAPA 7 — PAGO / CONFIRMACIÓN
+        ══════════════════════════════════════════ -->
+        @if (etapaActual === 7) {
+          <div class="etapa-page">
+            <div class="etapa-page__header">
+              <span class="etapa-badge">Paso {{ posicionVisible }} de {{ totalVisible }} · Último paso</span>
+              <h2>Confirma tu reserva</h2>
+              <p>Ningún dato bancario se procesa aquí. El pago se coordina con la administración.</p>
+            </div>
+            <div class="etapa-page__body">
+
+              <!-- Resumen compacto final -->
+              <div class="resumen-final-mini">
+                <div class="rfm-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>{{ getNombreTipo() }}</span></div>
+                <div class="rfm-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>{{ getNombreEspacio() }}</span></div>
+                <div class="rfm-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <span>{{ formatFechaCorta(config.fechaEntrada) }}
+                    @if (!esPasadiaOGrupal()) { → {{ formatFechaCorta(config.fechaSalida) }} · {{ config.noches }} noches }
+                  </span>
+                </div>
+                <div class="rfm-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>{{ totalPersonas }} personas · {{ datos.nombre }} {{ datos.apellido }}</span></div>
+                <div class="rfm-total">Total: <strong>{{ formatCOP(precioTotal) }}</strong></div>
+              </div>
+
+              <!-- Métodos de pago -->
+              <div class="pago-seccion">
+                <h4 class="form-section-title">Método de pago</h4>
+                <div class="metodos-pago">
+                  <label class="metodo" [class.metodo--active]="pago.metodo === 'transferencia'">
+                    <input type="radio" name="pago" value="transferencia" [(ngModel)]="pago.metodo" />
+                    <div class="metodo__icono">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <div class="metodo__texto">
+                      <strong>Transferencia bancaria</strong>
+                      <span>Enviamos los datos bancarios por correo tras confirmar</span>
+                    </div>
+                    <div class="metodo__check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  </label>
+                  <label class="metodo" [class.metodo--active]="pago.metodo === 'efectivo'">
+                    <input type="radio" name="pago" value="efectivo" [(ngModel)]="pago.metodo" />
+                    <div class="metodo__icono">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    </div>
+                    <div class="metodo__texto">
+                      <strong>Efectivo al llegar</strong>
+                      <span>Pago completo en la propiedad al momento del check-in</span>
+                    </div>
+                    <div class="metodo__check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  </label>
+                </div>
+                <div class="nota-anticipo">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Para confirmar la reserva se requiere un anticipo del <strong>30%</strong> ({{ formatCOP(precioTotal * 0.3) }}). El saldo se paga al llegar.
+                </div>
+              </div>
+
+              <!-- Términos -->
+              <div class="pago-seccion">
+                <label class="terminos">
+                  <input type="checkbox" [(ngModel)]="pago.aceptaTerminos" />
+                  <span>He leído y acepto las <a href="#" target="_blank">políticas de reserva</a> y el <a href="#" target="_blank">reglamento interno</a> del Hospedaje Sebastián Filandia.</span>
+                </label>
+              </div>
+
+            </div>
+            <div class="etapa-page__footer">
+              <button class="btn-ant" (click)="retroceder()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Anterior
+              </button>
+              <button class="btn-confirmar" (click)="confirmarReserva()" [disabled]="!pago.aceptaTerminos">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Confirmar reserva
+              </button>
+            </div>
+          </div>
+        }
+
+      </div><!-- /wizard-main -->
+
+
+      <!-- Resumen lateral sticky (desktop) -->
+      <aside class="wizard-sidebar">
+        <div class="sidebar-resumen">
+          <h4 class="sidebar-resumen__titulo">Tu reserva</h4>
+
+          @if (config.tipoReserva) {
+            <div class="sres-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <span>{{ getNombreTipo() }}</span>
+            </div>
+          }
+
+          @if (config.fechaEntrada) {
+            <div class="sres-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>
+                {{ formatFechaCorta(config.fechaEntrada) }}
+                @if (config.fechaSalida && !esPasadiaOGrupal()) {
+                  → {{ formatFechaCorta(config.fechaSalida) }}
+                }
               </span>
-            </p>
-          </div>
-        </div>
-        <div class="fechas-grid">
-          <div class="campo-grupo">
-            <label>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Fecha de llegada *
-            </label>
-            <input type="date" [(ngModel)]="form.fechaEntrada" (change)="calcularNoches()" required />
-            <small *ngIf="form.tipoReserva === 'individual'">Check-in entre 3:00 p.m. y 10:00 p.m.</small>
-          </div>
-          <div class="campo-grupo" *ngIf="!esPasadiaOGrupal()">
-            <label>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Fecha de salida *
-            </label>
-            <input type="date" [(ngModel)]="form.fechaSalida" (change)="calcularNoches()" required />
-          </div>
-          <div class="campo-grupo" *ngIf="!esPasadiaOGrupal()">
-            <label>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-              Noches
-            </label>
-            <input type="number" [(ngModel)]="form.noches" min="1" (change)="recalcular()" />
-          </div>
-          <div class="campo-grupo">
-            <label>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              Número de huéspedes *
-            </label>
-            <select [(ngModel)]="form.huespedes" (change)="recalcular()">
-              <option *ngFor="let n of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" [value]="n">
-                {{ n }} {{ n === 1 ? 'persona' : 'personas' }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- PASO 4: Datos personales -->
-      <div class="form-bloque">
-        <div class="bloque-header">
-          <div class="bloque-num">{{ mostrarSelectorEspacio() ? '4' : '3' }}</div>
-          <div><h2>Datos del contacto</h2><p>Quien realiza la reserva</p></div>
-        </div>
-        <div class="form-fila">
-          <div class="campo-grupo">
-            <label>Nombre completo *</label>
-            <input type="text" [(ngModel)]="form.nombre" placeholder="Juan Pérez" required />
-          </div>
-          <div class="campo-grupo">
-            <label>Correo electrónico *</label>
-            <input type="email" [(ngModel)]="form.email" placeholder="correo@ejemplo.com" required />
-          </div>
-        </div>
-        <div class="form-fila">
-          <div class="campo-grupo">
-            <label>Tipo de documento *</label>
-            <select [(ngModel)]="form.tipoDocumento" required>
-              <option value="">Seleccionar</option>
-              <option value="CC">Cédula de Ciudadanía</option>
-              <option value="CE">Cédula de Extranjería</option>
-              <option value="PA">Pasaporte</option>
-              <option value="TI">Tarjeta de Identidad</option>
-              <option value="NIT">NIT</option>
-            </select>
-          </div>
-          <div class="campo-grupo">
-            <label>Número de documento *</label>
-            <input type="text" [(ngModel)]="form.numeroDocumento" placeholder="123456789" required />
-          </div>
-        </div>
-        <div class="form-fila">
-          <div class="campo-grupo">
-            <label>Teléfono *</label>
-            <div class="telefono-wrap">
-              <select [(ngModel)]="form.codigoPais" class="codigo-pais">
-                <option value="+57">+57 (CO)</option>
-                <option value="+1">+1 (US)</option>
-                <option value="+34">+34 (ES)</option>
-                <option value="+52">+52 (MX)</option>
-                <option value="+54">+54 (AR)</option>
-                <option value="+55">+55 (BR)</option>
-              </select>
-              <input type="tel" [(ngModel)]="form.telefono" placeholder="300 123 4567" required />
             </div>
-          </div>
-          <div class="campo-grupo">
-            <label>País de origen</label>
-            <select [(ngModel)]="form.pais">
-              <option value="CO">Colombia</option>
-              <option value="AR">Argentina</option>
-              <option value="BR">Brasil</option>
-              <option value="CL">Chile</option>
-              <option value="EC">Ecuador</option>
-              <option value="ES">España</option>
-              <option value="MX">México</option>
-              <option value="PE">Perú</option>
-              <option value="US">Estados Unidos</option>
-              <option value="VE">Venezuela</option>
-              <option value="OT">Otro</option>
-            </select>
-          </div>
-        </div>
-      </div>
+            @if (config.noches > 0 && !esPasadiaOGrupal()) {
+              <div class="sres-noches">{{ config.noches }} noche{{ config.noches > 1 ? 's' : '' }}</div>
+            }
+          }
 
-      <!-- PASO 5: Método de pago y observaciones -->
-      <div class="form-bloque">
-        <div class="bloque-header">
-          <div class="bloque-num">{{ mostrarSelectorEspacio() ? '5' : '4' }}</div>
-          <div><h2>Pago y observaciones</h2></div>
-        </div>
-        <div class="metodos-pago-grid">
-          <label class="metodo-card" [class.active]="form.metodoPago === 'transferencia'">
-            <input type="radio" name="pago" value="transferencia" [(ngModel)]="form.metodoPago" />
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-            <strong>Transferencia bancaria</strong>
-            <small>Se envía info por correo</small>
-          </label>
-          <label class="metodo-card" [class.active]="form.metodoPago === 'efectivo'">
-            <input type="radio" name="pago" value="efectivo" [(ngModel)]="form.metodoPago" />
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            <strong>Efectivo al llegar</strong>
-            <small>Pago en la propiedad</small>
-          </label>
-        </div>
-        <div class="campo-grupo" style="margin-top:1.2rem">
-          <label>Observaciones o solicitudes especiales</label>
-          <textarea [(ngModel)]="form.observaciones" rows="3"
-            placeholder="Ej: llegamos tarde en la noche, traemos mascota, necesitamos cuna..."></textarea>
-        </div>
-        <label class="terminos-label">
-          <input type="checkbox" [(ngModel)]="form.aceptaTerminos" />
-          <span>Acepto las <a href="#" target="_blank">políticas de reserva</a> y el <a href="#" target="_blank">reglamento interno</a> del Hospedaje Sebastián.</span>
-        </label>
-      </div>
-
-    </div><!-- /form-col -->
-
-    <!-- ── SIDEBAR RESUMEN ─────────────────────────────────── -->
-    <aside class="resumen-col">
-      <div class="resumen-card sticky-top">
-        <h3 class="resumen-titulo">Resumen de tu reserva</h3>
-
-        <div class="resumen-item">
-          <span>Tipo</span>
-          <strong>{{ getNombreTipo(tipoSeleccionado) }}</strong>
-        </div>
-        <div class="resumen-item" *ngIf="form.espacio">
-          <span>Espacio</span>
-          <strong>{{ getNombreEspacio(form.espacio) }}</strong>
-        </div>
-        <div class="resumen-item" *ngIf="form.fechaEntrada">
-          <span>Llegada</span>
-          <strong>{{ form.fechaEntrada }}</strong>
-        </div>
-        <div class="resumen-item" *ngIf="form.fechaSalida && !esPasadiaOGrupal()">
-          <span>Salida</span>
-          <strong>{{ form.fechaSalida }}</strong>
-        </div>
-        <div class="resumen-item" *ngIf="!esPasadiaOGrupal()">
-          <span>Noches</span>
-          <strong>{{ form.noches }}</strong>
-        </div>
-        <div class="resumen-item">
-          <span>Huéspedes</span>
-          <strong>{{ form.huespedes }}</strong>
-        </div>
-
-        <div class="resumen-divider"></div>
-
-        <div class="resumen-temporada">
-          <span>Temporada</span>
-          <span class="temporada-pill" [class.alta]="temporada==='alta'" [class.media]="temporada==='media'" [class.baja]="temporada==='baja'">
-            {{ nombreTemporada }}
-          </span>
-        </div>
-
-        <div class="resumen-total">
-          <span>Total estimado</span>
-          <strong>{{ precioCalculado > 0 ? formatCOP(precioCalculado) : '–' }}</strong>
-        </div>
-        <p class="resumen-nota">Precio de referencia. Se confirma al completar la reserva.</p>
-
-        <div class="resumen-checks">
-          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Sin cargos ocultos</div>
-          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Confirmación por correo</div>
-          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cancelación flexible</div>
-        </div>
-
-        <button class="btn-confirmar" routerLink="/confirmacion" [disabled]="!form.aceptaTerminos">
-          Confirmar reserva
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-        <button class="btn-cancelar-res" routerLink="/">Cancelar</button>
-
-        <!-- Info horarios -->
-        <div class="resumen-horarios">
-          <div class="horario-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A3D6D" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <div>
-              <strong>Check-in</strong>
-              <span>3:00 p.m. – 10:00 p.m.</span>
+          @if (totalPersonas > 0 && etapaActual > 2) {
+            <div class="sres-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <span>{{ totalPersonas }} personas</span>
             </div>
-          </div>
-          <div class="horario-item">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A3D6D" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <div>
-              <strong>Contacto</strong>
-              <span>+57 300 123 4567</span>
+          }
+
+          @if (!esPasadiaOGrupal() && config.espacio && etapaActual > 3) {
+            <div class="sres-row">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              <span>{{ getNombreEspacio() }}</span>
             </div>
+          }
+
+          @if (precioTotal > 0) {
+            <div class="sres-divider"></div>
+            <div class="sres-precio">
+              <span>Total estimado</span>
+              <strong>{{ formatCOP(precioTotal) }}</strong>
+            </div>
+            <div class="sres-anticipo">
+              Anticipo (30%): <strong>{{ formatCOP(precioTotal * 0.3) }}</strong>
+            </div>
+            <div class="sres-temporada sres-temporada--{{ temporada }}">
+              Temporada {{ nombreTemporada }}
+            </div>
+          } @else {
+            <p class="sres-vacio">Completa los pasos para ver el precio estimado.</p>
+          }
+
+          <div class="sres-garantias">
+            <div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Sin cargos ocultos</div>
+            <div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Confirmación por correo</div>
+            <div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cancelación flexible</div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-  </div><!-- /nueva-reserva-wrapper -->
+    </div><!-- /wizard-layout -->
+
+  </div><!-- /wizard-wrapper -->
 
 </div>

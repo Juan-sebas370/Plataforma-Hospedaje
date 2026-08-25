@@ -5,24 +5,40 @@
 
 /* Header */
 .contacto-header {
-  background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
+  background: linear-gradient(135deg, #0A3D6D 0%, #0E5A9C 100%);
   color: white;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 7.5rem 2rem 3.5rem;
   margin-bottom: 0;
 }
 
+.contacto-header .header-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.92);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
 .contacto-header h1 {
-  padding: 2%;
-  /*font-size: 3rem;*/
-  margin-bottom: -1rem;
-  animation: fadeInDown 0.8s ease;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: white;
+  margin: 0.4rem 0 0.6rem;
+  line-height: 1.15;
 }
 
 .contacto-header p {
-  font-size: 1.3rem;
-  opacity: 0.95;
-  animation: fadeInUp 0.8s ease;
+  font-size: 1.05rem;
+  opacity: 0.88;
+  margin: 0;
 }
 
 /* Contenido Principal */
@@ -62,8 +78,16 @@
 }
 
 .info-icon {
-  font-size: 3rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(14, 90, 156, 0.08);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0E5A9C;
   margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .info-card h3 {
@@ -88,11 +112,15 @@
 .disponibilidad {
   margin-top: 1rem;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  background: rgba(39, 174, 96, 0.1);
   border-radius: 8px;
   color: #155724;
   font-weight: 600;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 /* Redes Sociales */
@@ -108,6 +136,10 @@
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .redes-icons {
@@ -210,9 +242,15 @@
 }
 
 .mapa-icon {
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 1rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(14, 90, 156, 0.08);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0E5A9C;
+  margin: 0 auto 1rem;
 }
 
 .ubicacion-card h3 {
@@ -229,13 +267,17 @@
 }
 
 .ubicacion-lista li {
-  padding: 0.8rem;
+  padding: 0.8rem 1rem;
   margin: 0.5rem 0;
   background: #F8F4EE;
   border-radius: 8px;
   color: #2B2B2B;
   border-left: 4px solid #0E5A9C;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
+.ubicacion-lista li svg { flex-shrink: 0; color: #0E5A9C; }
 
 .ubicacion-lista li strong {
   color: #2B2B2B;
@@ -345,8 +387,9 @@
   gap: 0.5rem;
 }
 
-.label-icon {
-  font-size: 1.2rem;
+.form-group label svg {
+  flex-shrink: 0;
+  color: #0E5A9C;
 }
 
 .form-group input,
@@ -445,6 +488,10 @@
 .btn-enviar {
   background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .btn-enviar:hover {
@@ -464,7 +511,15 @@
 }
 
 .rapida-icon {
-  font-size: 3rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(214, 48, 49, 0.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d63031;
+  flex-shrink: 0;
 }
 
 .rapida-content h4 {
@@ -490,8 +545,9 @@
 }
 
 .faq-section h2 {
+  font-family: 'Playfair Display', serif;
   color: #2B2B2B;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
@@ -504,45 +560,78 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
+  width: 80px;
+  height: 3px;
   background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
   border-radius: 2px;
 }
 
 .faq-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .faq-card {
   background: white;
-  padding: 2rem;
+  padding: 1.8rem;
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
+  border-left: 3px solid transparent;
 }
 
 .faq-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.11);
+  border-left-color: #0E5A9C;
 }
 
 .faq-icon {
-  font-size: 2.5rem;
+  width: 48px;
+  height: 48px;
+  background: rgba(14, 90, 156, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0E5A9C;
   margin-bottom: 1rem;
 }
 
 .faq-card h3 {
   color: #2B2B2B;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
 }
 
 .faq-card p {
-  color: #666666;
+  color: #555;
   line-height: 1.7;
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.faq-card p strong { color: #0A3D6D; }
+
+/* Nota WhatsApp en tarjeta de teléfono */
+.whatsapp-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #155724;
+  background: rgba(37,211,102,0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Grid 2 columnas para redes sociales */
+.redes-icons--2 {
+  grid-template-columns: repeat(2, 1fr) !important;
 }
 
 /* CTA Contacto */
@@ -580,6 +669,8 @@
 .phone-link,
 .whatsapp-link {
   display: flex;
+  align-items: center;
+  gap: 0.8rem;
   align-items: center;
   gap: 1rem;
   padding: 1.2rem 2.5rem;

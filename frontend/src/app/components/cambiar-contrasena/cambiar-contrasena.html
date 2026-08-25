@@ -5,12 +5,16 @@
   </div>
 
   <!-- Alertas -->
-  <div *ngIf="successMessage" class="alert alert-success">
-    {{ successMessage }}
-  </div>
-  <div *ngIf="errorMessage" class="alert alert-error">
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>{{ errorMessage }}
-  </div>
+  @if (successMessage) {
+    <div class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>{{ errorMessage }}
+    </div>
+  }
 
   <!-- Formulario -->
   <form [formGroup]="cambioForm" (ngSubmit)="cambiarContrasena()" class="formulario">
@@ -32,14 +36,20 @@
           <svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg> {{ mostrarActual ? 'Ocultar' : 'Mostrar' }}
         </button>
       </div>
-      <div *ngIf="submitted && f['contraseniaActual'].errors" class="error-text">
-        <span *ngIf="f['contraseniaActual'].errors['required']">
-          La contraseña actual es requerida
-        </span>
-        <span *ngIf="f['contraseniaActual'].errors['minlength']">
-          Mínimo 6 caracteres
-        </span>
-      </div>
+      @if (submitted && f['contraseniaActual'].errors) {
+        <div class="error-text">
+          @if (f['contraseniaActual'].errors['required']) {
+            <span>
+              La contraseña actual es requerida
+            </span>
+          }
+          @if (f['contraseniaActual'].errors['minlength']) {
+            <span>
+              Mínimo 6 caracteres
+            </span>
+          }
+        </div>
+      }
       <small class="form-text">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Tu contraseña será verificada inmediatamente
       </small>
@@ -68,18 +78,20 @@
       </div>
       
       <!-- Indicador de Fortaleza -->
-      <div *ngIf="cambioForm.get('contraseniaNueva')?.value" class="fortaleza-container">
-        <div class="fortaleza-bar">
-          <div 
-            class="fortaleza-relleno"
-            [style.width.%]="fortalezaContrasena"
-            [style.background-color]="fortalezaColor">
+      @if (cambioForm.get('contraseniaNueva')?.value) {
+        <div class="fortaleza-container">
+          <div class="fortaleza-bar">
+            <div 
+              class="fortaleza-relleno"
+              [style.width.%]="fortalezaContrasena"
+              [style.background-color]="fortalezaColor">
+            </div>
           </div>
+          <span class="fortaleza-texto" [style.color]="fortalezaColor">
+            Fortaleza: {{ fortalezaTexto }} ({{ fortalezaContrasena }}%)
+          </span>
         </div>
-        <span class="fortaleza-texto" [style.color]="fortalezaColor">
-          Fortaleza: {{ fortalezaTexto }} ({{ fortalezaContrasena }}%)
-        </span>
-      </div>
+      }
 
       <!-- Requisitos de Contraseña -->
       <div class="requisitos">
@@ -103,17 +115,25 @@
         </ul>
       </div>
 
-      <div *ngIf="submitted && f['contraseniaNueva'].errors" class="error-text">
-        <span *ngIf="f['contraseniaNueva'].errors['required']">
-          La nueva contraseña es requerida
-        </span>
-        <span *ngIf="f['contraseniaNueva'].errors['minlength']">
-          Mínimo 8 caracteres
-        </span>
-        <span *ngIf="f['contraseniaNueva'].errors['fortalezaInsuficiente']">
-          La contraseña debe cumplir todos los requisitos
-        </span>
-      </div>
+      @if (submitted && f['contraseniaNueva'].errors) {
+        <div class="error-text">
+          @if (f['contraseniaNueva'].errors['required']) {
+            <span>
+              La nueva contraseña es requerida
+            </span>
+          }
+          @if (f['contraseniaNueva'].errors['minlength']) {
+            <span>
+              Mínimo 8 caracteres
+            </span>
+          }
+          @if (f['contraseniaNueva'].errors['fortalezaInsuficiente']) {
+            <span>
+              La contraseña debe cumplir todos los requisitos
+            </span>
+          }
+        </div>
+      }
     </div>
 
     <!-- Confirmar Contraseña -->
@@ -134,12 +154,16 @@
           <svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg> {{ mostrarConfirmar ? 'Ocultar' : 'Mostrar' }}
         </button>
       </div>
-      <div *ngIf="submitted && cambioForm.errors?.['noCoinciden']" class="error-text">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Las contraseñas no coinciden
-      </div>
-      <div *ngIf="submitted && f['confirmarContrasena'].errors?.['required']" class="error-text">
-        La confirmación es requerida
-      </div>
+      @if (submitted && cambioForm.errors?.['noCoinciden']) {
+        <div class="error-text">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Las contraseñas no coinciden
+        </div>
+      }
+      @if (submitted && f['confirmarContrasena'].errors?.['required']) {
+        <div class="error-text">
+          La confirmación es requerida
+        </div>
+      }
     </div>
 
     <!-- Botones de Acción -->
@@ -155,8 +179,11 @@
         type="submit"
         class="btn btn-primary"
         [disabled]="loading || cambioForm.invalid">
-        <span *ngIf="!loading"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar Contraseña</span>
-        <span *ngIf="loading">Procesando...</span>
+        @if (!loading) {
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar Contraseña</span>
+        } @else {
+          <span>Procesando...</span>
+        }
       </button>
     </div>
 

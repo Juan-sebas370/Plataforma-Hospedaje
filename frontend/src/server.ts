@@ -8,6 +8,7 @@ import express from 'express';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const srcAssetsFolder = join(process.cwd(), 'src/assets');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
@@ -29,6 +30,16 @@ const angularApp = new AngularNodeAppEngine();
  */
 app.use(
   express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: false,
+    redirect: false,
+  }),
+);
+
+// Serve /assets/* from the source assets folder when the built browser dist doesn't include them.
+app.use(
+  '/assets',
+  express.static(srcAssetsFolder, {
     maxAge: '1y',
     index: false,
     redirect: false,

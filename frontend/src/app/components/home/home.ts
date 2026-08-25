@@ -2,24 +2,14 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  ElementRef,
-  ViewChild,
   PLATFORM_ID,
   Inject,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '../../shared/translate.pipe';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export type Season = 'alta' | 'media' | 'baja';
-
-export interface TarifaRow {
-  tipo: string;
-  baja: number;
-  media: number;
-  alta: number;
-}
 
 export interface Piso {
   nombre: string;
@@ -53,14 +43,12 @@ export interface Testimonio {
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-  @ViewChild('heroImg') heroImg!: ElementRef<HTMLImageElement>;
-
   // ── Carousel ──────────────────────────────────────────────────
   images = [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80',
-    'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1600&q=80',
-    'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=1600&q=80',
-    'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=1600&q=80',
+    '/assets/principal/imagen1.jpg',
+    '/assets/principal/imagen2.jpg',
+    '/assets/principal/imagen3.jpg',
+    '/assets/principal/imagen4.jpg',
   ];
   currentImageIndex = 0;
   private intervalId: any;
@@ -71,12 +59,10 @@ export class Home implements OnInit, OnDestroy {
     fechaEntrada: '',
     fechaSalida: '',
     huespedes: 2,
+    ninos: 0,
     tipoReserva: 'individual',
   };
 
-  // ── Temporada activa (para mostrar tarifas) ──────────────────
-  temporadaActiva: Season = 'baja';
-  nombreTemporada = 'Baja';
 
   // ── Tipos de Reserva ─────────────────────────────────────────
   tiposReserva: TipoReserva[] = [
@@ -141,15 +127,6 @@ export class Home implements OnInit, OnDestroy {
     { nombre: 'Cocina Equipada',   icon: 'kitchen' },
   ];
 
-  // ── Tarifas ──────────────────────────────────────────────────
-  tarifas: TarifaRow[] = [
-    { tipo: 'Piso 1 (hasta 8 personas)',       baja: 550000,  media: 700000,  alta: 950000  },
-    { tipo: 'Piso 2 (hasta 12 personas)',      baja: 750000,  media: 900000,  alta: 1200000 },
-    { tipo: 'Casa completa (hasta 20 pers.)',  baja: 1200000, media: 1500000, alta: 1900000 },
-    { tipo: 'Pasadía (por grupo)',             baja: 350000,  media: 450000,  alta: 600000  },
-    { tipo: 'Grupo de trabajo / conferencia',  baja: 600000,  media: 750000,  alta: 900000  },
-  ];
-
   // ── Testimonios ──────────────────────────────────────────────
   testimonios: Testimonio[] = [
     {
@@ -172,18 +149,18 @@ export class Home implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) platformId: Object, private cdr: ChangeDetectorRef) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
-    this.temporadaActiva = this.calcularTemporada(new Date());
-    this.nombreTemporada = this.getNombreTemporada(this.temporadaActiva);
-
     if (this.isBrowser) {
       this.intervalId = setInterval(() => {
-        this.goToImage((this.currentImageIndex + 1) % this.images.length);
-      }, 6000);
+        const next = (this.currentImageIndex + 1) % this.images.length;
+        // debug
+        console.debug('[Home] changing image', this.currentImageIndex, '->', next);
+        this.goToImage(next);
+      }, 3000);
 
       // Fechas por defecto: hoy y mañana
       const hoy = new Date();
@@ -200,93 +177,9 @@ export class Home implements OnInit, OnDestroy {
 
   // ── Carousel ─────────────────────────────────────────────────
   goToImage(index: number) {
-    if (!this.isBrowser) { this.currentImageIndex = index; return; }
-    if (this.heroImg?.nativeElement) {
-      const el = this.heroImg.nativeElement;
-      el.style.opacity = '0';
-      setTimeout(() => { this.currentImageIndex = index; el.style.opacity = '1'; }, 400);
-    } else {
-      this.currentImageIndex = index;
-    }
-  }
-
-  // ── Temporadas ───────────────────────────────────────────────
-  calcularTemporada(fecha: Date): Season {
-    const mes   = fecha.getMonth() + 1; // 1-12
-    const dia   = fecha.getDate();
-    const dow   = fecha.getDay();        // 0=Dom
-
-    // Temporada Alta
-    if (this.esTemporadaAlta(fecha)) return 'alta';
-
-    // Temporada Media: sábados (6), domingos (0), festivos
-    if (dow === 0 || dow === 6 || this.esFestivoColombia(fecha)) return 'media';
-
-    return 'baja';
-  }
-
-  private esTemporadaAlta(fecha: Date): boolean {
-    const mes = fecha.getMonth() + 1;
-    const dia = fecha.getDate();
-
-    // 15 dic – 15 ene
-    if ((mes === 12 && dia >= 15) || (mes === 1 && dia <= 15)) return true;
-    // 15 jun – 15 jul
-    if ((mes === 6 && dia >= 15) || (mes === 7 && dia <= 15)) return true;
-    // Semana Santa (aprox: domingo de ramos + 8 días antes hasta pascua)
-    // Se usa cálculo de Pascua de Gauss simplificado
-    if (this.esSemanaSanta(fecha)) return true;
-
-    return false;
-  }
-
-  private esSemanaSanta(fecha: Date): boolean {
-    const y = fecha.getFullYear();
-    const pascua = this.calcularPascua(y);
-    const viernes = new Date(pascua); viernes.setDate(pascua.getDate() - 8);
-    return fecha >= viernes && fecha <= pascua;
-  }
-
-  calcularPascua(year: number): Date {
-    const a = year % 19;
-    const b = Math.floor(year / 100);
-    const c = year % 100;
-    const d = Math.floor(b / 4);
-    const e = b % 4;
-    const f = Math.floor((b + 8) / 25);
-    const g = Math.floor((b - f + 1) / 3);
-    const h = (19 * a + b - d - g + 15) % 30;
-    const i = Math.floor(c / 4);
-    const k = c % 4;
-    const l = (32 + 2 * e + 2 * i - h - k) % 7;
-    const m = Math.floor((a + 11 * h + 22 * l) / 451);
-    const month = Math.floor((h + l - 7 * m + 114) / 31);
-    const day   = ((h + l - 7 * m + 114) % 31) + 1;
-    return new Date(year, month - 1, day);
-  }
-
-  private esFestivoColombia(fecha: Date): boolean {
-    const mes = fecha.getMonth() + 1;
-    const dia = fecha.getDate();
-    // Festivos fijos Colombia
-    const fijos: [number, number][] = [
-      [1, 1], [5, 1], [7, 20], [8, 7], [12, 8], [12, 25],
-    ];
-    return fijos.some(([m, d]) => m === mes && d === dia);
-  }
-
-  getNombreTemporada(t: Season): string {
-    return { alta: 'Alta', media: 'Media', baja: 'Baja' }[t];
-  }
-
-  getTarifaActual(tarifa: TarifaRow): number {
-    return tarifa[this.temporadaActiva];
-  }
-
-  formatCOP(valor: number): string {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency', currency: 'COP', minimumFractionDigits: 0,
-    }).format(valor);
+    this.currentImageIndex = index;
+    // Force change detection in case the app runs without Zone.js
+    try { this.cdr.detectChanges(); } catch (e) { /* noop */ }
   }
 
   // ── Helpers ──────────────────────────────────────────────────

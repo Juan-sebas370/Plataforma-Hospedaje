@@ -6,6 +6,7 @@ export interface Habitacion {
   id: number;
   numero: string;
   tipo: string;
+  piso: number;
   capacidad: number;
   precioNoche: number;
   descripcion: string;

@@ -1,4 +1,5 @@
 <div class="contacto-container">
+
   <!-- Header -->
   <div class="contacto-header">
     <h1>{{ 'contact.title' | translate }}</h1>
@@ -7,129 +8,135 @@
 
   <!-- Contenido Principal -->
   <div class="contacto-content">
+
     <!-- Información de Contacto -->
     <div class="contacto-info">
       <div class="info-section">
+
+        <!-- Dirección -->
         <div class="info-card">
-          <div class="info-icon">📍</div>
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
           <h3>{{ 'contact.info.addressTitle' | translate }}</h3>
           <p>{{ 'contact.info.addressLine1' | translate }}</p>
           <p>{{ 'contact.info.addressLine2' | translate }}</p>
           <p>{{ 'contact.info.postalCodeLabel' | translate }}: {{ 'contact.info.postalCodeValue' | translate }}</p>
         </div>
 
+        <!-- Teléfono -->
         <div class="info-card">
-          <div class="info-icon">📞</div>
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </div>
           <h3>{{ 'contact.info.phoneTitle' | translate }}</h3>
-          <p><strong>{{ 'contact.info.phoneMainLabel' | translate }}:</strong> +57 (1) 234-5678</p>
-          <p><strong>{{ 'contact.info.phoneMobileLabel' | translate }}:</strong> +57 300 123 4567</p>
-          <p><strong>{{ 'contact.info.phoneWhatsappLabel' | translate }}:</strong> +57 310 987 6543</p>
+          <p><strong>{{ 'contact.info.phoneMainLabel' | translate }}:</strong> +57 311 340 8867</p>
+          <p><strong>{{ 'contact.info.phoneMobileLabel' | translate }}:</strong> +57 314 755 6717</p>
+          <p class="whatsapp-note">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:#25d366">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            Ambos números tienen WhatsApp
+          </p>
         </div>
 
+        <!-- Email -->
         <div class="info-card">
-          <div class="info-icon">✉️</div>
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
           <h3>{{ 'contact.info.emailTitle' | translate }}</h3>
-          <p><strong>{{ 'contact.info.emailReservationsLabel' | translate }}:</strong></p>
-          <p>reservas@hospedajesebastian.com</p>
-          <p><strong>{{ 'contact.info.emailInfoLabel' | translate }}:</strong></p>
-          <p>info@hospedajesebastian.com</p>
+          <p>guipihur&#64;gmail.com</p>
+          <p>hospedajesebastian&#64;gmail.com</p>
+          <p>sebastian.pinilla.arcila&#64;gmail.com</p>
         </div>
 
+        <!-- Horario -->
         <div class="info-card">
-          <div class="info-icon">⏰</div>
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
           <h3>{{ 'contact.info.scheduleTitle' | translate }}</h3>
-          <p><strong>{{ 'contact.info.weekdaysLabel' | translate }}:</strong></p>
-          <p>{{ 'contact.info.weekdaysHours' | translate }}</p>
-          <p><strong>{{ 'contact.info.weekendsLabel' | translate }}:</strong></p>
-          <p>{{ 'contact.info.weekendsHours' | translate }}</p>
-          <p class="disponibilidad">✅ {{ 'contact.info.availability' | translate }}</p>
+          <p><strong>{{ 'contact.info.weekdaysLabel' | translate }}:</strong> {{ 'contact.info.weekdaysHours' | translate }}</p>
+          <p><strong>{{ 'contact.info.weekendsLabel' | translate }}:</strong> {{ 'contact.info.weekendsHours' | translate }}</p>
+          <div class="disponibilidad">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ 'contact.info.availability' | translate }}
+          </div>
         </div>
       </div>
 
       <!-- Redes Sociales -->
       <div class="redes-sociales">
-        <h3>🌐 {{ 'contact.social.title' | translate }}</h3>
-        <div class="redes-icons">
-          <a
-            href="https://facebook.com/hospedjesebastian"
-            target="_blank"
-            class="red-social facebook"
-            [attr.title]="'contact.social.facebook' | translate"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            <span>{{ 'contact.social.facebook' | translate }}</span>
-          </a>
-          <a
-            href="https://instagram.com/hospedjesebastian"
-            target="_blank"
-            class="red-social instagram"
-            [attr.title]="'contact.social.instagram' | translate"
-          >
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          {{ 'contact.social.title' | translate }}
+        </h3>
+        <div class="redes-icons redes-icons--2">
+          <a href="https://instagram.com/hospedajesebastian" target="_blank" class="red-social instagram" [attr.title]="'contact.social.instagram' | translate">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
             </svg>
             <span>{{ 'contact.social.instagram' | translate }}</span>
           </a>
-          <a
-            href="https://twitter.com/hospedjesebastian"
-            target="_blank"
-            class="red-social twitter"
-            [attr.title]="'contact.social.twitter' | translate"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            <span>{{ 'contact.social.twitter' | translate }}</span>
-          </a>
-          <a
-            href="https://wa.me/573001234567"
-            target="_blank"
-            class="red-social whatsapp"
-            [attr.title]="'contact.social.whatsapp' | translate"
-          >
+          <a href="https://wa.me/573113408867" target="_blank" class="red-social whatsapp" [attr.title]="'contact.social.whatsapp' | translate">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
             </svg>
             <span>{{ 'contact.social.whatsapp' | translate }}</span>
-          </a>
-          <a
-            href="https://youtube.com/@hospedjesebastian"
-            target="_blank"
-            class="red-social youtube"
-            [attr.title]="'contact.social.youtube' | translate"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
-            <span>{{ 'contact.social.youtube' | translate }}</span>
-          </a>
-          <a
-            href="https://tiktok.com/@hospedjesebastian"
-            target="_blank"
-            class="red-social tiktok"
-            [attr.title]="'contact.social.tiktok' | translate"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-            </svg>
-            <span>{{ 'contact.social.tiktok' | translate }}</span>
           </a>
         </div>
       </div>
 
       <!-- Mapa/Ubicación -->
       <div class="ubicacion-card">
-        <div class="mapa-icon">🗺️</div>
+        <div class="mapa-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+          </svg>
+        </div>
         <h3>{{ 'contact.location.title' | translate }}</h3>
         <ul class="ubicacion-lista">
-          <li>✈️ <strong>{{ 'contact.location.airportLabel' | translate }}:</strong> {{ 'contact.location.airportDistance' | translate }}</li>
-          <li>🏛️ <strong>{{ 'contact.location.historicLabel' | translate }}:</strong> {{ 'contact.location.historicDistance' | translate }}</li>
-          <li>🛍️ <strong>{{ 'contact.location.commercialLabel' | translate }}:</strong> {{ 'contact.location.commercialDistance' | translate }}</li>
-          <li>🚇 <strong>{{ 'contact.location.transmilenioLabel' | translate }}:</strong> {{ 'contact.location.transmilenioDistance' | translate }}</li>
-          <li>🏥 <strong>{{ 'contact.location.hospitalLabel' | translate }}:</strong> {{ 'contact.location.hospitalDistance' | translate }}</li>
-          <li>🍽️ <strong>{{ 'contact.location.gastronomyLabel' | translate }}:</strong> {{ 'contact.location.gastronomyDistance' | translate }}</li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2l-1.5 1.5 8.3 6.1-2.3 2.4-.5-1-.5-1-2 .5.5 2.4-1 1 2.4.5.5 2.4 2-.5-1-1-1-.5 2.4-2.3 6.1 8.3 1.5-1.5z"/></svg>
+            <strong>{{ 'contact.location.airportLabel' | translate }}:</strong> {{ 'contact.location.airportDistance' | translate }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <strong>{{ 'contact.location.historicLabel' | translate }}:</strong> {{ 'contact.location.historicDistance' | translate }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <strong>{{ 'contact.location.commercialLabel' | translate }}:</strong> {{ 'contact.location.commercialDistance' | translate }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <strong>{{ 'contact.location.transmilenioLabel' | translate }}:</strong> {{ 'contact.location.transmilenioDistance' | translate }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <strong>{{ 'contact.location.hospitalLabel' | translate }}:</strong> {{ 'contact.location.hospitalDistance' | translate }}
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2h18v6H3zM3 8h18v14H3z"/><path d="M9 8v14M15 8v14"/></svg>
+            <strong>{{ 'contact.location.gastronomyLabel' | translate }}:</strong> {{ 'contact.location.gastronomyDistance' | translate }}
+          </li>
         </ul>
 
         <!-- Mapa Interactivo -->
@@ -143,7 +150,11 @@
           </iframe>
           <div class="mapa-overlay">
             <a href="https://www.google.com/maps/search/Hotel+Sebastian+Bogota" target="_blank" class="mapa-link">
-              📍 {{ 'contact.location.mapLink' | translate }}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              {{ 'contact.location.mapLink' | translate }}
             </a>
           </div>
         </div>
@@ -161,65 +172,47 @@
         <div class="form-row">
           <div class="form-group">
             <label for="nombre">
-              <span class="label-icon">👤</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
               {{ 'contact.form.fullNameLabel' | translate }} *
             </label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              [placeholder]="'contact.form.fullNamePlaceholder' | translate"
-              required
-            >
+            <input type="text" id="nombre" name="nombre" [placeholder]="'contact.form.fullNamePlaceholder' | translate" required>
           </div>
 
           <div class="form-group">
             <label for="email">
-              <span class="label-icon">📧</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               {{ 'contact.form.emailLabel' | translate }} *
             </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              [placeholder]="'contact.form.emailPlaceholder' | translate"
-              required
-            >
+            <input type="email" id="email" name="email" [placeholder]="'contact.form.emailPlaceholder' | translate" required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="telefono">
-              <span class="label-icon">📱</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               {{ 'contact.form.phoneLabel' | translate }} *
             </label>
             <div class="telefono-group">
               <select id="codigoPais" name="codigoPais" class="codigo-pais" required>
-                <option value="+57">🇨🇴 +57</option>
-                <option value="+54">🇦🇷 +54</option>
-                <option value="+55">🇧🇷 +55</option>
-                <option value="+56">🇨🇱 +56</option>
-                <option value="+593">🇪🇨 +593</option>
-                <option value="+34">🇪🇸 +34</option>
-                <option value="+52">🇲🇽 +52</option>
-                <option value="+51">🇵🇪 +51</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+58">🇻🇪 +58</option>
+                <option value="+57">+57 CO</option>
+                <option value="+54">+54 AR</option>
+                <option value="+55">+55 BR</option>
+                <option value="+56">+56 CL</option>
+                <option value="+593">+593 EC</option>
+                <option value="+34">+34 ES</option>
+                <option value="+52">+52 MX</option>
+                <option value="+51">+51 PE</option>
+                <option value="+1">+1 US</option>
+                <option value="+58">+58 VE</option>
               </select>
-              <input
-                type="tel"
-                id="telefono"
-                name="telefono"
-                [placeholder]="'contact.form.phonePlaceholder' | translate"
-                required
-              >
+              <input type="tel" id="telefono" name="telefono" [placeholder]="'contact.form.phonePlaceholder' | translate" required>
             </div>
           </div>
 
           <div class="form-group">
             <label for="asunto">
-              <span class="label-icon">📋</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
               {{ 'contact.form.subjectLabel' | translate }} *
             </label>
             <select id="asunto" name="asunto" required>
@@ -237,16 +230,10 @@
 
         <div class="form-group full-width">
           <label for="mensaje">
-            <span class="label-icon">💬</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             {{ 'contact.form.messageLabel' | translate }} *
           </label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            rows="6"
-            [placeholder]="'contact.form.messagePlaceholder' | translate"
-            required
-          ></textarea>
+          <textarea id="mensaje" name="mensaje" rows="6" [placeholder]="'contact.form.messagePlaceholder' | translate" required></textarea>
         </div>
 
         <div class="form-group full-width">
@@ -270,13 +257,20 @@
 
         <div class="form-actions">
           <button type="reset" class="btn-limpiar">{{ 'contact.form.clearButton' | translate }}</button>
-          <button type="submit" class="btn-enviar">{{ 'contact.form.sendButton' | translate }} ✉️</button>
+          <button type="submit" class="btn-enviar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            {{ 'contact.form.sendButton' | translate }}
+          </button>
         </div>
       </form>
 
       <!-- Respuesta Rápida -->
       <div class="respuesta-rapida">
-        <div class="rapida-icon">⚡</div>
+        <div class="rapida-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
         <div class="rapida-content">
           <h4>{{ 'contact.quickResponse.title' | translate }}</h4>
           <p>
@@ -290,62 +284,186 @@
   </div>
 
   <!-- Sección FAQ -->
+  <!-- Sección FAQ -->
   <div class="faq-section">
-    <h2>{{ 'contact.faq.title' | translate }}</h2>
+    <h2>Preguntas frecuentes</h2>
     <div class="faq-grid">
+
+      <!-- Q1 -->
       <div class="faq-card">
-        <div class="faq-icon">❓</div>
-        <h3>{{ 'contact.faq.q1' | translate }}</h3>
-        <p>{{ 'contact.faq.a1' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>¿Cuántas personas puede alojar el hospedaje?</h3>
+        <p>El hospedaje cuenta con <strong>7 habitaciones y una capacidad total de hasta 20 personas</strong>, distribuidas en dos pisos: <strong>Piso 1</strong> hasta 8 personas y <strong>Piso 2</strong> hasta 12 personas. La capacidad disponible dependerá de la habitación y del tipo de reserva seleccionado.</p>
       </div>
 
+      <!-- Q2 -->
       <div class="faq-card">
-        <div class="faq-icon">💳</div>
-        <h3>{{ 'contact.faq.q2' | translate }}</h3>
-        <p>{{ 'contact.faq.a2' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/>
+          </svg>
+        </div>
+        <h3>¿Qué tipos de habitaciones tienen?</h3>
+        <p>Contamos con <strong>7 habitaciones</strong>. <strong>Piso 1:</strong> hab. 101, 102 y 103. <strong>Piso 2:</strong> hab. 201, 202, 203 y 204. Tenemos habitaciones con camas dobles, camarotes, baños privados y baños compartidos.</p>
       </div>
 
+      <!-- Q3 -->
       <div class="faq-card">
-        <div class="faq-icon">🚗</div>
-        <h3>{{ 'contact.faq.q3' | translate }}</h3>
-        <p>{{ 'contact.faq.a3' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/>
+          </svg>
+        </div>
+        <h3>¿Todas las habitaciones tienen baño privado?</h3>
+        <p>No. <strong>101, 201 y 204</strong> tienen baño privado. <strong>102 y 103</strong> comparten baño entre sí. <strong>202 y 203</strong> también comparten baño. Todos los baños cuentan con <strong>agua caliente</strong>.</p>
       </div>
 
+      <!-- Q4 -->
       <div class="faq-card">
-        <div class="faq-icon">🐕</div>
-        <h3>{{ 'contact.faq.q4' | translate }}</h3>
-        <p>{{ 'contact.faq.a4' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3>¿Qué incluye el hospedaje?</h3>
+        <p>Lencería completa (toallas, sábanas, almohadas y cobijas), WiFi gratuito, agua caliente, cocina equipada, sala de estar, televisor en sala y acceso a zonas de entretenimiento. El <strong>mezanine</strong> cuenta con sala de juegos, juegos de mesa y mesa de ping pong.</p>
       </div>
 
+      <!-- Q5 -->
       <div class="faq-card">
-        <div class="faq-icon">⏰</div>
-        <h3>{{ 'contact.faq.q5' | translate }}</h3>
-        <p>{{ 'contact.faq.a5' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <h3>¿Hay cocina disponible para los huéspedes?</h3>
+        <p><strong>Sí.</strong> Contamos con <strong>cocina equipada</strong>, disponible para que los huéspedes puedan preparar sus propias comidas durante su estadía.</p>
       </div>
 
+      <!-- Q6 -->
       <div class="faq-card">
-        <div class="faq-icon">🍳</div>
-        <h3>{{ 'contact.faq.q6' | translate }}</h3>
-        <p>{{ 'contact.faq.a6' | translate }}</p>
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <h3>¿Qué tipos de reserva ofrecen?</h3>
+        <p>Contamos con <strong>4 tipos</strong>: Reserva individual, Grupo familiar, Pasadía y Reuniones de grupo. Cada modalidad tiene diferentes condiciones, horarios, capacidades y disponibilidad según la temporada.</p>
       </div>
+
+      <!-- Q7 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <h3>¿Cómo se calcula el precio de mi reserva?</h3>
+        <p>El precio depende de las fechas, la cantidad de personas, el tipo de reserva y la temporada. El sistema <strong>calcula automáticamente la tarifa</strong> según las fechas seleccionadas, sin que el huésped necesite determinar la temporada manualmente.</p>
+      </div>
+
+      <!-- Q8 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h3>¿Cuál es el horario de check-in y check-out?</h3>
+        <p>Para hospedaje: <strong>Check-in 3:00 p.m. · Check-out 12:00 p.m.</strong><br>
+        Pasadía: 10:00 a.m. – 8:00 p.m.<br>
+        Reuniones de grupo: 8:00 a.m. – 6:00 p.m.</p>
+      </div>
+
+      <!-- Q9 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          </svg>
+        </div>
+        <h3>¿Qué incluye el pasadía y para cuántas personas es?</h3>
+        <p>El pasadía incluye sala comedor, una habitación, baño social y el mezanine (sala de juegos, juegos de mesa y ping pong — disponible para quienes alquilen el piso 2 o la casa completa). Capacidad: <strong>10 a 15 personas</strong>. Disponible en <strong>temporada baja</strong>.</p>
+      </div>
+
+      <!-- Q10 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <h3>¿Cómo puedo realizar una reserva?</h3>
+        <p>Directamente desde nuestra plataforma: <strong>Fecha → Tipo de reserva → Personas → Habitación → Datos</strong>. El sistema verifica disponibilidad y calcula el precio automáticamente. También puedes reservar por <strong>WhatsApp</strong> para atención personalizada.</p>
+      </div>
+
+      <!-- Q11 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/>
+            <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.96-1.45-2.344-2.5"/>
+            <path d="M8 14v.5A3.5 3.5 0 0 0 11.5 18h1a3.5 3.5 0 0 0 3.5-3.5V14"/>
+            <path d="M5 10c-.5 1.5-1.5 5 7 5s7.5-3.5 7-5"/>
+          </svg>
+        </div>
+        <h3>¿Se permiten mascotas?</h3>
+        <p><strong>Sí, somos Pet Friendly</strong> en las habitaciones habilitadas. Máximo una mascota por reserva, bajo responsabilidad del propietario. Las mascotas deben usar correa en zonas comunes y no pueden utilizar la lencería del hospedaje. Puede aplicarse un <strong>cargo adicional de limpieza</strong>.</p>
+      </div>
+
+      <!-- Q12 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+        </div>
+        <h3>¿Qué métodos de pago aceptan?</h3>
+        <p>Aceptamos <strong>transferencias bancarias</strong> y <strong>efectivo al llegar</strong>. El anticipo requerido para confirmar la reserva es del 30%; el saldo restante se cancela al momento del check-in.</p>
+      </div>
+
+      <!-- Q13 -->
+      <div class="faq-card">
+        <div class="faq-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </div>
+        <h3>¿Tienen parqueadero?</h3>
+        <p>No contamos con parqueadero propio, pero <strong>hay estacionamiento público cercano</strong> al hospedaje.</p>
+      </div>
+
     </div>
   </div>
-
   <!-- CTA Final -->
   <div class="cta-contacto">
     <div class="cta-content">
       <h2>{{ 'contact.cta.title' | translate }}</h2>
       <p>{{ 'contact.cta.subtitle' | translate }}</p>
       <div class="cta-phones">
-        <a href="tel:+5712345678" class="phone-link">
-          <span class="phone-icon">📞</span>
-          <span class="phone-number">+57 (1) 234-5678</span>
+        <a href="tel:+573113408867" class="phone-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>+57 311 340 8867</span>
         </a>
-        <a href="https://wa.me/573109876543" class="whatsapp-link">
-          <span class="whatsapp-icon">💬</span>
-          <span class="whatsapp-text">{{ 'contact.cta.whatsapp' | translate }}</span>
+        <a href="https://wa.me/573113408867" class="whatsapp-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          <span>{{ 'contact.cta.whatsapp' | translate }}</span>
         </a>
       </div>
     </div>
   </div>
+
 </div>

@@ -1,18 +1,10 @@
-﻿/* ══════════════════════════════════════════════
-   HOME — Hospedaje Sebastián Filandia
-   Paleta: --primary #0E5A9C | --primary-dark #0A3D6D
-           --accent #D1902C   | --surface-soft #F8F4EE
-           --border #E8DCCB   | --text #2B2B2B
-   ══════════════════════════════════════════════ */
-
-.home-container {
+﻿.home-container {
   min-height: 100vh;
   font-family: 'DM Sans', sans-serif;
   background: #F8F4EE;
   overflow-x: hidden;
 }
 
-/* ─── Helpers compartidos ─────────────────────── */
 .section-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -50,9 +42,6 @@
   color: #fff;
 }
 
-/* ══════════════════════════════════════════════
-   HERO
-   ══════════════════════════════════════════════ */
 .hero {
   position: relative;
   height: 100vh;
@@ -67,10 +56,19 @@
   z-index: 0;
 }
 .gallery-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: opacity 0.8s ease;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.gallery-image.active {
+  opacity: 1;
+  z-index: 1;
 }
 .hero-overlay {
   position: absolute;
@@ -106,7 +104,8 @@
   letter-spacing: 0.5px;
 }
 .hero-title {
-  font-family: 'Playfair Display', serif;
+  font-family: serif;
+  color: rgb(231, 232, 238);
   font-size: 3.8rem;
   font-weight: 700;
   line-height: 1.1;
@@ -184,9 +183,6 @@
   transform: scale(1.3);
 }
 
-/* ══════════════════════════════════════════════
-   BUSCADOR
-   ══════════════════════════════════════════════ */
 .buscador-section {
   padding: 0 2rem;
   margin-top: -3.5rem;
@@ -211,7 +207,7 @@
 }
 .buscador-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) auto;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
   gap: 1rem;
   align-items: end;
 }
@@ -265,20 +261,58 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(14,90,156,0.35);
 }
-.buscador-temporada {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: #666666;
+.buscador-info {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.4rem;
+  background: rgba(224, 211, 197, 0.38);
+  border: 1px solid rgba(224, 211, 197, 0.9);
+  border-radius: 18px;
+  color: #2B2B2B;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
-.buscador-temporada strong { color: #0E5A9C; }
+.buscador-info strong {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  color: #0E5A9C;
+}
+.buscador-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+.buscador-info-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 0.95rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+}
+.buscador-info-label {
+  font-size: 0.82rem;
+  color: #666666;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.buscador-info-value {
+  font-weight: 700;
+  color: #0A3D6D;
+}
+.buscador-info-note {
+  margin: 0;
+  color: #5E5E5E;
+  font-size: 0.92rem;
+}
+@media (max-width: 768px) {
+  .buscador-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
-/* ══════════════════════════════════════════════
-   TIPOS DE RESERVA
-   ══════════════════════════════════════════════ */
 .tipos-section {
   padding: 5rem 2rem;
   background: #F8F4EE;
@@ -371,9 +405,6 @@
 .tipo-card.destacado .tipo-link { color: #D1902C; }
 .tipo-link:hover { gap: 9px; }
 
-/* ══════════════════════════════════════════════
-   PISOS
-   ══════════════════════════════════════════════ */
 .pisos-section {
   padding: 5rem 2rem;
   background: white;
@@ -480,9 +511,6 @@
   box-shadow: 0 8px 22px rgba(209,144,44,0.35);
 }
 
-/* ══════════════════════════════════════════════
-   SERVICIOS
-   ══════════════════════════════════════════════ */
 .servicios-section {
   padding: 5rem 2rem;
   background: linear-gradient(135deg, #0A3D6D 0%, #0E5A9C 100%);
@@ -534,115 +562,6 @@
   opacity: 0.82;
   line-height: 1.55;
   margin: 0;
-}
-
-/* ══════════════════════════════════════════════
-   TARIFAS
-   ══════════════════════════════════════════════ */
-.tarifas-section {
-  padding: 5rem 2rem;
-  background: #F8F4EE;
-}
-.temporada-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
-}
-.temp-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0.65rem 1.5rem;
-  border: 2px solid #E8DCCB;
-  background: white;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #666666;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: inherit;
-}
-.temp-tab:hover { border-color: #0E5A9C; color: #0E5A9C; }
-.temp-tab.active {
-  background: #0E5A9C;
-  border-color: #0E5A9C;
-  color: white;
-  box-shadow: 0 6px 18px rgba(14,90,156,0.3);
-}
-.tarifas-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.25rem;
-}
-.tarifa-card {
-  background: white;
-  border: 2px solid #E8DCCB;
-  border-radius: 16px;
-  padding: 1.8rem 1.2rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-}
-.tarifa-card:hover {
-  border-color: #D1902C;
-  transform: translateY(-5px);
-  box-shadow: 0 14px 36px rgba(209,144,44,0.15);
-}
-.tarifa-tipo {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #666666;
-  line-height: 1.4;
-  min-height: 2.4em;
-}
-.tarifa-precio {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.55rem;
-  font-weight: 700;
-  color: #0A3D6D;
-  margin: 0.3rem 0 0;
-}
-.tarifa-por-noche {
-  font-size: 0.78rem;
-  color: #7A7A7A;
-  margin-bottom: 0.8rem;
-}
-.btn-tarifa {
-  width: 100%;
-  padding: 0.65rem;
-  background: #F8F4EE;
-  border: 2px solid #E8DCCB;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #0E5A9C;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: inherit;
-  margin-top: auto;
-}
-.btn-tarifa:hover {
-  background: #0E5A9C;
-  border-color: #0E5A9C;
-  color: white;
-}
-.tarifas-nota {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  text-align: center;
-  margin-top: 1.8rem;
-  font-size: 0.85rem;
-  color: #7A7A7A;
 }
 
 /* ══════════════════════════════════════════════
@@ -961,4 +880,129 @@
   .tipos-section, .pisos-section, .servicios-section,
   .tarifas-section, .testimonios-section, .ubicacion-section,
   .cta-final { padding: 2.5rem 0.8rem; }
+}
+
+/* ── BUSCADOR: campo niños + info tarifas ──────────────────── */
+.buscador-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  align-items: end;
+}
+.buscador-campo label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0A3D6D;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0.4rem;
+}
+.buscador-campo input,
+.buscador-campo select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #E8DCCB;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2B2B2B;
+  background: #FFFDF9;
+  transition: border-color 0.25s;
+  appearance: none;
+}
+.buscador-campo input:focus,
+.buscador-campo select:focus {
+  outline: none;
+  border-color: #0E5A9C;
+  box-shadow: 0 0 0 3px rgba(14,90,156,0.1);
+}
+.btn-buscar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0E5A9C, #0A3D6D);
+  color: white;
+  border: none;
+  padding: 0.78rem 1.6rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+  grid-column: span 1;
+}
+.btn-buscar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(14,90,156,0.35);
+}
+
+/* Info tarifas niños */
+.buscador-info {
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #E8DCCB;
+}
+.buscador-info > strong {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0A3D6D;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.85rem;
+}
+.buscador-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+.buscador-info-grid > div {
+  background: #F8F4EE;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border: 1px solid #E8DCCB;
+}
+.buscador-info-label {
+  font-size: 0.76rem;
+  color: #7A7A7A;
+  font-weight: 600;
+}
+.buscador-info-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0A3D6D;
+}
+.buscador-info-note {
+  font-size: 0.79rem;
+  color: #7A7A7A;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Buscador responsive */
+@media (max-width: 1200px) {
+  .buscador-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .btn-buscar { grid-column: 1 / -1; max-width: 240px; justify-self: center; }
+  .buscador-info-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .buscador-grid { grid-template-columns: 1fr 1fr; }
+  .btn-buscar { grid-column: 1 / -1; max-width: 100%; }
+  .buscador-info-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .buscador-grid { grid-template-columns: 1fr; }
+  .buscador-info-grid { grid-template-columns: 1fr; }
 }

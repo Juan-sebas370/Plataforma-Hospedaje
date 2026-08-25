@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
+    path: 'habitaciones/:id',
+    renderMode: RenderMode.Server
+  },
+  {
     path: 'habitaciones',
     renderMode: RenderMode.Prerender
   },
