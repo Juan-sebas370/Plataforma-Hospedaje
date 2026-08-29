@@ -221,18 +221,18 @@ export class Reservas implements OnInit {
     {
       id: 'piso2',
       nombre: 'Piso 2',
-      descripcion: '3 habitaciones · 2 camas dobles · 2 camarotes',
-      capacidad: '6 a 10 personas',
-      capacidadMax: 10,
-      detalle: '3 habitaciones · Capacidad: 10 personas · 2 camas dobles + 2 camarotes',
+      descripcion: '4 habitaciones · 2 camas dobles · 2 camarotes',
+      capacidad: '8 a 12 personas',
+      capacidadMax: 12,
+      detalle: '4 habitaciones · Capacidad: 12 personas · 2 camas dobles + 2 camarotes',
     },
     {
       id: 'completo',
       nombre: 'Casa completa',
-      descripcion: '6 habitaciones · 5 camas dobles · 3 camarotes',
+      descripcion: '7 habitaciones · 5 camas dobles · 3 camarotes',
       capacidad: 'Hasta 20 personas',
       capacidadMax: 20,
-      detalle: '6 habitaciones · Capacidad: 20 personas · Mayor privacidad y exclusividad',
+      detalle: '7 habitaciones · Capacidad: 20 personas · Mayor privacidad y exclusividad',
     },
   ];
 
@@ -252,15 +252,19 @@ export class Reservas implements OnInit {
     { id: 4, numero: '201', piso: 2, nombre: 'Habitación 201',
       descripcion: 'Cama doble y camarote. Baño privado. Capacidad para 4 personas.',
       capacidad: 4, camas: '1 cama doble · 1 camarote', bano: 'Baño privado',
-      precio: 120000, imagen: 'assets/habitaciones/piso2/hab201.jpeg' },
+      precio: 80000, imagen: 'assets/habitaciones/piso2/hab201.jpeg' },
     { id: 5, numero: '202', piso: 2, nombre: 'Habitación 202',
       descripcion: 'Cama doble matrimonial. Comparte baño con la hab. 203.',
       capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido (203)',
-      precio: 100000, imagen: 'assets/habitaciones/piso2/hab202.jpeg' },
+      precio: 110000, imagen: 'assets/habitaciones/piso2/hab202.jpeg' },
     { id: 6, numero: '203', piso: 2, nombre: 'Habitación 203',
       descripcion: 'Cama doble matrimonial. Comparte baño con la hab. 202.',
       capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido (202)',
-      precio: 100000, imagen: 'assets/habitaciones/piso2/hab203.jpg' },
+      precio: 110000, imagen: 'assets/habitaciones/piso2/hab203.jpg' },
+    { id: 7, numero: '204', piso: 2, nombre: 'Habitación 204',
+      descripcion: 'Cama doble y camarote. Baño privado. Ideal para 4 personas.',
+      capacidad: 4, camas: '1 cama doble · 1 camarote', bano: 'Baño privado',
+      precio: 80000, imagen: 'assets/habitaciones/piso2/hab204.jpg' },
   ];
 
   readonly tarifas: Tarifa[] = [

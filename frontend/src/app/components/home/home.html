@@ -1,8 +1,6 @@
 ﻿<div class="home-container">
 
-  <!-- ══════════════════════════════════════════
-       HERO + BUSCADOR
-  ══════════════════════════════════════════ -->
+  <!-- ══ HERO ══════════════════════════════════════════════ -->
   <section class="hero">
     <div class="hero-gallery">
       @for (img of images; track img; let i = $index) {
@@ -22,14 +20,13 @@
         Filandia, Quindío
       </span>
       <h1 class="hero-title">Hospedaje Sebastián</h1>
-      <p class="hero-subtitle">Paz, naturaleza y calidez en el corazón del Eje Cafetero</p>
+      <p class="hero-subtitle">Tu hogar lejos de casa, en el corazón de Filandia.<br>Descansa, comparte y disfruta la magia del Paisaje Cultural Cafetero.</p>
       <div class="hero-actions">
         <button class="btn-hero-primary" routerLink="/reservas">Reservar ahora</button>
-        <a class="btn-hero-ghost" href="#pisos">Ver alojamientos</a>
+        <a class="btn-hero-ghost" routerLink="/habitaciones">Explorar habitaciones</a>
       </div>
     </div>
 
-    <!-- Dots -->
     <div class="gallery-dots">
       @for (img of images; track $index) {
         <button class="dot" [class.active]="currentImageIndex === $index" (click)="goToImage($index)" [attr.aria-label]="'Imagen ' + ($index + 1)"></button>
@@ -37,9 +34,7 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       BUSCADOR DE DISPONIBILIDAD
-  ══════════════════════════════════════════ -->
+  <!-- ══ BUSCADOR ═══════════════════════════════════════════ -->
   <section class="buscador-section">
     <div class="buscador-card">
       <h2 class="buscador-title">Consulta disponibilidad</h2>
@@ -71,25 +66,6 @@
         </div>
         <div class="buscador-campo">
           <label>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5.25-3.5 9.84-8 11-4.5-1.16-8-5.75-8-11V6l8-4z"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>
-            Niños
-          </label>
-          <select [(ngModel)]="busqueda.ninos">
-            <option [value]="0">0 niños</option>
-            <option [value]="1">1 niño</option>
-            <option [value]="2">2 niños</option>
-            <option [value]="3">3 niños</option>
-            <option [value]="4">4 niños</option>
-            <option [value]="5">5 niños</option>
-            <option [value]="6">6 niños</option>
-            <option [value]="7">7 niños</option>
-            <option [value]="8">8 niños</option>
-            <option [value]="9">9 niños</option>
-            <option [value]="10">10 niños</option>
-          </select>
-        </div>
-        <div class="buscador-campo">
-          <label>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Tipo de reserva
           </label>
@@ -102,38 +78,37 @@
         </div>
         <button class="btn-buscar" routerLink="/reservas">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Buscar
+          Buscar disponibilidad
         </button>
       </div>
-      <div class="buscador-info">
-        <strong>Tarifas para niños</strong>
-        <div class="buscador-info-grid">
-          <div>
-            <span class="buscador-info-label">0–3 años</span>
-            <span class="buscador-info-value">Gratis</span>
+
+      <!-- Info niños: colapsable -->
+      <div class="buscador-ninos">
+        <button class="buscador-ninos-toggle" (click)="mostrarInfoNinos = !mostrarInfoNinos" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Información sobre tarifas infantiles
+          <svg class="toggle-chevron" [class.open]="mostrarInfoNinos" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        @if (mostrarInfoNinos) {
+          <div class="buscador-ninos-info">
+            <div class="ninos-grid">
+              <div><span class="ninos-label">0–3 años</span><span class="ninos-valor">Gratis</span></div>
+              <div><span class="ninos-label">4–10 años</span><span class="ninos-valor">60% del adulto</span></div>
+              <div><span class="ninos-label">11+ años</span><span class="ninos-valor">Tarifa adulto</span></div>
+            </div>
+            <p>Los niños menores de 4 años pueden compartir cama con los padres sin costo adicional.</p>
           </div>
-          <div>
-            <span class="buscador-info-label">4–10 años</span>
-            <span class="buscador-info-value">60 % del adulto</span>
-          </div>
-          <div>
-            <span class="buscador-info-label">11+ años</span>
-            <span class="buscador-info-value">Tarifa de adulto</span>
-          </div>
-        </div>
-        <p class="buscador-info-note">Los niños menores de 4 años pueden compartir cama con los padres y no pagan tarifa adicional.</p>
+        }
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       TIPOS DE RESERVA
-  ══════════════════════════════════════════ -->
+  <!-- ══ TIPOS DE RESERVA ═══════════════════════════════════ -->
   <section class="tipos-section">
     <div class="section-header">
       <span class="section-tag">Modalidades</span>
-      <h2>¿Cómo quieres disfrutarlo?</h2>
-      <p>El Hospedaje Sebastián se adapta a cada ocasión</p>
+      <h2>Elige tu experiencia</h2>
+      <p>Tenemos diferentes opciones para disfrutar Hospedaje Sebastián según lo que necesites</p>
     </div>
     <div class="tipos-grid">
       @for (tipo of tiposReserva; track tipo.id) {
@@ -152,13 +127,14 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             }
             @if (tipo.icon === 'briefcase') {
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             }
           </div>
           <h3>{{ tipo.nombre }}</h3>
           <p>{{ tipo.descripcion }}</p>
-          <a class="tipo-link" routerLink="/reservas" [queryParams]="{tipo: tipo.id}">
-            Reservar
+          <span class="tipo-precio">{{ tipo.precio }}</span>
+          <a class="tipo-link" routerLink="/servicios">
+            Ver detalles
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
@@ -166,13 +142,11 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       DISTRIBUCIÓN POR PISOS
-  ══════════════════════════════════════════ -->
+  <!-- ══ HABITACIONES / PISOS ═══════════════════════════════ -->
   <section class="pisos-section" id="pisos">
     <div class="section-header">
       <span class="section-tag">Alojamiento</span>
-      <h2>Elige tu espacio</h2>
+      <h2>Encuentra el espacio ideal para tu estadía</h2>
       <p>Dos pisos independientes, reservables por separado o juntos</p>
     </div>
     <div class="pisos-grid">
@@ -202,19 +176,20 @@
                 <span>Hasta {{ piso.capacidadMax }} huéspedes</span>
               </div>
             </div>
-            <button class="btn-piso" routerLink="/reservas">Reservar este piso</button>
+            <button class="btn-piso" routerLink="/reservas">Ver {{ piso.nombre }}</button>
           </div>
         </div>
       }
 
-      <!-- Casa completa -->
+      <!-- Casa completa — destacada -->
       <div class="piso-card piso-completo">
         <div class="piso-visual piso-completo-visual">
+          <span class="piso-estrella-badge">⭐ Recomendado</span>
           <div class="piso-numero">Casa Completa</div>
           <div class="piso-capacidad-badge">Hasta 20 personas</div>
         </div>
         <div class="piso-info">
-          <p class="piso-desc">Reserva ambos pisos y disfruta de toda la casa con tu grupo. 7 habitaciones, 7 camas dobles y 3 camarotes disponibles.</p>
+          <p class="piso-desc">Reserva ambos pisos y disfruta de toda la casa con tu grupo. Máxima privacidad, cocina, mezanine y espacios comunes exclusivos.</p>
           <div class="piso-stats">
             <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg><span>7 habitaciones</span></div>
             <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg><span>7 camas dobles</span></div>
@@ -227,9 +202,70 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       SERVICIOS (4 reales)
-  ══════════════════════════════════════════ -->
+  <!-- ══ GALERÍA ════════════════════════════════════════════ -->
+  <section class="galeria-section">
+    <div class="galeria-header">
+      <div class="section-header">
+        <span class="section-tag">Fotografías</span>
+        <h2>Conoce nuestro hospedaje</h2>
+        <p>Espacios diseñados para que te sientas como en casa</p>
+      </div>
+    </div>
+    <div class="galeria-grid">
+      @for (foto of galeriaFotos; track foto.src; let i = $index) {
+        <div class="galeria-item" [class.galeria-item--grande]="i === 0">
+          <img [src]="foto.src" [alt]="foto.alt" loading="lazy" />
+          <div class="galeria-overlay">
+            <span>{{ foto.alt }}</span>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="galeria-footer">
+      <button class="btn-galeria" routerLink="/galeria">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Ver toda la galería
+      </button>
+    </div>
+  </section>
+
+  <!-- ══ MEZANINE ═══════════════════════════════════════════ -->
+  <section class="mezanine-section">
+    <div class="mezanine-inner">
+      <div class="mezanine-imagen">
+        <img src="assets/habitaciones/espacios/mezanine.png" alt="Mezanine Hospedaje Sebastián" loading="lazy" />
+      </div>
+      <div class="mezanine-texto">
+        <span class="section-tag">Espacio único</span>
+        <h2>Un espacio para compartir</h2>
+        <p>Disfruta nuestro mezanine, juega una partida de ping pong o comparte un juego de mesa con familiares y amigos. El lugar perfecto para crear recuerdos durante tu visita a Filandia.</p>
+        <ul class="mezanine-lista">
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Acceso incluido en tu estadía
+          </li>
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Mesa de ping pong
+          </li>
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Juegos de mesa
+          </li>
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Espacio de entretenimiento
+          </li>
+        </ul>
+        <button class="btn-mezanine" routerLink="/servicios">
+          Conocer nuestros espacios
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SERVICIOS ══════════════════════════════════════════ -->
   <section class="servicios-section">
     <div class="section-header section-header-dark">
       <span class="section-tag section-tag-light">Incluido</span>
@@ -269,12 +305,109 @@
         <h3>Cocina Equipada</h3>
         <p>Cocina completa con todos los utensilios para preparar tus alimentos</p>
       </div>
+      <!-- Lencería -->
+      <div class="servicio-card">
+        <div class="servicio-icon-wrap">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
+        </div>
+        <h3>Lencería Completa</h3>
+        <p>Sábanas, cobijas, almohadas y toallas incluidas en tu estadía</p>
+      </div>
+      <!-- Sala de estar -->
+      <div class="servicio-card">
+        <div class="servicio-icon-wrap">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+        </div>
+        <h3>Sala de Estar</h3>
+        <p>Espacio común con televisor para descansar y compartir</p>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       TESTIMONIOS
-  ══════════════════════════════════════════ -->
+  <!-- ══ PET FRIENDLY ═══════════════════════════════════════ -->
+  <section class="pet-section">
+    <div class="pet-inner">
+      <div class="pet-icono-wrap">
+        <img src="assets/habitaciones/espacios/petfriendly.jpg" alt="Pet Friendly Hospedaje Sebastián" loading="lazy" />
+      </div>
+      <div class="pet-texto">
+        <span class="section-tag">Mascotas bienvenidas</span>
+        <h2>¿Viajas con tu mascota?</h2>
+        <p>En Hospedaje Sebastián somos pet friendly. Consulta nuestras habitaciones habilitadas para mascotas y conoce nuestras condiciones.</p>
+        <button class="btn-pet" routerLink="/servicios">
+          Ver política de mascotas
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FILANDIA ═══════════════════════════════════════════ -->
+  <section class="filandia-section">
+    <div class="filandia-inner">
+      <div class="filandia-texto">
+        <span class="section-tag">¿Dónde estamos?</span>
+        <h2>Descubre Filandia</h2>
+        <p>Hospedaje Sebastián está ubicado cerca del centro de Filandia, permitiéndote disfrutar fácilmente de sus calles, gastronomía, miradores y atractivos turísticos.</p>
+        <ul class="filandia-lista">
+          <li>
+            <span class="filandia-icono"> </span>
+            <div>
+              <strong>Parque principal</strong>
+              <span>2 cuadras</span>
+            </div>
+          </li>
+          <li>
+            <span class="filandia-icono"> </span>
+            <div>
+              <strong>Restaurantes</strong>
+              <span>≈ 5 minutos caminando</span>
+            </div>
+          </li>
+          <li>
+            <span class="filandia-icono"> </span>
+            <div>
+              <strong>Miradores</strong>
+              <span>≈ 10 minutos caminando</span>
+            </div>
+          </li>
+          <li>
+            <span class="filandia-icono"> </span>
+            <div>
+              <strong>Armenia</strong>
+              <span>30 minutos</span>
+            </div>
+          </li>
+          <li>
+            <span class="filandia-icono"> </span>
+            <div>
+              <strong>Pereira</strong>
+              <span>45 minutos</span>
+            </div>
+          </li>
+        </ul>
+        <div class="filandia-acciones">
+          <button class="btn-filandia-primary" routerLink="/servicios">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Explorar Filandia
+          </button>
+          <a class="btn-filandia-ghost" href="https://www.google.com/maps/search/Filandia+Quindio+Colombia" target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            Ver en Google Maps
+          </a>
+        </div>
+      </div>
+      <div class="filandia-mapa">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15918.12!2d-75.6661!3d4.6737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e38865a3b8d1e3d%3A0x8d4d4d4d4d4d4d4d!2sFilandia%2C%20Quind%C3%ADo!5e0!3m2!1ses!2sco!4v1234567890"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación Filandia Quindío">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TESTIMONIOS ════════════════════════════════════════ -->
   <section class="testimonios-section">
     <div class="section-header section-header-dark">
       <span class="section-tag section-tag-light">Opiniones</span>
@@ -301,56 +434,13 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       UBICACIÓN
-  ══════════════════════════════════════════ -->
-  <section class="ubicacion-section">
-    <div class="ubicacion-content">
-      <div class="ubicacion-info">
-        <span class="section-tag">¿Dónde estamos?</span>
-        <h2>Filandia, Quindío</h2>
-        <p>En el corazón del Paisaje Cultural Cafetero de Colombia, Filandia es uno de los pueblos más pintorescos del Eje Cafetero. Rodeado de montañas verdes, cafetales y un clima perfecto durante todo el año.</p>
-        <ul class="ubicacion-lista">
-          <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            30 min de Armenia
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            45 min de Pereira
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Cerca al Mirador y Observatorio de Filandia
-          </li>
-          <li>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Paisaje Cultural Cafetero (Patrimonio UNESCO)
-          </li>
-        </ul>
-        <a href="https://www.google.com/maps/search/Filandia+Quindio+Colombia" target="_blank" class="btn-mapa">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          Ver en Google Maps
-        </a>
-      </div>
-      <div class="ubicacion-mapa">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15918.12!2d-75.6661!3d4.6737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e38865a3b8d1e3d%3A0x8d4d4d4d4d4d4d4d!2sFilandia%2C%20Quind%C3%ADo!5e0!3m2!1ses!2sco!4v1234567890"
-          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       CTA FINAL
-  ══════════════════════════════════════════ -->
+  <!-- ══ CTA FINAL ══════════════════════════════════════════ -->
   <section class="cta-final">
     <div class="cta-content">
-      <h2>¿Listo para escapar a la montaña?</h2>
-      <p>Reserva hoy y vive la experiencia del Eje Cafetero en el Hospedaje Sebastián</p>
+      <h2>Tu próxima experiencia comienza en Filandia</h2>
+      <p>Reserva tu estadía y disfruta de un lugar pensado para descansar, compartir y descubrir el corazón del Quindío.</p>
       <div class="cta-actions">
-        <button class="btn-cta-primary" routerLink="/reservas">Hacer una reserva</button>
+        <button class="btn-cta-primary" routerLink="/reservas">Reservar ahora</button>
         <button class="btn-cta-ghost" routerLink="/contacto">Hablar con nosotros</button>
       </div>
     </div>

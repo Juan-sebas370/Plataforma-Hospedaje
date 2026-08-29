@@ -3,7 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '../../shared/translate.pipe';
 
-export type CategoriaLugar = 'todos' | 'restaurantes' | 'miradores' | 'atracciones' | 'parqueaderos' | 'cafeteros';
+export type CategoriaLugar =
+  | 'todos'
+  | 'restaurantes'
+  | 'miradores'
+  | 'atracciones'
+  | 'cafeteros'
+  | 'parqueaderos';
 
 export interface LugarTuristico {
   id: number;
@@ -16,6 +22,19 @@ export interface LugarTuristico {
   imagen: string;
 }
 
+export interface TipoReserva {
+  id: string;
+  titulo: string;
+  subtitulo: string;
+  descripcion: string;
+  horario: string;
+  capacidad: string | null;
+  precio: string | null;
+  incluye: string[] | null;
+  disponibilidad: string | null;
+  destacado: boolean;
+}
+
 @Component({
   selector: 'app-servicios',
   imports: [CommonModule, RouterLink, TranslatePipe],
@@ -24,17 +43,78 @@ export interface LugarTuristico {
 })
 export class Servicios {
 
+  /* ── Filtro de lugares ───────────────────────────────────── */
   filtroActivo: CategoriaLugar = 'todos';
 
-  readonly categorias: { id: CategoriaLugar; label: string; icono: string }[] = [
-    { id: 'todos',        label: 'Todos',               icono: 'grid'      },
-    { id: 'restaurantes', label: 'Restaurantes',         icono: 'fork'      },
-    { id: 'miradores',    label: 'Miradores',             icono: 'mountain'  },
-    { id: 'atracciones',  label: 'Atracciones',           icono: 'map-pin'   },
-    { id: 'cafeteros',    label: 'Experiencias cafeteras', icono: 'coffee'    },
-    { id: 'parqueaderos', label: 'Parqueaderos',           icono: 'parking'   },
+  readonly categorias: { id: CategoriaLugar; label: string }[] = [
+    { id: 'todos',        label: 'Todos'                },
+    { id: 'restaurantes', label: 'Restaurantes'         },
+    { id: 'miradores',    label: 'Miradores'             },
+    { id: 'atracciones',  label: 'Atracciones'           },
+    { id: 'cafeteros',    label: 'Experiencias cafeteras'},
+    { id: 'parqueaderos', label: 'Parqueaderos'          },
   ];
 
+  /* ── Tipos de reserva ────────────────────────────────────── */
+  readonly tiposReserva: TipoReserva[] = [
+    {
+      id: 'individual',
+      titulo: 'Reserva Individual',
+      subtitulo: 'Comodidad para uno o dos viajeros',
+      descripcion: 'Disfruta de una estadía cómoda en una de nuestras habitaciones, pensada para que descanses y explores Filandia a tu ritmo.',
+      horario: '3:00 p. m. – 12:00 p. m.',
+      capacidad: null,
+      precio: 'Desde $65.000 por persona',
+      incluye: null,
+      disponibilidad: null,
+      destacado: false,
+    },
+    {
+      id: 'familiar',
+      titulo: 'Grupo Familiar',
+      subtitulo: 'Una experiencia pensada para familias',
+      descripcion: 'Una opción diseñada para familias y pequeños grupos que quieren compartir la experiencia de Filandia juntos.',
+      horario: '3:00 p. m. – 12:00 p. m.',
+      capacidad: '6 a 8 personas',
+      precio: 'Desde $51.000 por persona',
+      incluye: null,
+      disponibilidad: null,
+      destacado: true,
+    },
+    {
+      id: 'pasadia',
+      titulo: 'Pasadía',
+      subtitulo: 'Ideal para celebraciones y reuniones',
+      descripcion: 'Perfecto para cumpleaños, celebraciones familiares o simplemente disfrutar un día completo con familia y amigos.',
+      horario: '10:00 a. m. – 8:00 p. m.',
+      capacidad: '10 a 15 personas',
+      precio: null,
+      incluye: [
+        'Sala comedor',
+        'Una habitación',
+        'Baño social',
+        'Acceso al mezanine',
+        'Juegos de mesa',
+        'Mesa de ping pong',
+      ],
+      disponibilidad: 'Disponible en temporada baja',
+      destacado: false,
+    },
+    {
+      id: 'reuniones',
+      titulo: 'Reuniones de Grupo',
+      subtitulo: 'Espacio para equipos de trabajo',
+      descripcion: 'Un ambiente tranquilo y bien equipado para reuniones empresariales, laborales o de equipo.',
+      horario: '8:00 a. m. – 6:00 p. m.',
+      capacidad: null,
+      precio: null,
+      incluye: null,
+      disponibilidad: 'Disponible en temporada media y baja',
+      destacado: false,
+    },
+  ];
+
+  /* ── Lugares turísticos ──────────────────────────────────── */
   readonly lugares: LugarTuristico[] = [
     // Restaurantes
     {
@@ -173,7 +253,7 @@ export class Servicios {
       id: 14,
       nombre: 'Reserva Barbas Bremen',
       categoria: 'atracciones',
-      descripcion: 'Reserva natural con caminatas, observación de fauna y paisajes del Eje Cafetero. Ideal para naturaleza.',
+      descripcion: 'Reserva natural con caminatas, observación de fauna y paisajes del Eje Cafetero.',
       distancia: '20 min en carro',
       calificacion: 4.2,
       mapsUrl: 'https://www.google.com/maps/search/Reserva+Barbas+Bremen+Filandia',
@@ -190,19 +270,9 @@ export class Servicios {
       mapsUrl: 'https://www.google.com/maps/search/Recua+Cafe+Tour+Filandia',
       imagen: 'assets/img/servicios/cafe1.jpg',
     },
-    {
-      id: 16,
-      nombre: 'Fincas cafeteras temáticas',
-      categoria: 'cafeteros',
-      descripcion: 'Visita fincas productoras de café donde puedes cosechar, descerezar y aprender sobre el paisaje cafetero.',
-      distancia: 'Varios puntos',
-      calificacion: 4.7,
-      mapsUrl: 'https://www.google.com/maps/search/Fincas+cafeteras+Filandia+Quindio',
-      imagen: 'assets/img/servicios/cafe2.jpg',
-    },
     // Parqueaderos
     {
-      id: 17,
+      id: 16,
       nombre: 'Parqueadero Central Parking',
       categoria: 'parqueaderos',
       descripcion: 'Estacionamiento central, seguro y vigilado, a pocas cuadras del hospedaje.',
@@ -212,7 +282,7 @@ export class Servicios {
       imagen: 'assets/img/servicios/parking1.jpg',
     },
     {
-      id: 18,
+      id: 17,
       nombre: 'Parqueadero Los Yarumos',
       categoria: 'parqueaderos',
       descripcion: 'Alternativa de parqueo cercana al centro del municipio.',
@@ -221,8 +291,19 @@ export class Servicios {
       mapsUrl: 'https://www.google.com/maps/search/Parqueadero+Los+Yarumos+Filandia',
       imagen: 'assets/img/servicios/parking2.jpg',
     },
+    {
+      id: 18,
+      nombre: 'Simmetria Detailing (Auto Spa - Parqueadero)',
+      categoria: 'parqueaderos',
+      descripcion: 'Auto spa y parqueadero ubicado en el centro de Filandia. Cl. 6 #2-22, Filandia, Quindío.',
+      distancia: '5 min caminando',
+      calificacion: 4.5,
+      mapsUrl: 'https://www.google.com/maps/place/SIMMETRIA+DETAILING+(+AUTO+SPA-PARQUEADERO)/@4.6729211,-75.6583805,379m/data=!3m1!1e3!4m14!1m7!3m6!1s0x8e388971858ec31f:0x55b839617517cd53!2sParqueadero!8m2!3d4.67599!4d-75.6579299!16s%2Fg%2F1v_z5c93!3m5!1s0x8e388975479d15f7:0x1e3813c888e1826!8m2!3d4.6724102!4d-75.6570811!16s%2Fg%2F11m71cc8jv?entry=ttu&g_ep=EgoyMDI2MDgxOS4wIKXMDSoASAFQAw%3D%3D',
+      imagen: 'assets/img/servicios/parking3.jpg',
+    },
   ];
 
+  /* ── Helpers ─────────────────────────────────────────────── */
   get lugaresFiltrados(): LugarTuristico[] {
     if (this.filtroActivo === 'todos') return this.lugares;
     return this.lugares.filter(l => l.categoria === this.filtroActivo);
@@ -232,11 +313,15 @@ export class Servicios {
     this.filtroActivo = cat;
   }
 
-  getEstrellas(cal: number): number[] {
-    return Array.from({ length: 5 }, (_, i) => i + 1);
+  getEstrellas(cal: number): boolean[] {
+    return Array.from({ length: 5 }, (_, i) => i < Math.round(cal));
   }
 
   abrirMaps(url: string): void {
     window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  abrirFilandiaEnMaps(): void {
+    window.open('https://www.google.com/maps/search/Filandia+Quindio+Colombia', '_blank', 'noopener,noreferrer');
   }
 }

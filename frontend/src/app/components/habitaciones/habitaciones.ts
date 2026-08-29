@@ -80,9 +80,9 @@ export class Habitaciones implements OnInit {
       piso: 2,
       titulo: 'PISO 2',
       descripcion:
-        'En el piso 2 se encuentran 3 habitaciones: 201, 202 y 203. Tiene capacidad para 8 personas, 2 camas dobles y 2 camarotes.',
-      habitaciones: 3,
-      capacidad: 8,
+        'En el piso 2 se encuentran 4 habitaciones: 201, 202, 203 y 204. Tiene capacidad para 12 personas, 2 camas dobles y 2 camarotes.',
+      habitaciones: 4,
+      capacidad: 12,
       camasDobles: 2,
       camarotes: 2,
       detalles: [
@@ -98,6 +98,10 @@ export class Habitaciones implements OnInit {
         {
           nombre: 'Habitación 203',
           descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 202.',
+        },
+        {
+          nombre: 'Habitación 204',
+          descripcion: 'Cama doble y camarote. Baño privado. Capacidad para 4 personas.',
         },
       ],
     },
@@ -287,7 +291,7 @@ export class Habitaciones implements OnInit {
         bano: false,
         minibar: false
       },
-      // PISO 2 (ABAJO) - 3 Habitaciones
+      // PISO 2 (ABAJO) - 4 Habitaciones
       {
         id: 5,
         numero: '201',
@@ -347,6 +351,25 @@ export class Habitaciones implements OnInit {
         television: false,
         wifi: true,
         bano: false,
+        minibar: false
+      },
+      {
+        id: 8,
+        numero: '204',
+        tipo: 'Individual',
+        piso: 2,
+        capacidad: 4,
+        precioNoche: 80000,
+        descripcion: 'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
+        servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
+        imagenes: [
+          'assets/habitaciones/piso2/hab204.jpg',
+        ],
+        estado: 'DISPONIBLE',
+        climatizacion: false,
+        television: false,
+        wifi: true,
+        bano: true,
         minibar: false
       }
     ];

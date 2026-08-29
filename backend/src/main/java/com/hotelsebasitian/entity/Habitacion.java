@@ -21,18 +21,19 @@ public class Habitacion {
     private Long id;
 
     private String numero;
-    private String tipo; // SIMPLE, DOBLE, SUITE, etc.
+    private String tipo;    // SIMPLE, DOBLE, SUITE, etc.
+    private Integer piso;   // 1 o 2
     private Integer capacidad;
     private Double precioNoche;
     private String descripcion;
-    
+
     @ElementCollection
     private List<String> servicios;
-    
+
     @ElementCollection
     private List<String> imagenes;
-    
-    private String estado; // DISPONIBLE, OCUPADA, MANTENIMIENTO
+
+    private String estado;        // DISPONIBLE, OCUPADA, MANTENIMIENTO
     private Boolean climatizacion;
     private Boolean television;
     private Boolean wifi;

@@ -25,6 +25,7 @@ export interface TipoReserva {
   id: string;
   nombre: string;
   descripcion: string;
+  precio: string;
   icon: string;
   destacado?: boolean;
 }
@@ -43,7 +44,8 @@ export interface Testimonio {
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-  // ── Carousel ──────────────────────────────────────────────────
+
+  // ── Carousel ───────────────────────────────────────────────
   images = [
     '/assets/principal/imagen1.jpg',
     '/assets/principal/imagen2.jpg',
@@ -54,7 +56,7 @@ export class Home implements OnInit, OnDestroy {
   private intervalId: any;
   private isBrowser = false;
 
-  // ── Buscador ─────────────────────────────────────────────────
+  // ── Buscador ───────────────────────────────────────────────
   busqueda = {
     fechaEntrada: '',
     fechaSalida: '',
@@ -62,46 +64,46 @@ export class Home implements OnInit, OnDestroy {
     ninos: 0,
     tipoReserva: 'individual',
   };
+  mostrarInfoNinos = false;
 
-
-  // ── Tipos de Reserva ─────────────────────────────────────────
+  // ── Tipos de reserva ───────────────────────────────────────
   tiposReserva: TipoReserva[] = [
     {
       id: 'individual',
-      nombre: 'Reserva Individual',
-      descripcion:
-        'Ideal para grupos pequeños o familias. Alquila el piso que necesites con horario de ingreso entre 3:00 p.m. y 10:00 p.m.',
+      nombre: 'Individual',
+      descripcion: 'Para grupos pequeños o familias. Alquila el piso que necesites con horario de ingreso entre 3:00 p.m. y 10:00 p.m.',
+      precio: 'Desde $65.000 por persona',
       icon: 'user',
     },
     {
       id: 'familiar',
-      nombre: 'Reserva Familiar',
-      descripcion:
-        'Para familias numerosas que desean la casa completa. Sin restricción de horario, previa coordinación. Puede incluir uno o ambos pisos.',
+      nombre: 'Grupo Familiar',
+      descripcion: 'Para familias que desean la casa completa o un piso entero. Ideal para disfrutar juntos sin restricciones.',
+      precio: 'Desde $51.000 por persona',
       icon: 'users',
       destacado: true,
     },
     {
       id: 'pasadia',
       nombre: 'Pasadía',
-      descripcion:
-        'Disfruta las instalaciones sin hospedarte. Ideal para reuniones, cumpleaños e integraciones. Incluye baño social, salón de juegos y zonas comunes.',
+      descripcion: 'Disfruta las instalaciones sin hospedarte. Ideal para cumpleaños, reuniones e integraciones familiares.',
+      precio: '10 a 15 personas',
       icon: 'sun',
     },
     {
       id: 'grupal',
-      nombre: 'Grupos de Trabajo',
-      descripcion:
-        'Para empresas, colegios o grupos de capacitación. Congresos, talleres y reuniones con equipo de proyección, tablero y espacios habilitados.',
+      nombre: 'Reuniones de Grupo',
+      descripcion: 'Para empresas, colegios o equipos de trabajo. Espacios habilitados para conferencias y talleres.',
+      precio: 'Ideal para equipos',
       icon: 'briefcase',
     },
   ];
 
-  // ── Pisos ────────────────────────────────────────────────────
+  // ── Pisos ──────────────────────────────────────────────────
   pisos: Piso[] = [
     {
       nombre: 'Piso 1',
-      descripcion: 'Acogedor y perfecto para grupos pequeños. Cuenta con tres habitaciones distribuidas en un espacio cálido y confortable.',
+      descripcion: 'Acogedor y perfecto para grupos pequeños. Tres habitaciones distribuidas en un espacio cálido y confortable.',
       capacidadMin: 6,
       capacidadMax: 8,
       habitaciones: 3,
@@ -119,15 +121,27 @@ export class Home implements OnInit, OnDestroy {
     },
   ];
 
-  // ── Servicios (solo los 4 reales) ────────────────────────────
-  servicios = [
-    { nombre: 'WiFi Gratuito',     icon: 'wifi' },
-    { nombre: 'Agua Caliente',     icon: 'droplet' },
-    { nombre: 'Lavandería',        icon: 'washing' },
-    { nombre: 'Cocina Equipada',   icon: 'kitchen' },
+  // ── Galería del hospedaje ──────────────────────────────────
+  galeriaFotos = [
+    { src: 'assets/habitaciones/piso2/hab201.jpeg',   alt: 'Habitación 201' },
+    { src: 'assets/habitaciones/piso2/hab202.jpeg',   alt: 'Habitación 202' },
+    { src: 'assets/habitaciones/piso2/hab201-2.jpeg', alt: 'Habitación piso 2' },
+    { src: 'assets/habitaciones/piso1/hab101.jpg',    alt: 'Habitación 101' },
+    { src: 'assets/habitaciones/espacios/mezanine.png', alt: 'Mezanine' },
+    { src: 'assets/habitaciones/piso1/hab102.jpg',    alt: 'Habitación 102' },
   ];
 
-  // ── Testimonios ──────────────────────────────────────────────
+  // ── Servicios ──────────────────────────────────────────────
+  servicios = [
+    { nombre: 'WiFi Gratuito',   icono: 'wifi',    descripcion: 'Conectividad de alta velocidad en todas las áreas' },
+    { nombre: 'Agua Caliente',   icono: 'droplet', descripcion: 'Duchas con agua caliente disponibles las 24 horas' },
+    { nombre: 'Lavandería',      icono: 'wash',    descripcion: 'Servicio de lavado para que viajes ligero y cómodo' },
+    { nombre: 'Cocina Equipada', icono: 'kitchen', descripcion: 'Cocina completa con utensilios para preparar tus alimentos' },
+    { nombre: 'Lencería completa', icono: 'bed',   descripcion: 'Sábanas, cobijas, almohadas y toallas incluidas' },
+    { nombre: 'Sala de estar',   icono: 'tv',      descripcion: 'Espacio común para descansar y compartir con televisor' },
+  ];
+
+  // ── Testimonios ───────────────────────────────────────────
   testimonios: Testimonio[] = [
     {
       nombre: 'Laura Gómez',
@@ -149,21 +163,20 @@ export class Home implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object, private cdr: ChangeDetectorRef) {
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+    private cdr: ChangeDetectorRef,
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
     if (this.isBrowser) {
       this.intervalId = setInterval(() => {
-        const next = (this.currentImageIndex + 1) % this.images.length;
-        // debug
-        console.debug('[Home] changing image', this.currentImageIndex, '->', next);
-        this.goToImage(next);
-      }, 3000);
+        this.goToImage((this.currentImageIndex + 1) % this.images.length);
+      }, 4000);
 
-      // Fechas por defecto: hoy y mañana
-      const hoy = new Date();
+      const hoy    = new Date();
       const manana = new Date(hoy);
       manana.setDate(manana.getDate() + 1);
       this.busqueda.fechaEntrada = this.formatDate(hoy);
@@ -175,23 +188,16 @@ export class Home implements OnInit, OnDestroy {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  // ── Carousel ─────────────────────────────────────────────────
   goToImage(index: number) {
     this.currentImageIndex = index;
-    // Force change detection in case the app runs without Zone.js
-    try { this.cdr.detectChanges(); } catch (e) { /* noop */ }
+    try { this.cdr.detectChanges(); } catch { /* noop */ }
   }
 
-  // ── Helpers ──────────────────────────────────────────────────
   private formatDate(d: Date): string {
     return d.toISOString().split('T')[0];
   }
 
   getRange(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i);
-  }
-
-  onBuscar() {
-    // Navegación al módulo de reservas — implementada en el router
   }
 }

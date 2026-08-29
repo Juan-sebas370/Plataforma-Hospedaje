@@ -19,45 +19,36 @@ public class HabitacionService {
 
     public Habitacion obtenerPorId(Long id) {
         return habitacionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Habitación no encontrada"));
+                .orElseThrow(() -> new RuntimeException("Habitación no encontrada con id: " + id));
     }
 
     public List<Habitacion> obtenerDisponibles() {
         return habitacionRepository.findByEstado("DISPONIBLE");
     }
 
+    public List<Habitacion> obtenerPorPiso(Integer piso) {
+        return habitacionRepository.findByPiso(piso);
+    }
+
     public Habitacion crear(Habitacion habitacion) {
-        habitacion.setEstado("DISPONIBLE");
+        if (habitacion.getEstado() == null) {
+            habitacion.setEstado("DISPONIBLE");
+        }
         return habitacionRepository.save(habitacion);
     }
 
     public Habitacion actualizar(Long id, Habitacion habitacion) {
         Habitacion existente = obtenerPorId(id);
-        
-        if (habitacion.getNumero() != null) {
-            existente.setNumero(habitacion.getNumero());
-        }
-        if (habitacion.getTipo() != null) {
-            existente.setTipo(habitacion.getTipo());
-        }
-        if (habitacion.getCapacidad() != null) {
-            existente.setCapacidad(habitacion.getCapacidad());
-        }
-        if (habitacion.getPrecioNoche() != null) {
-            existente.setPrecioNoche(habitacion.getPrecioNoche());
-        }
-        if (habitacion.getDescripcion() != null) {
-            existente.setDescripcion(habitacion.getDescripcion());
-        }
-        if (habitacion.getServicios() != null) {
-            existente.setServicios(habitacion.getServicios());
-        }
-        if (habitacion.getImagenes() != null) {
-            existente.setImagenes(habitacion.getImagenes());
-        }
-        if (habitacion.getEstado() != null) {
-            existente.setEstado(habitacion.getEstado());
-        }
+
+        if (habitacion.getNumero()      != null) existente.setNumero(habitacion.getNumero());
+        if (habitacion.getTipo()        != null) existente.setTipo(habitacion.getTipo());
+        if (habitacion.getPiso()        != null) existente.setPiso(habitacion.getPiso());
+        if (habitacion.getCapacidad()   != null) existente.setCapacidad(habitacion.getCapacidad());
+        if (habitacion.getPrecioNoche() != null) existente.setPrecioNoche(habitacion.getPrecioNoche());
+        if (habitacion.getDescripcion() != null) existente.setDescripcion(habitacion.getDescripcion());
+        if (habitacion.getServicios()   != null) existente.setServicios(habitacion.getServicios());
+        if (habitacion.getImagenes()    != null) existente.setImagenes(habitacion.getImagenes());
+        if (habitacion.getEstado()      != null) existente.setEstado(habitacion.getEstado());
 
         return habitacionRepository.save(existente);
     }
@@ -65,5 +56,4 @@ public class HabitacionService {
     public void eliminar(Long id) {
         habitacionRepository.deleteById(id);
     }
-
 }

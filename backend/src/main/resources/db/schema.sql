@@ -25,6 +25,7 @@ CREATE TABLE habitaciones (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   numero VARCHAR(20),
   tipo VARCHAR(30),
+  piso INT NOT NULL DEFAULT 1,
   capacidad INT,
   precio_noche DECIMAL(10,2),
   descripcion TEXT,
@@ -344,3 +345,103 @@ CREATE INDEX idx_paquete_precio ON paquetes (precio_total);
 CREATE INDEX idx_contacto_estado ON contactos (estado);
 CREATE INDEX idx_contacto_prioridad ON contactos (prioridad);
 CREATE INDEX idx_contacto_fecha ON contactos (fecha_creacion);
+
+-- ============================================================
+-- DATOS INICIALES — Habitaciones reales Hospedaje Sebastián
+-- Se insertan solo si la tabla está vacía para evitar duplicados
+-- ============================================================
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '101', 'Individual', 1, 4, 80000.00,
+  'Habitación principal del piso 1 con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor.',
+  'DISPONIBLE', 0, 0, 1, 1, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '101');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '102', 'Doble', 1, 2, 100000.00,
+  'Habitación doble con cama matrimonial. Comparte baño con la habitación 103. Cómoda y tranquila.',
+  'DISPONIBLE', 0, 0, 1, 0, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '102');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '103', 'Doble', 1, 2, 100000.00,
+  'Habitación doble con cama matrimonial. Comparte baño con la habitación 102. Ambiente tranquilo y acogedor.',
+  'DISPONIBLE', 0, 0, 1, 0, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '103');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '201', 'Individual', 2, 4, 80000.00,
+  'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
+  'DISPONIBLE', 0, 0, 1, 1, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '201');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '202', 'Doble', 2, 2, 110000.00,
+  'Habitación doble acogedora con cama matrimonial. Comparte baño con la habitación 203. Perfecta para parejas.',
+  'DISPONIBLE', 0, 0, 1, 0, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '202');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '203', 'Doble', 2, 2, 110000.00,
+  'Habitación doble con cama matrimonial y ambiente tranquilo. Comparte baño con la habitación 202.',
+  'DISPONIBLE', 0, 0, 1, 0, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '203');
+
+INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
+SELECT * FROM (SELECT
+  '204', 'Individual', 2, 4, 80000.00,
+  'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
+  'DISPONIBLE', 0, 0, 1, 1, 0
+) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '204');
+
+-- Servicios de cada habitación
+INSERT INTO habitacion_servicios (habitacion_id, servicio)
+SELECT id, 'WiFi gratis' FROM habitaciones WHERE numero IN ('101','102','103','201','202','203','204')
+  AND NOT EXISTS (SELECT 1 FROM habitacion_servicios hs WHERE hs.habitacion_id = habitaciones.id AND hs.servicio = 'WiFi gratis');
+
+INSERT INTO habitacion_servicios (habitacion_id, servicio)
+SELECT id, 'Agua caliente' FROM habitaciones WHERE numero IN ('101','102','103','201','202','203','204')
+  AND NOT EXISTS (SELECT 1 FROM habitacion_servicios hs WHERE hs.habitacion_id = habitaciones.id AND hs.servicio = 'Agua caliente');
+
+INSERT INTO habitacion_servicios (habitacion_id, servicio)
+SELECT id, 'Cocina equipada' FROM habitaciones WHERE numero IN ('101','102','103','201','202','203','204')
+  AND NOT EXISTS (SELECT 1 FROM habitacion_servicios hs WHERE hs.habitacion_id = habitaciones.id AND hs.servicio = 'Cocina equipada');
+
+INSERT INTO habitacion_servicios (habitacion_id, servicio)
+SELECT id, 'Lavandería' FROM habitaciones WHERE numero IN ('101','103','201','204')
+  AND NOT EXISTS (SELECT 1 FROM habitacion_servicios hs WHERE hs.habitacion_id = habitaciones.id AND hs.servicio = 'Lavandería');
+
+-- Imágenes de cada habitación
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso1/hab101.jpg' FROM habitaciones WHERE numero = '101'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso1/hab102.jpg' FROM habitaciones WHERE numero = '102'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso1/hab103.jpg' FROM habitaciones WHERE numero = '103'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso2/hab201.jpeg' FROM habitaciones WHERE numero = '201'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso2/hab202.jpeg' FROM habitaciones WHERE numero = '202'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso2/hab203.jpg' FROM habitaciones WHERE numero = '203'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
+
+INSERT INTO habitacion_imagenes (habitacion_id, imagen_url)
+SELECT id, 'assets/habitaciones/piso2/hab204.jpg' FROM habitaciones WHERE numero = '204'
+  AND NOT EXISTS (SELECT 1 FROM habitacion_imagenes hi WHERE hi.habitacion_id = habitaciones.id);
