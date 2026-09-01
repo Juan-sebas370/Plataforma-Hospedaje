@@ -21,7 +21,7 @@ export class Footer {
     { label: 'Contacto',      ruta: '/contacto'     },
   ];
 
-  readonly metodosPago = ['Visa', 'Mastercard', 'Nequi', 'Daviplata'];
+  readonly metodosPago = ['Visa', 'Mastercard', 'Nequi', 'Daviplata', 'Bancolombia'];
 
   abrirWhatsApp(): void {
     window.open('https://wa.me/573001234567?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20hospedaje.', '_blank', 'noopener,noreferrer');
