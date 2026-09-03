@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Habitacion {
   id: number;
@@ -24,7 +25,7 @@ export interface Habitacion {
   providedIn: 'root'
 })
 export class HabitacionService {
-  private apiUrl = 'http://localhost:3000/api/habitaciones';
+  private apiUrl = `${environment.apiUrl}/habitaciones`;
 
   constructor(private http: HttpClient) { }
 
@@ -34,6 +35,10 @@ export class HabitacionService {
 
   obtenerDisponibles(): Observable<Habitacion[]> {
     return this.http.get<Habitacion[]>(`${this.apiUrl}/disponibles`);
+  }
+
+  obtenerPorPiso(piso: number): Observable<Habitacion[]> {
+    return this.http.get<Habitacion[]>(`${this.apiUrl}/piso/${piso}`);
   }
 
   obtenerPorId(id: number): Observable<Habitacion> {

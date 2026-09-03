@@ -3,8 +3,8 @@
  */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
-  wsUrl: 'ws://localhost:3000/ws',
+  apiUrl: 'http://localhost:8080/api',
+  wsUrl: 'ws://localhost:8080/ws',
 
   // Timeouts
   requestTimeout: 30000,
@@ -26,7 +26,7 @@ export const environment = {
   // Validacion
   validation: {
     passwordMinLength: 8,
-    sessionTimeout: 3600000, // 60 minutos
+    sessionTimeout: 3600000,    // 60 minutos
     tokenRefreshInterval: 900000, // 15 minutos
   },
 

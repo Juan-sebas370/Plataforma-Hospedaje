@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ProcesarPagoRequest {
   reservaId: string;
@@ -45,7 +46,7 @@ export interface DetallesReservaConPago {
   providedIn: 'root'
 })
 export class PagoService {
-  private apiUrl = 'http://localhost:3000/api/pagos';
+  private apiUrl = `${environment.apiUrl}/pagos`;
   private pagoEnProcesoSubject = new BehaviorSubject<ResultadoPago | null>(null);
   public pagoEnProceso$ = this.pagoEnProcesoSubject.asObservable();
 

@@ -2,6 +2,7 @@ import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReservaService, Reserva } from '../../services/reserva.service';
 
 export type Season        = 'alta' | 'media' | 'baja';
 export type TipoReservaId = 'individual' | 'familiar' | 'pasadia' | 'grupal';
@@ -277,9 +278,15 @@ export class Reservas implements OnInit {
 
   misReservas: never[] = [];
 
+  // ── Estado del envío ──────────────────────────────────────
+  enviando       = false;
+  errorReserva   = '';
+  reservaCreada: Reserva | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private reservaService: ReservaService,
     @Inject(PLATFORM_ID) platformId: Object,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -402,7 +409,69 @@ export class Reservas implements OnInit {
   }
 
   confirmarReserva(): void {
-    this.router.navigate(['/confirmacion']);
+    if (this.enviando) return;
+
+    this.enviando     = true;
+    this.errorReserva = '';
+
+    // Construye el payload que espera el backend
+    const payload: Reserva = {
+      // Tipo y modo
+      tipoReserva:       this.config.tipoReserva,
+      modoEspacio:       this.config.modoEspacio,
+      espacio:           this.config.espacio,
+
+      // Habitaciones seleccionadas
+      habitacionesIds:   this.habitacionesSeleccionadas.length > 0
+                           ? [...this.habitacionesSeleccionadas]
+                           : undefined,
+      // Si hay solo una, también en habitacionId para compatibilidad
+      habitacionId:      this.habitacionesSeleccionadas.length === 1
+                           ? this.habitacionesSeleccionadas[0]
+                           : undefined,
+
+      // Fechas
+      fechaIngreso:      this.config.fechaEntrada,
+      fechaSalida:       this.config.fechaSalida || undefined,
+      noches:            this.config.noches,
+      precioNoche:       this.precioNoche,
+      precioTotal:       this.precioTotal,
+      temporada:         this.temporada,
+
+      // Personas
+      huespedes:         this.config.adultos,
+      ninos3:            this.config.ninos3,
+      ninos10:           this.config.ninos10,
+      ninos11:           this.config.ninos11,
+
+      // Datos del huésped (etapa 6)
+      nombreHuesped:     this.datos.nombre,
+      apellidoHuesped:   this.datos.apellido,
+      emailContacto:     this.datos.email,
+      codigoPais:        this.datos.codigoPais,
+      telefonoContacto:  this.datos.telefono,
+      pais:              this.datos.pais,
+      tipoDocumento:     this.datos.tipoDocumento,
+      numeroDocumento:   this.datos.numeroDocumento,
+      observaciones:     this.datos.observaciones || undefined,
+    };
+
+    this.reservaService.crearReserva(payload).subscribe({
+      next: (reserva) => {
+        this.reservaCreada = reserva;
+        this.enviando      = false;
+        // Navega a confirmación pasando el ID de la reserva creada
+        this.router.navigate(['/confirmacion'], {
+          queryParams: { reservaId: reserva.id, total: reserva.precioTotal },
+        });
+      },
+      error: (err) => {
+        this.enviando     = false;
+        this.errorReserva = err?.error?.message
+          ?? 'Ocurrió un error al crear la reserva. Por favor intenta de nuevo.';
+        if (this.isBrowser) window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+    });
   }
 
   puedeAvanzar(): boolean {

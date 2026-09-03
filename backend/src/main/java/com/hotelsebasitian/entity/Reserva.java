@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "reservas")
@@ -21,37 +22,74 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ── Relaciones ────────────────────────────────────────
     private Long usuarioId;
+
+    /** habitación principal (puede ser null si modoEspacio = piso/casa) */
     private Long habitacionId;
+
+    /** IDs adicionales cuando se reservan varias habitaciones */
+    @ElementCollection
+    @CollectionTable(name = "reserva_habitaciones",
+                     joinColumns = @JoinColumn(name = "reserva_id"))
+    @Column(name = "habitacion_id")
+    private List<Long> habitacionesIds;
+
+    // ── Tipo de reserva ───────────────────────────────────
+    /** individual | familiar | pasadia | grupal */
+    private String tipoReserva;
+
+    /** habitaciones | piso | casa */
+    private String modoEspacio;
+
+    /** piso1 | piso2 | completo */
+    private String espacio;
+
+    // ── Fechas y precios ──────────────────────────────────
     private LocalDate fechaIngreso;
     private LocalDate fechaSalida;
     private Integer noches;
-    private Double precioTotal;
     private Double precioNoche;
-    private String estado; // PENDIENTE, CONFIRMADA, CANCELADA, COMPLETADA
+    private Double precioTotal;
+
+    /** alta | media | baja */
+    private String temporada;
+
+    // ── Estado ────────────────────────────────────────────
+    /** PENDIENTE | CONFIRMADA | CANCELADA | COMPLETADA */
+    private String estado;
+
+    // ── Personas ──────────────────────────────────────────
     private Integer huespedes;
+    private Integer ninos3;
+    private Integer ninos10;
+    private Integer ninos11;
+
+    // ── Datos del huésped ─────────────────────────────────
     private String nombreHuesped;
-    private String pais;
-    private String tipoDocumento; // CC, CE, TI, PA, NIT, DNI, RG
-    private String numeroDocumento;
-    private String codigoPais; // +57, +1, +34, etc.
+    private String apellidoHuesped;
+    private String emailContacto;
+    private String codigoPais;
     private String telefonoContacto;
+    private String pais;
+    private String tipoDocumento;   // CC, CE, TI, PA, NIT, DNI, RG
+    private String numeroDocumento;
     private String observaciones;
+
+    // ── Auditoría ─────────────────────────────────────────
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaModificacion;
 
-    // Método auxiliar para calcular el número de noches
+    // ── Helpers ───────────────────────────────────────────
     public void calcularNoches() {
         if (fechaIngreso != null && fechaSalida != null) {
             this.noches = (int) java.time.temporal.ChronoUnit.DAYS.between(fechaIngreso, fechaSalida);
         }
     }
 
-    // Método auxiliar para calcular el precio total
     public void calcularPrecioTotal() {
         if (precioNoche != null && noches != null && noches > 0) {
             this.precioTotal = precioNoche * noches;
         }
     }
-
 }

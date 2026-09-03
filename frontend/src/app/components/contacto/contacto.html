@@ -169,14 +169,17 @@
         <p>{{ 'contact.form.subtitle' | translate }}</p>
       </div>
 
-      <form class="contacto-form">
+      <form class="contacto-form" (ngSubmit)="enviarFormulario()" #contactoForm="ngForm" novalidate>
         <div class="form-row">
           <div class="form-group">
             <label for="nombre">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
               {{ 'contact.form.fullNameLabel' | translate }} *
             </label>
-            <input type="text" id="nombre" name="nombre" [placeholder]="'contact.form.fullNamePlaceholder' | translate" required>
+            <input type="text" id="nombre" name="nombre"
+              [(ngModel)]="form.nombre"
+              [placeholder]="'contact.form.fullNamePlaceholder' | translate"
+              required>
           </div>
 
           <div class="form-group">
@@ -184,7 +187,10 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               {{ 'contact.form.emailLabel' | translate }} *
             </label>
-            <input type="email" id="email" name="email" [placeholder]="'contact.form.emailPlaceholder' | translate" required>
+            <input type="email" id="email" name="email"
+              [(ngModel)]="form.email"
+              [placeholder]="'contact.form.emailPlaceholder' | translate"
+              required>
           </div>
         </div>
 
@@ -192,208 +198,23 @@
           <div class="form-group">
             <label for="telefono">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              {{ 'contact.form.phoneLabel' | translate }} *
+              {{ 'contact.form.phoneLabel' | translate }}
             </label>
             <div class="telefono-group">
               <select id="codigoPais" name="codigoPais" class="codigo-pais" required>
-                <option value="+57">+57 CO - Colombia</option>
-                <option value="+1">+1 US - Estados Unidos</option>
-                <option value="+34">+34 ES - España</option>
-                <option value="+52">+52 MX - México</option>
-                <option value="+54">+54 AR - Argentina</option>
-                <option value="+55">+55 BR - Brasil</option>
-                <option value="+56">+56 CL - Chile</option>
-                <option value="+51">+51 PE - Perú</option>
-                <option value="+58">+58 VE - Venezuela</option>
-                <option value="+93">+93 AF - Afganistán</option>
-                <option value="+355">+355 AL - Albania</option>
-                <option value="+49">+49 DE - Alemania</option>
-                <option value="+376">+376 AD - Andorra</option>
-                <option value="+244">+244 AO - Angola</option>
-                <option value="+1">+1 AG - Antigua y Barbuda</option>
-                <option value="+966">+966 SA - Arabia Saudita</option>
-                <option value="+213">+213 DZ - Argelia</option>
-                <option value="+374">+374 AM - Armenia</option>
-                <option value="+61">+61 AU - Australia</option>
-                <option value="+43">+43 AT - Austria</option>
-                <option value="+994">+994 AZ - Azerbaiyán</option>
-                <option value="+1">+1 BS - Bahamas</option>
-                <option value="+973">+973 BH - Baréin</option>
-                <option value="+880">+880 BD - Bangladés</option>
-                <option value="+1">+1 BB - Barbados</option>
-                <option value="+32">+32 BE - Bélgica</option>
-                <option value="+501">+501 BZ - Belice</option>
-                <option value="+229">+229 BJ - Benín</option>
-                <option value="+375">+375 BY - Bielorrusia</option>
-                <option value="+591">+591 BO - Bolivia</option>
-                <option value="+387">+387 BA - Bosnia y Herzegovina</option>
-                <option value="+267">+267 BW - Botsuana</option>
-                <option value="+673">+673 BN - Brunéi</option>
-                <option value="+359">+359 BG - Bulgaria</option>
-                <option value="+226">+226 BF - Burkina Faso</option>
-                <option value="+257">+257 BI - Burundi</option>
-                <option value="+238">+238 CV - Cabo Verde</option>
-                <option value="+855">+855 KH - Camboya</option>
-                <option value="+237">+237 CM - Camerún</option>
-                <option value="+1">+1 CA - Canadá</option>
-                <option value="+974">+974 QA - Catar</option>
-                <option value="+235">+235 TD - Chad</option>
-                <option value="+357">+357 CY - Chipre</option>
-                <option value="+420">+420 CZ - Chequia</option>
-                <option value="+86">+86 CN - China</option>
-                <option value="+57">+57 CO - Colombia</option>
-                <option value="+269">+269 KM - Comoras</option>
-                <option value="+242">+242 CG - Congo</option>
-                <option value="+243">+243 CD - República Democrática del Congo</option>
-                <option value="+850">+850 KP - Corea del Norte</option>
-                <option value="+82">+82 KR - Corea del Sur</option>
-                <option value="+506">+506 CR - Costa Rica</option>
-                <option value="+225">+225 CI - Costa de Marfil</option>
-                <option value="+385">+385 HR - Croacia</option>
-                <option value="+53">+53 CU - Cuba</option>
-                <option value="+45">+45 DK - Dinamarca</option>
-                <option value="+253">+253 DJ - Yibuti</option>
-                <option value="+1">+1 DM - Dominica</option>
-                <option value="+1">+1 DO - República Dominicana</option>
-                <option value="+593">+593 EC - Ecuador</option>
-                <option value="+20">+20 EG - Egipto</option>
-                <option value="+503">+503 SV - El Salvador</option>
-                <option value="+971">+971 AE - Emiratos Árabes Unidos</option>
-                <option value="+291">+291 ER - Eritrea</option>
-                <option value="+421">+421 SK - Eslovaquia</option>
-                <option value="+386">+386 SI - Eslovenia</option>
-                <option value="+372">+372 EE - Estonia</option>
-                <option value="+251">+251 ET - Etiopía</option>
-                <option value="+679">+679 FJ - Fiyi</option>
-                <option value="+63">+63 PH - Filipinas</option>
-                <option value="+358">+358 FI - Finlandia</option>
-                <option value="+33">+33 FR - Francia</option>
-                <option value="+241">+241 GA - Gabón</option>
-                <option value="+220">+220 GM - Gambia</option>
-                <option value="+995">+995 GE - Georgia</option>
-                <option value="+233">+233 GH - Ghana</option>
-                <option value="+350">+350 GI - Gibraltar</option>
-                <option value="+30">+30 GR - Grecia</option>
-                <option value="+1">+1 GD - Granada</option>
-                <option value="+502">+502 GT - Guatemala</option>
-                <option value="+224">+224 GN - Guinea</option>
-                <option value="+245">+245 GW - Guinea-Bisáu</option>
-                <option value="+240">+240 GQ - Guinea Ecuatorial</option>
-                <option value="+592">+592 GY - Guyana</option>
-                <option value="+509">+509 HT - Haití</option>
-                <option value="+504">+504 HN - Honduras</option>
-                <option value="+852">+852 HK - Hong Kong</option>
-                <option value="+36">+36 HU - Hungría</option>
-                <option value="+354">+354 IS - Islandia</option>
-                <option value="+91">+91 IN - India</option>
-                <option value="+62">+62 ID - Indonesia</option>
-                <option value="+98">+98 IR - Irán</option>
-                <option value="+964">+964 IQ - Irak</option>
-                <option value="+353">+353 IE - Irlanda</option>
-                <option value="+972">+972 IL - Israel</option>
-                <option value="+39">+39 IT - Italia</option>
-                <option value="+1">+1 JM - Jamaica</option>
-                <option value="+81">+81 JP - Japón</option>
-                <option value="+962">+962 JO - Jordania</option>
-                <option value="+7">+7 KZ - Kazajistán</option>
-                <option value="+254">+254 KE - Kenia</option>
-                <option value="+996">+996 KG - Kirguistán</option>
-                <option value="+686">+686 KI - Kiribati</option>
-                <option value="+965">+965 KW - Kuwait</option>
-                <option value="+856">+856 LA - Laos</option>
-                <option value="+266">+266 LS - Lesoto</option>
-                <option value="+371">+371 LV - Letonia</option>
-                <option value="+961">+961 LB - Líbano</option>
-                <option value="+231">+231 LR - Liberia</option>
-                <option value="+218">+218 LY - Libia</option>
-                <option value="+423">+423 LI - Liechtenstein</option>
-                <option value="+370">+370 LT - Lituania</option>
-                <option value="+352">+352 LU - Luxemburgo</option>
-                <option value="+853">+853 MO - Macao</option>
-                <option value="+389">+389 MK - Macedonia del Norte</option>
-                <option value="+261">+261 MG - Madagascar</option>
-                <option value="+265">+265 MW - Malaui</option>
-                <option value="+60">+60 MY - Malasia</option>
-                <option value="+960">+960 MV - Maldivas</option>
-                <option value="+223">+223 ML - Malí</option>
-                <option value="+356">+356 MT - Malta</option>
-                <option value="+212">+212 MA - Marruecos</option>
-                <option value="+230">+230 MU - Mauricio</option>
-                <option value="+222">+222 MR - Mauritania</option>
-                <option value="+52">+52 YT - Mayotte</option>
-                <option value="+691">+691 FM - Micronesia</option>
-                <option value="+373">+373 MD - Moldavia</option>
-                <option value="+377">+377 MC - Mónaco</option>
-                <option value="+976">+976 MN - Mongolia</option>
-                <option value="+382">+382 ME - Montenegro</option>
-                <option value="+258">+258 MZ - Mozambique</option>
-                <option value="+95">+95 MM - Myanmar</option>
-                <option value="+264">+264 NA - Namibia</option>
-                <option value="+674">+674 NR - Nauru</option>
-                <option value="+977">+977 NP - Nepal</option>
-                <option value="+505">+505 NI - Nicaragua</option>
-                <option value="+227">+227 NE - Níger</option>
-                <option value="+234">+234 NG - Nigeria</option>
-                <option value="+47">+47 NO - Noruega</option>
-                <option value="+64">+64 NZ - Nueva Zelanda</option>
-                <option value="+968">+968 OM - Omán</option>
-                <option value="+31">+31 NL - Países Bajos</option>
-                <option value="+92">+92 PK - Pakistán</option>
-                <option value="+680">+680 PW - Palaos</option>
-                <option value="+970">+970 PS - Palestina</option>
-                <option value="+507">+507 PA - Panamá</option>
-                <option value="+675">+675 PG - Papúa Nueva Guinea</option>
-                <option value="+595">+595 PY - Paraguay</option>
-                <option value="+48">+48 PL - Polonia</option>
-                <option value="+351">+351 PT - Portugal</option>
-                <option value="+1">+1 PR - Puerto Rico</option>
-                <option value="+44">+44 GB - Reino Unido</option>
-                <option value="+236">+236 CF - República Centroafricana</option>
-                <option value="+250">+250 RW - Ruanda</option>
-                <option value="+40">+40 RO - Rumania</option>
-                <option value="+685">+685 WS - Samoa</option>
-                <option value="+378">+378 SM - San Marino</option>
-                <option value="+1">+1 VC - San Vicente y las Granadinas</option>
-                <option value="+1">+1 LC - Santa Lucía</option>
-                <option value="+239">+239 ST - Santo Tomé y Príncipe</option>
-                <option value="+221">+221 SN - Senegal</option>
-                <option value="+381">+381 RS - Serbia</option>
-                <option value="+248">+248 SC - Seychelles</option>
-                <option value="+232">+232 SL - Sierra Leona</option>
-                <option value="+65">+65 SG - Singapur</option>
-                <option value="+963">+963 SY - Siria</option>
-                <option value="+252">+252 SO - Somalia</option>
-                <option value="+94">+94 LK - Sri Lanka</option>
-                <option value="+27">+27 ZA - Sudáfrica</option>
-                <option value="+249">+249 SD - Sudán</option>
-                <option value="+211">+211 SS - Sudán del Sur</option>
-                <option value="+46">+46 SE - Suecia</option>
-                <option value="+41">+41 CH - Suiza</option>
-                <option value="+597">+597 SR - Surinam</option>
-                <option value="+66">+66 TH - Tailandia</option>
-                <option value="+886">+886 TW - Taiwán</option>
-                <option value="+255">+255 TZ - Tanzania</option>
-                <option value="+992">+992 TJ - Tayikistán</option>
-                <option value="+670">+670 TL - Timor Oriental</option>
-                <option value="+228">+228 TG - Togo</option>
-                <option value="+676">+676 TO - Tonga</option>
-                <option value="+1">+1 TT - Trinidad y Tobago</option>
-                <option value="+216">+216 TN - Túnez</option>
-                <option value="+90">+90 TR - Turquía</option>
-                <option value="+993">+993 TM - Turkmenistán</option>
-                <option value="+688">+688 TV - Tuvalu</option>
-                <option value="+380">+380 UA - Ucrania</option>
-                <option value="+256">+256 UG - Uganda</option>
-                <option value="+598">+598 UY - Uruguay</option>
-                <option value="+998">+998 UZ - Uzbekistán</option>
-                <option value="+678">+678 VU - Vanuatu</option>
-                <option value="+379">+379 VA - Ciudad del Vaticano</option>
-                <option value="+84">+84 VN - Vietnam</option>
-                <option value="+967">+967 YE - Yemen</option>
-                <option value="+260">+260 ZM - Zambia</option>
-                <option value="+263">+263 ZW - Zimbabue</option>
+                <option value="+57">+57 CO</option>
+                <option value="+54">+54 AR</option>
+                <option value="+55">+55 BR</option>
+                <option value="+56">+56 CL</option>
+                <option value="+593">+593 EC</option>
+                <option value="+34">+34 ES</option>
+                <option value="+52">+52 MX</option>
+                <option value="+51">+51 PE</option>
+                <option value="+1">+1 US</option>
+                <option value="+58">+58 VE</option>
               </select>
-              <input type="tel" id="telefono" name="telefono" [placeholder]="'contact.form.phonePlaceholder' | translate" required>
+              <input type="tel" id="telefono" name="telefono"
+                [placeholder]="'contact.form.phonePlaceholder' | translate">
             </div>
           </div>
 
@@ -402,7 +223,7 @@
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
               {{ 'contact.form.subjectLabel' | translate }} *
             </label>
-            <select id="asunto" name="asunto" required>
+            <select id="asunto" name="asunto" [(ngModel)]="form.asunto" required>
               <option value="">{{ 'contact.form.subjectPlaceholder' | translate }}</option>
               <option value="reserva">{{ 'contact.form.subjectReservation' | translate }}</option>
               <option value="servicio">{{ 'contact.form.subjectServices' | translate }}</option>
@@ -420,19 +241,15 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             {{ 'contact.form.messageLabel' | translate }} *
           </label>
-          <textarea id="mensaje" name="mensaje" rows="6" [placeholder]="'contact.form.messagePlaceholder' | translate" required></textarea>
+          <textarea id="mensaje" name="mensaje" rows="6"
+            [(ngModel)]="form.mensaje"
+            [placeholder]="'contact.form.messagePlaceholder' | translate"
+            required></textarea>
         </div>
 
         <div class="form-group full-width">
           <label class="checkbox-group">
-            <input type="checkbox" name="newsletter">
-            <span>{{ 'contact.form.newsletterText' | translate }}</span>
-          </label>
-        </div>
-
-        <div class="form-group full-width">
-          <label class="checkbox-group">
-            <input type="checkbox" name="politica" required>
+            <input type="checkbox" name="politica" [(ngModel)]="form.politica" required>
             <span>
               {{ 'contact.form.privacyPrefix' | translate }}
               <a href="#">{{ 'contact.form.privacyPolicy' | translate }}</a>
@@ -442,11 +259,34 @@
           </label>
         </div>
 
+        <!-- Feedback de error -->
+        @if (hayError) {
+          <div class="form-feedback form-feedback--error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {{ errorMensaje }}
+          </div>
+        }
+
+        <!-- Feedback de éxito -->
+        @if (enviado) {
+          <div class="form-feedback form-feedback--ok">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            ¡Mensaje enviado correctamente! Te responderemos pronto.
+          </div>
+        }
+
         <div class="form-actions">
-          <button type="reset" class="btn-limpiar">{{ 'contact.form.clearButton' | translate }}</button>
-          <button type="submit" class="btn-enviar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            {{ 'contact.form.sendButton' | translate }}
+          <button type="button" class="btn-limpiar" (click)="limpiarFormulario()" [disabled]="enviando">
+            {{ 'contact.form.clearButton' | translate }}
+          </button>
+          <button type="submit" class="btn-enviar" [disabled]="enviando || !formularioValido">
+            @if (enviando) {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Enviando...
+            } @else {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              {{ 'contact.form.sendButton' | translate }}
+            }
           </button>
         </div>
       </form>
