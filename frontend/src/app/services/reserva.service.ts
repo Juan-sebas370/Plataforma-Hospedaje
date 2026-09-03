@@ -1,100 +1,103 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-interface Reserva {
-  id: string;
-  numeroReserva: string;
-  fechaEntrada: string;
-  fechaSalida: string;
-  habitacion: {
-    numero: string;
-    tipo: string;
-    precio: number;
-  };
-  estado: 'confirmada' | 'pendiente' | 'cancelada' | 'completada';
-  total: number;
+// ── Tipos que coinciden con la entidad Reserva del backend ──
+
+export interface Reserva {
+  id?: number;
+  usuarioId?: number;
+
+  // Habitaciones
+  habitacionId?: number;
+  habitacionesIds?: number[];
+
+  // Tipo y modo
+  tipoReserva: 'individual' | 'familiar' | 'pasadia' | 'grupal';
+  modoEspacio?: 'habitaciones' | 'piso' | 'casa';
+  espacio?: string;          // piso1 | piso2 | completo
+
+  // Fechas y precio
+  fechaIngreso: string;      // YYYY-MM-DD
+  fechaSalida?: string;      // null para pasadía/grupal
+  noches?: number;
+  precioNoche?: number;
+  precioTotal?: number;
+  temporada?: 'alta' | 'media' | 'baja';
+  estado?: string;
+
+  // Personas
+  huespedes: number;
+  ninos3?: number;
+  ninos10?: number;
+  ninos11?: number;
+
+  // Datos del huésped
+  nombreHuesped: string;
+  apellidoHuesped: string;
+  emailContacto: string;
+  codigoPais: string;
+  telefonoContacto: string;
+  pais: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  observaciones?: string;
 }
 
-interface CrearReservaRequest {
-  habitacionId: string;
-  fechaEntrada: string;
+export interface ReservaResumen {
+  id: number;
+  tipoReserva: string;
+  espacio: string;
+  fechaIngreso: string;
   fechaSalida: string;
+  noches: number;
+  precioTotal: number;
+  temporada: string;
+  estado: string;
   nombreHuesped: string;
-  emailHuesped: string;
-  telefonoHuesped: string;
-  notas?: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReservaService {
-  private apiUrl = 'http://localhost:3000/api/reservas';
+  private apiUrl = `${environment.apiUrl}/reservas`;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Obtiene todas las reservas del usuario autenticado
-   */
-  obtenerMisReservas(): Observable<Reserva[]> {
-    return this.http.get<Reserva[]>(`${this.apiUrl}/mis-reservas`);
+  /** Crear reserva desde el wizard */
+  crearReserva(data: Reserva): Observable<Reserva> {
+    return this.http.post<Reserva>(this.apiUrl, data);
   }
 
-  /**
-   * Obtiene una reserva específica
-   */
-  obtenerReserva(id: string): Observable<Reserva> {
+  /** Obtener reserva por ID */
+  obtenerReserva(id: number): Observable<Reserva> {
     return this.http.get<Reserva>(`${this.apiUrl}/${id}`);
   }
 
-  /**
-   * Crea una nueva reserva
-   */
-  crearReserva(data: CrearReservaRequest): Observable<Reserva> {
-    return this.http.post<Reserva>(`${this.apiUrl}`, data);
+  /** Reservas del usuario autenticado */
+  obtenerMisReservas(usuarioId: number): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>(`${this.apiUrl}/usuario/${usuarioId}`);
   }
 
-  /**
-   * Actualiza una reserva existente
-   */
-  actualizarReserva(id: string, data: Partial<Reserva>): Observable<Reserva> {
+  /** Todas las reservas (admin) */
+  obtenerTodasLasReservas(): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>(this.apiUrl);
+  }
+
+  /** Actualizar una reserva */
+  actualizarReserva(id: number, data: Partial<Reserva>): Observable<Reserva> {
     return this.http.put<Reserva>(`${this.apiUrl}/${id}`, data);
   }
 
-  /**
-   * Cancela una reserva
-   */
-  cancelarReserva(id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${id}/cancelar`, {});
+  /** Cancelar reserva */
+  cancelarReserva(id: number): Observable<Reserva> {
+    return this.http.put<Reserva>(`${this.apiUrl}/${id}/cancelar`, {});
   }
 
-  /**
-   * Obtiene todas las reservas (admin)
-   */
-  obtenerTodasLasReservas(): Observable<Reserva[]> {
-    return this.http.get<Reserva[]>(`${this.apiUrl}/admin/todas`);
-  }
-
-  /**
-   * Obtiene disponibilidad de habitaciones
-   */
-  verificarDisponibilidad(
-    habitacionId: string,
-    fechaEntrada: string,
-    fechaSalida: string
-  ): Observable<{ disponible: boolean }> {
-    return this.http.get<{ disponible: boolean }>(
-      `${this.apiUrl}/disponibilidad/${habitacionId}?inicio=${fechaEntrada}&fin=${fechaSalida}`
-    );
-  }
-
-  /**
-   * Descarga el recibo de una reserva
-   */
-  descargarRecibo(id: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${id}/recibo`, {
-      responseType: 'blob',
-    });
+  /** Eliminar reserva */
+  eliminarReserva(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -779,14 +779,28 @@
 
             </div>
             <div class="etapa-page__footer">
-              <button class="btn-ant" (click)="retroceder()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                Anterior
-              </button>
-              <button class="btn-confirmar" (click)="confirmarReserva()" [disabled]="!pago.aceptaTerminos">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                Confirmar reserva
-              </button>
+              @if (errorReserva) {
+                <div class="reserva-error">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  {{ errorReserva }}
+                </div>
+              }
+              <div class="etapa-page__footer-btns">
+                <button class="btn-ant" (click)="retroceder()" [disabled]="enviando">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                  Anterior
+                </button>
+                <button class="btn-confirmar" (click)="confirmarReserva()"
+                  [disabled]="!pago.aceptaTerminos || enviando">
+                  @if (enviando) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-icon"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Enviando reserva...
+                  } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Confirmar reserva
+                  }
+                </button>
+              </div>
             </div>
           </div>
         }

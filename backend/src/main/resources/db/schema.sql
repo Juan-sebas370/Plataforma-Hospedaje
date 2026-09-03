@@ -59,25 +59,50 @@ CREATE TABLE reservas (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   usuario_id BIGINT,
   habitacion_id BIGINT,
+  -- Tipo y modo de reserva (wizard frontend)
+  tipo_reserva VARCHAR(20),   -- individual | familiar | pasadia | grupal
+  modo_espacio VARCHAR(20),   -- habitaciones | piso | casa
+  espacio      VARCHAR(20),   -- piso1 | piso2 | completo
+  -- Fechas y precio
   fecha_ingreso DATE,
   fecha_salida DATE,
   noches INT,
   precio_total DECIMAL(10,2),
   precio_noche DECIMAL(10,2),
+  temporada VARCHAR(10),      -- alta | media | baja
   estado VARCHAR(30),
+  -- Personas
   huespedes INT,
-  nombre_huesped VARCHAR(200),
+  ninos3  INT DEFAULT 0,
+  ninos10 INT DEFAULT 0,
+  ninos11 INT DEFAULT 0,
+  -- Datos del huésped
+  nombre_huesped VARCHAR(120),
+  apellido_huesped VARCHAR(120),
+  email_contacto VARCHAR(120),
   pais VARCHAR(120),
   tipo_documento VARCHAR(20),
   numero_documento VARCHAR(50),
   codigo_pais VARCHAR(10),
   telefono_contacto VARCHAR(30),
   observaciones TEXT,
+  -- Auditoría
   fecha_creacion DATETIME,
   fecha_modificacion DATETIME,
   CONSTRAINT fk_reserva_usuario
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
   CONSTRAINT fk_reserva_habitacion
+    FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
+);
+
+-- Habitaciones adicionales por reserva (múltiples habitaciones en un wizard)
+CREATE TABLE reserva_habitaciones (
+  reserva_id   BIGINT NOT NULL,
+  habitacion_id BIGINT NOT NULL,
+  PRIMARY KEY (reserva_id, habitacion_id),
+  CONSTRAINT fk_res_hab_reserva
+    FOREIGN KEY (reserva_id) REFERENCES reservas(id) ON DELETE CASCADE,
+  CONSTRAINT fk_res_hab_habitacion
     FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id)
 );
 

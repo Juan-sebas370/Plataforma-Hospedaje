@@ -2,135 +2,88 @@ package com.hotelsebasitian.controller;
 
 import com.hotelsebasitian.entity.Contacto;
 import com.hotelsebasitian.repository.ContactoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/contactos")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/contactos")   // context-path /api ya está en application.properties
+@RequiredArgsConstructor
 public class ContactoController {
-    
-    @Autowired
-    private ContactoRepository contactoRepository;
-    
-    /**
-     * Obtener todos los contactos
-     */
+
+    private final ContactoRepository contactoRepository;
+
+    /** GET /api/contactos */
     @GetMapping
-    public ResponseEntity<?> obtenerTodosContactos() {
-        try {
-            List<Contacto> contactos = contactoRepository.findAll();
-            return ResponseEntity.ok(contactos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener contactos: " + e.getMessage());
-        }
+    public ResponseEntity<List<Contacto>> obtenerTodos() {
+        return ResponseEntity.ok(contactoRepository.findAll());
     }
-    
-    /**
-     * Obtener contacto por ID
-     */
+
+    /** GET /api/contactos/{id} */
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerContactoById(@PathVariable Long id) {
-        try {
-            Optional<Contacto> contacto = contactoRepository.findById(id);
-            if (contacto.isPresent()) {
-                return ResponseEntity.ok(contacto.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener contacto: " + e.getMessage());
-        }
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
+        return contactoRepository.findById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-    
+
+    /** GET /api/contactos/estado/{estado} */
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Contacto>> porEstado(@PathVariable String estado) {
+        return ResponseEntity.ok(contactoRepository.findByEstado(estado));
+    }
+
+    /** GET /api/contactos/prioridad/{prioridad} */
+    @GetMapping("/prioridad/{prioridad}")
+    public ResponseEntity<List<Contacto>> porPrioridad(@PathVariable String prioridad) {
+        return ResponseEntity.ok(contactoRepository.findByPrioridad(prioridad));
+    }
+
     /**
-     * Crear nuevo mensaje de contacto
+     * POST /api/contactos
+     * Recibe el formulario de contacto del frontend.
+     * Campos: nombre, email, telefono, asunto, mensaje, categoria
      */
     @PostMapping
-    public ResponseEntity<?> crearContacto(@RequestBody Contacto contacto) {
-        try {
-            contacto.setFechaCreacion(LocalDateTime.now());
-            contacto.setEstado("nuevo");
-            Contacto nuevoContacto = contactoRepository.save(contacto);
-            return ResponseEntity.ok(nuevoContacto);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear contacto: " + e.getMessage());
+    public ResponseEntity<Contacto> crear(@RequestBody Contacto contacto) {
+        contacto.setFechaCreacion(LocalDateTime.now());
+        contacto.setEstado("nuevo");
+        if (contacto.getPrioridad() == null) {
+            contacto.setPrioridad("normal");
         }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(contactoRepository.save(contacto));
     }
-    
-    /**
-     * Actualizar estado de contacto
-     */
+
+    /** PUT /api/contactos/{id} — cambiar estado o prioridad (admin) */
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarContacto(@PathVariable Long id, @RequestBody Contacto contactoActualizado) {
-        try {
-            Optional<Contacto> contactoExistente = contactoRepository.findById(id);
-            if (contactoExistente.isPresent()) {
-                Contacto contacto = contactoExistente.get();
-                contacto.setEstado(contactoActualizado.getEstado());
-                contacto.setPrioridad(contactoActualizado.getPrioridad());
-                contacto.setFechaModificacion(LocalDateTime.now());
-                Contacto contactoActual = contactoRepository.save(contacto);
-                return ResponseEntity.ok(contactoActual);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar contacto: " + e.getMessage());
-        }
+    public ResponseEntity<?> actualizar(
+            @PathVariable Long id,
+            @RequestBody Contacto datos) {
+        return contactoRepository.findById(id).map(c -> {
+            if (datos.getEstado()    != null) c.setEstado(datos.getEstado());
+            if (datos.getPrioridad() != null) c.setPrioridad(datos.getPrioridad());
+            c.setFechaModificacion(LocalDateTime.now());
+            return ResponseEntity.ok(contactoRepository.save(c));
+        }).orElse(ResponseEntity.notFound().build());
     }
-    
-    /**
-     * Responder mensaje de contacto (ADMIN)
-     */
+
+    /** PUT /api/contactos/{id}/responder — responder mensaje (admin) */
     @PutMapping("/{id}/responder")
-    public ResponseEntity<?> responderContacto(@PathVariable Long id, @RequestBody Map<String, Object> datos) {
-        try {
-            Optional<Contacto> contactoExistente = contactoRepository.findById(id);
-            if (contactoExistente.isPresent()) {
-                Contacto contacto = contactoExistente.get();
-                contacto.setRespuesta((String) datos.get("respuesta"));
-                contacto.setEstado("respondido");
-                contacto.setFechaRespuesta(LocalDateTime.now());
-                Contacto contactoActual = contactoRepository.save(contacto);
-                return ResponseEntity.ok(contactoActual);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al responder contacto: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Obtener contactos por estado
-     */
-    @GetMapping("/estado/{estado}")
-    public ResponseEntity<?> obtenerContactosPorEstado(@PathVariable String estado) {
-        try {
-            List<Contacto> contactos = contactoRepository.findByEstado(estado);
-            return ResponseEntity.ok(contactos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener contactos: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Obtener contactos por prioridad
-     */
-    @GetMapping("/prioridad/{prioridad}")
-    public ResponseEntity<?> obtenerContactosPorPrioridad(@PathVariable String prioridad) {
-        try {
-            List<Contacto> contactos = contactoRepository.findByPrioridad(prioridad);
-            return ResponseEntity.ok(contactos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener contactos: " + e.getMessage());
-        }
+    public ResponseEntity<?> responder(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+        return contactoRepository.findById(id).map(c -> {
+            c.setRespuesta(body.get("respuesta"));
+            c.setEstado("respondido");
+            c.setFechaRespuesta(LocalDateTime.now());
+            c.setFechaModificacion(LocalDateTime.now());
+            return ResponseEntity.ok(contactoRepository.save(c));
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
