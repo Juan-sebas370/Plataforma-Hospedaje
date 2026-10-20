@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Mensaje {
   id: string;
@@ -34,7 +35,7 @@ export interface ConversacionDetalle extends Conversacion {
   providedIn: 'root'
 })
 export class ChatSoporteService {
-  private apiUrl = 'http://localhost:3000/api/chat';
+  private apiUrl = `${environment.apiUrl}/chat`;
   
   // WebSocket o polling para mensajes en tiempo real
   private mensajesSubject = new BehaviorSubject<Mensaje[]>([]);
@@ -49,7 +50,7 @@ export class ChatSoporteService {
   private conectadoSubject = new BehaviorSubject<boolean>(false);
   public conectado$ = this.conectadoSubject.asObservable();
 
-  private socketUrl = 'ws://localhost:3000/ws/chat';
+  private socketUrl = `${environment.wsUrl}/chat`;
   private socket: WebSocket | null = null;
 
   constructor(private http: HttpClient) {

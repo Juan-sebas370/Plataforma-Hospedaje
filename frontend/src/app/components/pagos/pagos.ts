@@ -1,275 +1,195 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '../../shared/translate.pipe';
+import { ReservaService, Reserva } from '../../services/reserva.service';
+import { PagoService, WompiCheckout } from '../../services/pago.service';
 
-interface MetodoPago {
-  id: string;
-  nombre: string;
-  icono: string;
-  activo: boolean;
-}
+/** Constructor global que define https://checkout.wompi.co/widget.js */
+declare const WidgetCheckout: new (config: Record<string, unknown>) => {
+  open: (callback: (resultado: { transaction?: { id: string; status: string } }) => void) => void;
+};
 
-interface DetallesReserva {
-  id: string;
-  habitacion: string;
-  fechaLlegada: string;
-  fechaSalida: string;
-  noches: number;
-  precioNoche: number;
-  precioTotal: number;
-  impuestos: number;
-  totalConImpuestos: number;
-}
+const WOMPI_WIDGET_URL = 'https://checkout.wompi.co/widget.js';
 
 @Component({
   selector: 'app-pagos',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './pagos.html',
   styleUrl: './pagos.css',
 })
 export class Pagos implements OnInit {
-  // Datos de la reserva (recibiría del servicio)
-  detallesReserva: DetallesReserva = {
-    id: 'RES-2024-001',
-    habitacion: 'Suite Deluxe #301',
-    fechaLlegada: '2024-03-20',
-    fechaSalida: '2024-03-25',
-    noches: 5,
-    precioNoche: 250,
-    precioTotal: 1250,
-    impuestos: 125,
-    totalConImpuestos: 1375,
-  };
-
-  // Opciones de pago
-  metodosPago: MetodoPago[] = [
-    {
-      id: 'tarjeta',
-      nombre: 'Tarjeta de Crédito/Débito',
-      icono: 'card',
-      activo: true,
-    },
-    {
-      id: 'transferencia',
-      nombre: 'Transferencia Bancaria',
-      icono: 'bank',
-      activo: false,
-    },
-    { id: 'paypal', nombre: 'PayPal', icono: 'paypal', activo: false },
-    {
-      id: 'efectivo',
-      nombre: 'Efectivo al Llegar',
-      icono: 'cash',
-      activo: false,
-    },
-  ];
-
-  // Formulario de tarjeta
-  formularioPago!: FormGroup;
-  procesando: boolean = false;
-  pagoCompleto: boolean = false;
-  errorPago: string = '';
-  metodoPagoSeleccionado: string = 'tarjeta';
-  submitted: boolean = false;
-
-  // Estados paso a paso
-  pasoActual: number = 1; // 1: Datos, 2: Confirmación, 3: Procesamiento, 4: Éxito
+  reserva: Reserva | null = null;
+  reservaId = 0;
+  /** Código de acceso de la reserva (llega en la URL desde el paso de confirmación). */
+  private codigo = '';
+  cargando = true;
+  error = '';
+  /** true mientras se pide la firma al backend / se abre el widget / se verifica. */
+  procesando = false;
+  /** Mensaje del resultado del último intento de pago (rechazado, pendiente...). */
+  mensajePago = '';
+  private isBrowser: boolean;
+  private widgetScript?: Promise<void>;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router
+    @Inject(PLATFORM_ID) platformId: Object,
+    private route: ActivatedRoute,
+    private router: Router,
+    private reservaService: ReservaService,
+    private pagoService: PagoService,
+    private cdr: ChangeDetectorRef,
   ) {
-    this.inicializarFormulario();
+    this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
-    this.cargarDetallesReserva();
-  }
+    const reservaId = this.route.snapshot.queryParamMap.get('reservaId');
+    if (!reservaId) {
+      this.error = 'No se encontró el ID de la reserva.';
+      this.cargando = false;
+      return;
+    }
+    this.reservaId = +reservaId;
+    this.codigo = this.route.snapshot.queryParamMap.get('codigo') ?? '';
 
-  /**
-   * Inicializa el formulario de pago
-   */
-  private inicializarFormulario(): void {
-    this.formularioPago = this.formBuilder.group({
-      nombreTitular: [
-        '',
-        [Validators.required, Validators.minLength(3)],
-      ],
-      numeroTarjeta: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{13,19}$/),
-        ],
-      ],
-      mesExpiracion: ['', [Validators.required, Validators.pattern(/^\d{2}$/)]],
-      anoExpiracion: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
-      email: ['', [Validators.required, Validators.email]],
-      terminos: [false, Validators.requiredTrue],
+    this.reservaService.obtenerReserva(this.reservaId, this.codigo).subscribe({
+      next: (reserva) => {
+        this.reserva = reserva;
+        this.cargando = false;
+        // La app es zoneless: sin esto la vista no se actualiza.
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.error = 'No se pudo cargar la información de la reserva.';
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
     });
   }
 
-  /**
-   * Carga los detalles de la reserva (simula obtener del servidor)
-   */
-  private cargarDetallesReserva(): void {
-    // Aquí iría la llamada al servicio: this.reservasService.obtenerDetalles(id)
+  get yaPagada(): boolean {
+    return this.reserva?.estado === 'CONFIRMADA';
   }
 
   /**
-   * Getter para acceder a controles
+   * Abre el Widget de Checkout de Wompi. Se pide una firma nueva en cada
+   * intento porque Wompi no deja reutilizar la referencia de un pago
+   * rechazado. El pago ocurre dentro del widget de Wompi — el número de
+   * tarjeta jamás toca nuestro frontend ni backend.
    */
-  get f() {
-    return this.formularioPago.controls;
+  pagar(): void {
+    if (!this.isBrowser || this.procesando) return;
+    this.procesando = true;
+    this.mensajePago = '';
+
+    this.pagoService.iniciarCheckoutWompi(this.reservaId, this.codigo).subscribe({
+      next: (checkout) => {
+        this.cargarWidget()
+          .then(() => this.abrirWidget(checkout))
+          .catch(() => this.finalizar('No se pudo cargar Wompi. Revisá tu conexión e intentá de nuevo.'));
+      },
+      error: (err) => {
+        this.finalizar(err?.error?.error || 'No se pudo iniciar el pago. Intenta de nuevo en unos minutos.');
+      },
+    });
   }
 
-  /**
-   * Selecciona un método de pago
-   */
-  seleccionarMetodo(metodId: string): void {
-    this.metodosPago.forEach((m) => (m.activo = m.id === metodId));
-    this.metodoPagoSeleccionado = metodId;
-    this.errorPago = '';
+  private cargarWidget(): Promise<void> {
+    if (typeof WidgetCheckout !== 'undefined') return Promise.resolve();
+    this.widgetScript ??= new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = WOMPI_WIDGET_URL;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        this.widgetScript = undefined;
+        reject();
+      };
+      document.head.appendChild(script);
+    });
+    return this.widgetScript;
   }
 
-  /**
-   * Procede al siguiente paso
-   */
-  procederProxPaso(): void {
-    if (this.pasoActual === 1) {
-      this.pasoActual = 2;
-    } else if (this.pasoActual === 2) {
-      this.procesarPago();
+  private abrirWidget(checkout: WompiCheckout): void {
+    const config: Record<string, unknown> = {
+      currency: checkout.currency,
+      amountInCents: checkout.amountInCents,
+      reference: checkout.reference,
+      publicKey: checkout.publicKey,
+      signature: { integrity: checkout.signature },
+    };
+    // El firewall de Wompi responde 403 si la redirect-url apunta a una
+    // dirección local, así que en desarrollo se omite; el resultado llega
+    // igual por el callback de open().
+    const esLocal = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+    if (!esLocal) {
+      config['redirectUrl'] = `${window.location.origin}/confirmacion?reservaId=${this.reservaId}&codigo=${encodeURIComponent(this.codigo)}`;
     }
-  }
-
-  /**
-   * Vuelve al paso anterior
-   */
-  volverPasoAnterior(): void {
-    if (this.pasoActual > 1) {
-      this.pasoActual--;
-      this.errorPago = '';
+    if (this.reserva?.emailContacto) {
+      config['customerData'] = { email: this.reserva.emailContacto };
     }
-  }
 
-  /**
-   * Procesa el pago
-   */
-  private procesarPago(): void {
-    this.submitted = true;
-
-    if (this.metodoPagoSeleccionado === 'tarjeta') {
-      if (this.formularioPago.invalid) {
+    new WidgetCheckout(config).open((resultado) => {
+      const transaccion = resultado?.transaction;
+      if (!transaccion?.id) {
+        // El huésped cerró el widget sin pagar.
+        this.finalizar('');
         return;
       }
-    }
-
-    this.procesando = true;
-    this.pasoActual = 3;
-
-    // Simular procesamiento
-    setTimeout(() => {
-      this.procesando = false;
-      this.pagoCompleto = true;
-      this.pasoActual = 4;
-
-      // Limpiar formulario después de éxito
-      this.formularioPago.reset();
-      this.submitted = false;
-    }, 2500);
+      console.info('Transacción de Wompi', transaccion.id, transaccion.status);
+      this.mensajePago = 'Verificando tu pago con Wompi...';
+      this.cdr.detectChanges();
+      this.verificarPago(transaccion.id);
+    });
   }
 
-  /**
-   * Cancela el pago y vuelve a reservas
-   */
-  cancelarPago(): void {
-    if (
-      confirm(
-        '¿Estás seguro de que deseas cancelar el pago? Tu reserva será descartada.'
-      )
-    ) {
-      this.router.navigate(['/reservas']);
-    }
+  /** Confirma el estado con el backend, que a su vez le pregunta a Wompi. */
+  private verificarPago(transaccionId: string, intento = 1): void {
+    this.pagoService.verificarPagoWompi(this.reservaId, transaccionId, this.codigo).subscribe({
+      next: ({ estado }) => {
+        if (estado === 'APPROVED') {
+          this.router.navigate(['/confirmacion'], { queryParams: { reservaId: this.reservaId, codigo: this.codigo } });
+        } else if (estado === 'PENDING' && intento < 10) {
+          this.mensajePago = 'Tu pago está en proceso, esperando la confirmación de Wompi...';
+          this.cdr.detectChanges();
+          setTimeout(() => this.verificarPago(transaccionId, intento + 1), 3000);
+        } else if (estado === 'PENDING') {
+          this.finalizar('Tu pago sigue en proceso. Te avisaremos por correo cuando Wompi lo confirme.');
+        } else {
+          this.finalizar('El pago fue rechazado. Podés intentarlo de nuevo con otro medio de pago.');
+        }
+      },
+      error: (err) => {
+        // Justo después de pagar, la transacción puede tardar unos segundos
+        // en aparecer en la API de Wompi: se reintenta antes de rendirse.
+        if (intento < 5) {
+          setTimeout(() => this.verificarPago(transaccionId, intento + 1), 3000);
+          return;
+        }
+        console.error('No se pudo verificar la transacción de Wompi', transaccionId, err);
+        this.finalizar(err?.error?.error || 'No pudimos verificar tu pago. Si se descontó el dinero, contactá al hotel.');
+      },
+    });
   }
 
-  /**
-   * Completa la transacción y va al dashboard
-   */
-  completarTransaccion(): void {
-    this.router.navigate(['/dashboard']);
+  private finalizar(mensaje: string): void {
+    this.procesando = false;
+    this.mensajePago = mensaje;
+    this.cdr.detectChanges();
   }
 
-  /**
-   * Formatea el número de tarjeta
-   */
-  formatearTarjeta(evento: any): void {
-    const valor = evento.target.value.replace(/\s/g, '');
-    evento.target.value = valor
-      .replace(/\D/g, '')
-      .replace(/(.{4})/g, '$1 ')
-      .trim();
-  }
-
-  /**
-   * Valida mes de expiración
-   */
-  validarMes(evento: any): void {
-    let valor = evento.target.value.replace(/\D/g, '');
-    if (valor.length > 2) valor = valor.substring(0, 2);
-    if (valor && parseInt(valor) > 12) valor = '12';
-    evento.target.value = valor;
-  }
-
-  /**
-   * Valida año de expiración
-   */
-  validarAno(evento: any): void {
-    let valor = evento.target.value.replace(/\D/g, '');
-    if (valor.length > 4) valor = valor.substring(0, 4);
-    evento.target.value = valor;
-  }
-
-  /**
-   * Valida CVV
-   */
-  validarCVV(evento: any): void {
-    evento.target.value = evento.target.value
-      .replace(/\D/g, '')
-      .substring(0, 4);
-  }
-
-  /**
-   * Obtiene icono del método de pago seleccionado
-   */
-  getIconoMetodo(): string {
-    const metodo = this.metodosPago.find((m) => m.id === this.metodoPagoSeleccionado);
-    return metodo?.icono || 'card';
-  }
-
-  /**
-   * Obtiene nombre del método de pago seleccionado
-   */
-  getNombreMetodo(): string {
-    const metodo = this.metodosPago.find((m) => m.id === this.metodoPagoSeleccionado);
-    return metodo?.nombre || '';
-  }
-
-  /**
-   * Calcula el total formateado
-   */
-  getTotalFormateado(): string {
+  formatPrecio(valor: number | undefined): string {
+    if (valor == null) return '–';
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
       minimumFractionDigits: 0,
-    }).format(this.detallesReserva.totalConImpuestos);
+    }).format(valor);
+  }
+
+  cancelar(): void {
+    if (confirm('¿Seguro que querés cancelar? Podés volver a intentar el pago más tarde desde el enlace de tu reserva.')) {
+      this.router.navigate(['/']);
+    }
   }
 }

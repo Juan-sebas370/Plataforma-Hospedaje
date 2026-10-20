@@ -3,7 +3,7 @@
 ## 📋 Configuración Actual
 
 ```yaml
-Clave JWT: HotelSebastian2026-JWTSecureKey-Prod-9f8e7d6c5b4a3210-CHANGE-IN-PRODUCTION
+Clave JWT: configurar mediante la variable de entorno JWT_SECRET.
 Expiración: 86400000 ms (24 horas)
 Algoritmo: HS256 (HMAC-SHA256)
 ```
@@ -23,7 +23,7 @@ POST http://localhost:3000/api/auth/login
 ```json
 {
   "email": "sebastian@gmail.com",
-  "password": "jiampi2018*"
+  "password": "<PASSWORD_CONFIGURADO>"
 }
 ```
 
@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 # 1. Login y obtener token
 TOKEN=$(curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"sebastian@gmail.com","password":"jiampi2018*"}' \
+  -d '{"email":"sebastian@gmail.com","password":"<PASSWORD_CONFIGURADO>"}' \
   | jq -r '.token')
 
 # 2. Usar token para obtener reservas
@@ -78,7 +78,7 @@ const loginResponse = await fetch('http://localhost:3000/api/auth/login', {
   },
   body: JSON.stringify({
     email: 'sebastian@gmail.com',
-    password: 'jiampi2018*'
+    password: '<PASSWORD_CONFIGURADO>'
   })
 });
 
@@ -132,7 +132,7 @@ getReservas() {
      ```json
      {
        "email": "sebastian@gmail.com",
-       "password": "jiampi2018*"
+      "password": "<PASSWORD_CONFIGURADO>"
      }
      ```
    - Copiar el `token` de la respuesta
@@ -328,7 +328,7 @@ POST   /api/contactos
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"sebastian@gmail.com","password":"jiampi2018*"}'
+  -d '{"email":"sebastian@gmail.com","password":"<PASSWORD_CONFIGURADO>"}'
 ```
 
 **Resultado esperado:** Status 200 + token
@@ -413,7 +413,7 @@ fetch(url, {
 ```bash
 # 1. Login
 POST /api/auth/login
-Body: { "email": "sebastian@gmail.com", "password": "jiampi2018*" }
+Body: { "email": "sebastian@gmail.com", "password": "<PASSWORD_CONFIGURADO>" }
 
 # 2. Guardar token del response
 token = response.token

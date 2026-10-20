@@ -47,7 +47,7 @@ describe('ChatSoporteService', () => {
     it('debería obtener conversación actual sin parámetros', () => {
       service.obtenerConversacion().subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversacion-actual');
+      const req = httpMock.expectOne('http://localhost:8080/api/chat/conversacion-actual');
       expect(req.request.method).toBe('GET');
 
       const mockConversacion: Conversacion = {

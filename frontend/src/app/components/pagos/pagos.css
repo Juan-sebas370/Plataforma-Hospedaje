@@ -1,4 +1,4 @@
-﻿.pagos-container {
+.pagos-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -12,7 +12,7 @@
 }
 
 .pagos-header h1 {
-  font-size: 32px;
+  font-size: 2rem;
   color: #2B2B2B;
   margin: 0 0 10px 0;
 }
@@ -60,14 +60,14 @@
 }
 
 .paso.completado .numero {
-  border-color: #27ae60;
-  background: #27ae60;
+  border-color: #1B7340;
+  background: #1B7340;
   color: white;
 }
 
 .paso .label {
-  font-size: 12px;
-  color: #7A7A7A;
+  font-size: 0.75rem;
+  color: #6B6560;
   text-align: center;
 }
 
@@ -79,7 +79,7 @@
 }
 
 .paso-linea.completada {
-  background: #27ae60;
+  background: #1B7340;
 }
 
 /* Contenido Principal */
@@ -130,11 +130,11 @@
 }
 
 .metodo-icono {
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .metodo-nombre {
-  font-size: 12px;
+  font-size: 0.75rem;
   text-align: center;
   font-weight: 600;
 }
@@ -160,7 +160,7 @@ label {
   margin-bottom: 8px;
   font-weight: 600;
   color: #2B2B2B;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .form-control {
@@ -168,7 +168,7 @@ label {
   padding: 12px 15px;
   border: 2px solid #E8DCCB;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   transition: all 0.3s ease;
 }
@@ -180,13 +180,18 @@ label {
 }
 
 .form-control.is-invalid {
-  border-color: #e74c3c;
+  border-color: #B83A2E;
 }
 
 .error-text {
-  color: #e74c3c;
-  font-size: 12px;
+  color: #B83A2E;
+  font-size: 0.75rem;
   margin-top: 5px;
+}
+
+.wompi-boton-container {
+  margin: 24px 0;
+  min-height: 48px;
 }
 
 .form-row {
@@ -217,8 +222,8 @@ label {
 }
 
 .info-seguridad {
-  color: #27ae60;
-  font-size: 13px;
+  color: #1B7340;
+  font-size: 0.8125rem;
   padding: 12px;
   background: #d4edda;
   border-radius: 8px;
@@ -297,9 +302,9 @@ label {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: #27ae60;
+  background: #1B7340;
   color: white;
-  font-size: 48px;
+  font-size: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,14 +327,14 @@ label {
 
 .dato-exito .etiqueta {
   display: block;
-  color: #7A7A7A;
-  font-size: 12px;
+  color: #6B6560;
+  font-size: 0.75rem;
   margin-bottom: 8px;
 }
 
 .dato-exito .valor {
   display: block;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   color: #2B2B2B;
 }
@@ -357,11 +362,11 @@ label {
   justify-content: space-between;
   padding: 12px 0;
   border-bottom: 1px solid #E8DCCB;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .resumen-item.destacado {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   background: #F8F4EE;
   padding: 15px;
@@ -378,7 +383,7 @@ label {
 .beneficios h4 {
   margin: 0 0 10px 0;
   color: #2B2B2B;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .beneficios ul {
@@ -388,8 +393,8 @@ label {
 }
 
 .beneficios li {
-  font-size: 12px;
-  color: #27ae60;
+  font-size: 0.75rem;
+  color: #1B7340;
   padding: 5px 0;
 }
 
@@ -399,8 +404,8 @@ label {
   padding: 15px;
   background: #F8F4EE;
   border-radius: 8px;
-  font-size: 12px;
-  color: #27ae60;
+  font-size: 0.75rem;
+  color: #1B7340;
 }
 
 .seguridad-info p {
@@ -418,7 +423,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 38px;
+    font-size: 2.375rem;
   }
 
   .pagos-contenido {
@@ -438,7 +443,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 32px;
+    font-size: 2rem;
   }
 }
 
@@ -483,7 +488,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .pagos-contenido {
@@ -538,7 +543,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 26px;
+    font-size: 1.625rem;
   }
 
   .pasos-indicador {
@@ -569,7 +574,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .pasos-indicador {
@@ -579,11 +584,11 @@ label {
   .paso .numero {
     width: 35px;
     height: 35px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .paso .label {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 
   .paso-linea {
@@ -622,7 +627,7 @@ label {
   }
 
   .pagos-header h1 {
-    font-size: 20px;
+    font-size: 1.25rem;
     margin-bottom: 8px;
   }
 
@@ -641,11 +646,11 @@ label {
   .paso .numero {
     width: 30px;
     height: 30px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .paso .label {
-    font-size: 11px;
+    font-size: 0.6875rem;
     text-align: left;
   }
 
@@ -662,13 +667,13 @@ label {
   }
 
   .form-group label {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .form-group input,
   .form-group select {
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .metodo-pago {
@@ -676,11 +681,14 @@ label {
   }
 
   .metodo-pago h4 {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .btn {
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 }
+
+/* Espacio para la barra de navegación fija (85px). Va al final para ganarle a los media queries. */
+.pagos-container { padding-top: calc(85px + 1.5rem); }

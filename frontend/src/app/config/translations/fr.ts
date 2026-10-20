@@ -15,7 +15,7 @@ export const fr = {
     logout: 'Se déconnecter'
   },
   home: {
-    title: 'Bienvenue à Hospedaje Sebastian',
+    title: 'Bienvenue à Hospedaje Sebastián',
     subtitle: 'Votre maison loin de chez vous. Confort et service de première classe.',
     checkIn: 'Arrivée',
     checkOut: 'Départ',
@@ -38,8 +38,6 @@ export const fr = {
     serviceParking: 'Parking',
     serviceLaundry: 'Blanchisserie',
     serviceAir: 'Climatisation',
-    servicePool: 'Piscine',
-    serviceRestaurant: 'Restaurant',
     serviceRoomService: 'Service en Chambre',
     serviceTransfer: 'Transfert Aéroport',
     serviceSafe: 'Coffre-fort',
@@ -79,7 +77,7 @@ export const fr = {
     paymentInfo: 'Espèces, Cartes, Virements',
     promotions: 'Promotions',
     promotionInfo: '7+ nuits: 15% de réduction. Réservation anticipée: 10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: 'Disponible 24h/24 et 7j/7'
   },
   gallery: {
@@ -87,8 +85,8 @@ export const fr = {
     subtitle: 'Découvrez nos installations et chambres',
     all: 'Toutes',
     rooms: 'Chambres',
-    facilities: 'Installations',
-    services: 'Services',
+    spaces: 'Espaces du logement',
+    attractions: 'Attractions de Filandia',
     noImages: 'Aucune image dans cette catégorie',
     ctaTitle: 'Prêt à vivre l\'expérience ?',
     ctaSubtitle: 'Réservez maintenant et profitez de nos installations incroyables',
@@ -268,7 +266,7 @@ export const fr = {
     backHome: "Retour à l'accueil",
     myReservations: 'Mes réservations',
     contactSupport: 'Contacter le support',
-    thankYou: "Merci d'avoir choisi Hospedaje Sebastian!",
+    thankYou: "Merci d'avoir choisi Hospedaje Sebastián!",
     enjoyStay: 'Nous espérons que vous apprécierez votre séjour avec nous'
   },
   contact: {
@@ -394,6 +392,11 @@ export const fr = {
     back: 'Retour',
     next: 'Suivant',
     previous: 'Précédent',
-    selectLanguage: 'Sélectionner la langue'
+    selectLanguage: 'Sélectionner la langue',
+    step: 'Étape',
+    of: 'sur'
+  },
+  languages: {
+    current: 'Langue actuelle'
   }
 };

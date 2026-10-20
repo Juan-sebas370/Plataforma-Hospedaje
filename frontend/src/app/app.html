@@ -1,5 +1,11 @@
+<a class="saltar-contenido" href="#contenido" (click)="saltarAlContenido($event)">Saltar al contenido principal</a>
 <div class="app-container">
   <app-nav></app-nav>
-  <router-outlet />
+  <main id="contenido" tabindex="-1" #contenido>
+    <router-outlet />
+  </main>
   <app-footer></app-footer>
 </div>
+<!-- El asistente se descarga cuando el navegador queda libre: no retrasa la carga de la página -->
+@defer (on idle) { <app-chatbot /> }
+<p class="sr-only" aria-live="polite" aria-atomic="true">{{ anuncio() }}</p>

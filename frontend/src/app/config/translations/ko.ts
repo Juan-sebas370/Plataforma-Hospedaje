@@ -15,7 +15,7 @@ export const ko = {
     logout: '로그아웃'
   },
   home: {
-    title: 'Hospedaje Sebastian에 오신 것을 환영합니다',
+    title: 'Hospedaje Sebastián에 오신 것을 환영합니다',
     subtitle: '집처럼 편안한 곳. 편안함과 최고급 서비스.',
     checkIn: '체크인',
     checkOut: '체크아웃',
@@ -38,8 +38,6 @@ export const ko = {
     serviceParking: '주차장',
     serviceLaundry: '세탁 서비스',
     serviceAir: '에어컨',
-    servicePool: '수영장',
-    serviceRestaurant: '레스토랑',
     serviceRoomService: '룸 서비스',
     serviceTransfer: '공항 픽업',
     serviceSafe: '금고',
@@ -79,7 +77,7 @@ export const ko = {
     paymentInfo: '현금, 카드, 송금',
     promotions: '프로모션',
     promotionInfo: '7박 이상: 15% 할인. 사전 예약: 10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: '24/7 이용 가능'
   },
   gallery: {
@@ -87,8 +85,8 @@ export const ko = {
     subtitle: '시설과 객실을 둘러보세요',
     all: '전체',
     rooms: '객실',
-    facilities: '시설',
-    services: '서비스',
+    spaces: '숙소 공간',
+    attractions: '필란디아 명소',
     noImages: '이 카테고리에 이미지가 없습니다',
     ctaTitle: '경험할 준비가 되셨나요?',
     ctaSubtitle: '지금 예약하고 놀라운 시설을 즐기세요',
@@ -269,7 +267,7 @@ export const ko = {
     backHome: '홈으로 돌아가기',
     myReservations: '내 예약',
     contactSupport: '고객 지원 센터',
-    thankYou: 'Hospedaje Sebastian을 선택해 주셔서 감사합니다!',
+    thankYou: 'Hospedaje Sebastián을 선택해 주셔서 감사합니다!',
     enjoyStay: '즐거운 시간 되시기 바랍니다'
   },
   contact: {
@@ -395,6 +393,11 @@ export const ko = {
     back: '뒤로',
     next: '다음',
     previous: '이전',
-    selectLanguage: '언어 선택'
+    selectLanguage: '언어 선택',
+    step: '단계',
+    of: '/'
+  },
+  languages: {
+    current: '현재 언어'
   }
 };

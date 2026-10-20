@@ -1,0 +1,75 @@
+<section class="pagina">
+  <div class="tarjeta">
+    <span class="tarjeta__icono" aria-hidden="true"><app-icono name="lock" [size]="26" [stroke]="1.8" /></span>
+    <h1>Restablecer contraseña</h1>
+
+    @switch (estado()) {
+      @case ('validando') {
+        <p class="estado" role="status"><span class="spinner" aria-hidden="true"></span> Verificando el enlace…</p>
+      }
+
+      @case ('invalido') {
+        <div class="aviso aviso--error" role="alert">
+          <app-icono name="alert" [size]="18" />
+          <p>{{ motivo() }}</p>
+        </div>
+        <p class="ayuda">¿Necesitas ayuda para entrar a tu cuenta? Escríbenos y te ayudamos.</p>
+        <div class="acciones">
+          <a class="btn btn--primario" routerLink="/contacto">Escribirnos</a>
+          <a class="btn btn--secundario" routerLink="/">Ir al inicio</a>
+        </div>
+      }
+
+      @case ('listo') {
+        <div class="aviso aviso--ok" role="status">
+          <app-icono name="check" [size]="18" [stroke]="2.4" />
+          <p>Tu contraseña se cambió correctamente. Te enviamos un correo de confirmación.</p>
+        </div>
+        <div class="acciones">
+          <a class="btn btn--primario" routerLink="/">Ir al inicio</a>
+        </div>
+      }
+
+      @default {
+        <p class="subtitulo">
+          Elige una contraseña nueva
+          @if (email()) { para <strong>{{ email() }}</strong> }.
+        </p>
+
+        <form (submit)="guardar($event)" novalidate>
+          <div class="campo" [class.campo--error]="errorNueva()">
+            <label for="nueva">Contraseña nueva</label>
+            <div class="clave">
+              <input id="nueva" name="nueva" [type]="verClave() ? 'text' : 'password'" autocomplete="new-password"
+                     [ngModel]="nueva()" (ngModelChange)="nueva.set($event)"
+                     [attr.aria-invalid]="!!errorNueva()" aria-describedby="requisito error-nueva" />
+              <button type="button" class="clave__ver" (click)="verClave.set(!verClave())"
+                      [attr.aria-pressed]="verClave()">{{ verClave() ? 'Ocultar' : 'Mostrar' }}</button>
+            </div>
+            <p id="requisito" class="requisito" [class.requisito--ok]="largoOk()">
+              <app-icono [name]="largoOk() ? 'check' : 'info'" [size]="14" [stroke]="2.2" />
+              Mínimo {{ minimo }} caracteres
+            </p>
+            <p id="error-nueva" class="campo__error">{{ errorNueva() }}</p>
+          </div>
+
+          <div class="campo" [class.campo--error]="errorConfirmacion()">
+            <label for="confirmacion">Repite la contraseña</label>
+            <input id="confirmacion" name="confirmacion" [type]="verClave() ? 'text' : 'password'" autocomplete="new-password"
+                   [ngModel]="confirmacion()" (ngModelChange)="confirmacion.set($event)"
+                   [attr.aria-invalid]="!!errorConfirmacion()" aria-describedby="error-confirmacion" />
+            <p id="error-confirmacion" class="campo__error">{{ errorConfirmacion() }}</p>
+          </div>
+
+          @if (errorServidor()) {
+            <div class="aviso aviso--error" role="alert"><app-icono name="alert" [size]="18" /><p>{{ errorServidor() }}</p></div>
+          }
+
+          <button type="submit" class="btn btn--primario btn--ancho" [disabled]="estado() === 'enviando'">
+            @if (estado() === 'enviando') { <span class="spinner" aria-hidden="true"></span> Guardando… } @else { Guardar contraseña }
+          </button>
+        </form>
+      }
+    }
+  </div>
+</section>

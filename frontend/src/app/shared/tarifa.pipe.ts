@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Tarifa } from '../components/reservas/reservas';
+import { Tarifa } from '../components/reservas/reserva.catalogo';
 
 @Pipe({ name: 'tarifa', standalone: true })
 export class TarifaPipe implements PipeTransform {

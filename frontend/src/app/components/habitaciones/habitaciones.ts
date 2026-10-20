@@ -1,24 +1,46 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitacionService, Habitacion } from '../../services/habitacion.service';
-import { TranslatePipe } from '../../shared/translate.pipe';
+import { ReservaService, Disponibilidad } from '../../services/reserva.service';
 
 @Component({
   selector: 'app-habitaciones',
-  imports: [RouterLink, CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule],
   templateUrl: './habitaciones.html',
   styleUrl: './habitaciones.css',
 })
-export class Habitaciones implements OnInit {
+export class Habitaciones implements OnInit, OnDestroy {
   habitaciones: Habitacion[] = [];
   habitacionesFiltradas: Habitacion[] = [];
+  habitacionesNoDisponibles: Habitacion[] = [];
+  motivoNoDisponibilidad = new Map<number, string>();
+  busqueda = {
+    fechaEntrada: '',
+    fechaSalida: '',
+    adultos: 0,
+    ninos3: 0,
+    ninos10: 0,
+    ninos11: 0,
+    tipoReserva: '',
+  };
+  disponibilidad: Disponibilidad | null = null;
   filtroActivo: string = 'Todas';
   textoBusqueda: string = '';
   cargando: boolean = false;
   error: string = '';
   private isBrowser = false;
+
+  private readonly imagenesPorHabitacion: Record<string, string> = {
+    '101': 'assets/habitaciones/piso1/hab101.jpg',
+    '102': 'assets/habitaciones/piso1/hab102.jpg',
+    '103': 'assets/habitaciones/piso1/hab103.jpg',
+    '201': 'assets/habitaciones/piso2/hab201.jpeg',
+    '202': 'assets/habitaciones/piso2/hab202.jpeg',
+    '203': 'assets/habitaciones/piso2/hab203.jpg',
+    '204': 'assets/habitaciones/piso2/hab204.jpg',
+  };
 
   // Nuevos filtros avanzados
   filtros = {
@@ -200,41 +222,206 @@ export class Habitaciones implements OnInit {
   constructor(
     private habitacionService: HabitacionService,
     private router: Router,
+    private route: ActivatedRoute,
+    private reservaService: ReservaService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.busqueda = {
+        fechaEntrada: params['fechaEntrada'] || '',
+        fechaSalida: params['fechaSalida'] || '',
+        adultos: Number(params['adultos'] || 0),
+        ninos3: Number(params['ninos3'] || 0),
+        ninos10: Number(params['ninos10'] || 0),
+        ninos11: Number(params['ninos11'] || 0),
+        tipoReserva: params['tipo'] || '',
+      };
+      if (this.busqueda.fechaEntrada) this.consultarDisponibilidad();
+      this.aplicarFiltros();
+    });
     this.limpiarFiltros();
-    this.usarDatosEjemplo();
     this.cargarHabitaciones();
+    // Desde "Ver Piso 1 / Piso 2" del inicio: llega con el filtro del piso ya elegido.
+    const piso = this.route.snapshot.queryParamMap.get('piso');
+    if (piso === '1' || piso === '2') this.aplicarFiltro(`Piso ${piso}`);
   }
 
   cargarHabitaciones() {
-    this.cargando = this.habitacionesFiltradas.length === 0;
+    // El catalogo local permite renderizar las habitaciones inmediatamente.
+    this.usarDatosEjemplo();
+    this.cargando = false;
     this.error = '';
+    if (this.busqueda.fechaEntrada) this.establecerDisponibilidadLocal();
+    this.cdr.detectChanges();
     
     this.habitacionService.obtenerTodas().subscribe({
       next: (habitaciones) => {
         const datos = Array.isArray(habitaciones) ? habitaciones : [];
 
         if (datos.length >= 6) {
-          this.habitaciones = datos;
-          this.aplicarFiltros();
-        } else {
-          this.usarDatosEjemplo();
+          this.zone.run(() => {
+            this.habitaciones = datos.map(habitacion => this.normalizarHabitacion(habitacion));
+            this.aplicarFiltros();
+            this.cdr.detectChanges();
+          });
         }
-
-        this.cargando = false;
       },
-      error: (err) => {
-        this.error = 'No se pudieron cargar las habitaciones. Intenta nuevamente.';
-        this.cargando = false;
-        // Usar datos de ejemplo si falla
-        this.usarDatosEjemplo();
+      error: () => {
+        // El catalogo local ya esta visible; el error no debe bloquearlo.
+        this.error = '';
       }
     });
+  }
+
+  private normalizarHabitacion(habitacion: Habitacion): Habitacion {
+    const imagenFallback = this.imagenesPorHabitacion[habitacion.numero] || 'assets/logo.png';
+    const imagenes = Array.isArray(habitacion.imagenes)
+      ? habitacion.imagenes
+        .filter(Boolean)
+        .map(imagen => this.normalizarRutaImagen(imagen, imagenFallback))
+      : [];
+
+    return {
+      ...habitacion,
+      numero: habitacion.numero || '',
+      tipo: habitacion.tipo || 'Habitación',
+      capacidad: Number(habitacion.capacidad) || 0,
+      precioNoche: Number(habitacion.precioNoche) || 0,
+      descripcion: habitacion.descripcion || 'Espacio cómodo para tu estadía en Filandia.',
+      servicios: Array.isArray(habitacion.servicios) ? habitacion.servicios : [],
+      imagenes: imagenes.length > 0 ? imagenes : [imagenFallback],
+    };
+  }
+
+  private normalizarRutaImagen(imagen: string, fallback: string): string {
+    if (imagen.startsWith('assets/') || imagen.startsWith('/assets/') || imagen.startsWith('http')) {
+      return imagen;
+    }
+    return fallback;
+  }
+
+  imagenPrincipal(habitacion: Habitacion): string {
+    return habitacion.imagenes?.[0] || this.imagenesPorHabitacion[habitacion.numero] || 'assets/logo.png';
+  }
+
+  get totalHuespedes(): number {
+    return this.busqueda.adultos + this.busqueda.ninos3 + this.busqueda.ninos10 + this.busqueda.ninos11;
+  }
+
+  get tieneBusqueda(): boolean {
+    return !!this.busqueda.fechaEntrada && this.totalHuespedes > 0;
+  }
+
+  get esGrupoGrande(): boolean {
+    return this.totalHuespedes >= 5;
+  }
+
+  get recomendacion(): string {
+    if (!this.tieneBusqueda || this.alternativasEspacio.length === 0) return '';
+    const pisoConveniente = this.alternativasEspacio.some(alternativa => alternativa.conveniente);
+    if (this.totalHuespedes >= 13) {
+      return 'Por el tamaño de tu grupo, revisa la opción de reservar la casa completa en Reservas para tener mayor comodidad.';
+    }
+    if (this.totalHuespedes >= 9) {
+      return pisoConveniente
+        ? 'Para este grupo, un piso completo puede ser más cómodo y conveniente que reservar habitaciones por separado.'
+        : 'Para este grupo, un piso completo ofrece la capacidad necesaria; compara el precio antes de confirmar.';
+    }
+    if (this.totalHuespedes >= 5) {
+      return 'Estas opciones tienen capacidad suficiente para tu grupo. Puedes comparar varias habitaciones antes de confirmar.';
+    }
+    return 'Te mostramos primero las habitaciones que tienen capacidad para tu grupo.';
+  }
+
+  get alternativasEspacio() {
+    if (!this.tieneBusqueda || !this.esGrupoGrande || !this.disponibilidad) return [];
+
+    const total = this.totalHuespedes;
+    const habitacionesLibres = this.habitaciones
+      .filter(habitacion => !this.disponibilidad?.habitacionesOcupadas.includes(habitacion.id))
+      .sort((a, b) => a.precioNoche - b.precioNoche);
+    let capacidadComparada = 0;
+    let precioHabitaciones = 0;
+    for (const habitacion of habitacionesLibres) {
+      if (capacidadComparada >= total) break;
+      capacidadComparada += habitacion.capacidad;
+      precioHabitaciones += habitacion.precioNoche;
+    }
+
+    const pisos = [
+      { id: 'piso1', nombre: 'Piso 1', capacidad: 8, precio: 550000, ocupado: this.disponibilidad.piso1Ocupado },
+      { id: 'piso2', nombre: 'Piso 2', capacidad: 12, precio: 550000, ocupado: this.disponibilidad.piso2Ocupado },
+      { id: 'completo', nombre: 'Casa completa', capacidad: 20, precio: 1200000, ocupado: this.disponibilidad.piso1Ocupado || this.disponibilidad.piso2Ocupado },
+    ];
+
+    return pisos
+      .filter(piso => !piso.ocupado && piso.capacidad >= total)
+      .map(piso => ({
+        ...piso,
+        precioHabitaciones,
+        conveniente: capacidadComparada >= total && piso.precio <= precioHabitaciones,
+      }));
+  }
+
+  esAlternativaDisponible(espacio: string): boolean {
+    return this.alternativasEspacio.some(alternativa => alternativa.id === espacio);
+  }
+
+  reservarEspacio(espacio: string): void {
+    if (this.tieneBusqueda && !this.esAlternativaDisponible(espacio)) return;
+    this.router.navigate(['/reservas'], {
+      queryParams: {
+        espacio,
+        modoEspacio: espacio === 'completo' ? 'casa' : 'piso',
+        fechaEntrada: this.busqueda.fechaEntrada || undefined,
+        fechaSalida: this.busqueda.fechaSalida || undefined,
+        adultos: this.busqueda.adultos || undefined,
+        ninos3: this.busqueda.ninos3 || undefined,
+        ninos10: this.busqueda.ninos10 || undefined,
+        ninos11: this.busqueda.ninos11 || undefined,
+        tipo: this.busqueda.tipoReserva || undefined,
+      },
+    });
+  }
+
+  consultarDisponibilidad(): void {
+    this.reservaService.verificarDisponibilidad(
+      this.busqueda.fechaEntrada,
+      this.busqueda.fechaSalida || undefined,
+    ).subscribe({
+      next: disponibilidad => {
+        this.zone.run(() => {
+          this.disponibilidad = disponibilidad;
+          this.aplicarFiltros();
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
+          // Conserva la disponibilidad local optimista si el API no responde.
+          this.aplicarFiltros();
+          this.cdr.detectChanges();
+        });
+      },
+    });
+  }
+
+  private establecerDisponibilidadLocal(): void {
+    this.disponibilidad = {
+      habitacionesOcupadas: [],
+      espaciosOcupados: [],
+      piso1Ocupado: false,
+      piso2Ocupado: false,
+      casaOcupada: false,
+      disponible: true,
+      mensaje: '',
+    };
   }
 
   usarDatosEjemplo() {
@@ -402,7 +589,28 @@ export class Habitaciones implements OnInit {
       );
     }
 
-    this.habitacionesFiltradas = resultado;
+    this.motivoNoDisponibilidad.clear();
+    const disponibles: Habitacion[] = [];
+    const noDisponibles: Habitacion[] = [];
+
+    resultado.forEach(habitacion => {
+      const capacidadInsuficiente = this.tieneBusqueda
+        && !this.esGrupoGrande
+        && habitacion.capacidad < this.totalHuespedes;
+      const ocupada = this.disponibilidad?.habitacionesOcupadas.includes(habitacion.id) ?? false;
+      if (capacidadInsuficiente || ocupada) {
+        this.motivoNoDisponibilidad.set(
+          habitacion.id,
+          ocupada ? 'Ya reservada para las fechas seleccionadas' : 'Sin capacidad suficiente para tu grupo',
+        );
+        noDisponibles.push(habitacion);
+      } else {
+        disponibles.push(habitacion);
+      }
+    });
+
+    this.habitacionesFiltradas = disponibles;
+    this.habitacionesNoDisponibles = noDisponibles;
   }
 
   onBusquedaChange() {
@@ -587,8 +795,13 @@ export class Habitaciones implements OnInit {
     this.habitacionSeleccionada = null;
     this.imagenActivaIdx = 0;
     if (this.isBrowser) {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
     }
+  }
+
+  /** Si se sale de la página con el detalle abierto, se libera el scroll del sitio. */
+  ngOnDestroy(): void {
+    if (this.isBrowser) document.body.style.overflow = '';
   }
 
   prevImagen(): void {
@@ -608,8 +821,21 @@ export class Habitaciones implements OnInit {
    */
   reservarHabitacion(habitacion: Habitacion): void {
     this.router.navigate(['/reservas'], {
-      queryParams: { habitacionId: habitacion.id },
+      queryParams: {
+        habitacionId: habitacion.id,
+        fechaEntrada: this.busqueda.fechaEntrada || undefined,
+        fechaSalida: this.busqueda.fechaSalida || undefined,
+        adultos: this.busqueda.adultos || undefined,
+        ninos3: this.busqueda.ninos3 || undefined,
+        ninos10: this.busqueda.ninos10 || undefined,
+        ninos11: this.busqueda.ninos11 || undefined,
+        tipo: this.busqueda.tipoReserva || undefined,
+      },
     });
+  }
+
+  motivoNoDisponible(habitacion: Habitacion): string {
+    return this.motivoNoDisponibilidad.get(habitacion.id) || 'No disponible para las fechas seleccionadas';
   }
 
   /**

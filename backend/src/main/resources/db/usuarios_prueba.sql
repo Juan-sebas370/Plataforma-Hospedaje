@@ -7,7 +7,7 @@ USE hotel_sebastian;
 
 -- Usuario de prueba: Sebastian
 -- Email: sebastian@gmail.com
--- Contraseña original: jiampi2018*
+-- La contraseña debe configurarse fuera del repositorio y almacenarse como hash.
 -- Contraseña hasheada BCrypt: $2a$10$N9qo8uLOickgx2ZMQbicOeEwNl.9Kx8WPdqxEj/Jb8Z8l7dVJ1xDi
 
 INSERT INTO usuarios (

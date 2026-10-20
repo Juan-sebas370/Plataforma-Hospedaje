@@ -1,24 +1,24 @@
-﻿<nav class="navbar">
+<nav class="navbar" [class.navbar--transparente]="transparente() && !menuOpen" aria-label="Principal">
   <!-- Brand Logo -->
   <div class="nav-container">
-    <a routerLink="/" class="nav-brand">
-      <img src="/assets/logo.png" alt="Hospedaje Sebastián" class="brand-logo">
+    <a routerLink="/" class="nav-brand" aria-label="Hospedaje Sebastián, ir al inicio">
+      <img src="/assets/logo.png" alt="" class="brand-logo">
       <span class="brand-text">Hospedaje Sebastián</span>
     </a>
 
     <!-- Hamburger Menu Button -->
-    <button class="hamburger" [class.active]="menuOpen" (click)="toggleMenu()" aria-label="Menu de navegación" title="Menú">
+    <button type="button" class="hamburger" [class.active]="menuOpen" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-controls="menu-principal" [attr.aria-label]="menuOpen ? 'Cerrar menú' : 'Abrir menú'">
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
     </button>
 
     <!-- Navigation Links -->
-    <ul class="nav-links" [class.active]="menuOpen">
+    <ul id="menu-principal" class="nav-links" [class.active]="menuOpen">
       <!-- Home -->
       <li class="nav-item">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Home icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </span>
@@ -29,7 +29,7 @@
       <!-- Rooms -->
       <li class="nav-item">
         <a routerLink="/habitaciones" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Bed icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/><path d="M2 20h20"/></svg>
           </span>
@@ -40,7 +40,7 @@
       <!-- Gallery -->
       <li class="nav-item">
         <a routerLink="/galeria" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Image / gallery icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </span>
@@ -51,7 +51,7 @@
       <!-- Services -->
       <li class="nav-item">
         <a routerLink="/servicios" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Grid / services icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
           </span>
@@ -62,7 +62,7 @@
       <!-- Contact -->
       <li class="nav-item">
         <a routerLink="/contacto" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Phone icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           </span>
@@ -73,7 +73,7 @@
       <!-- Reservations -->
       <li class="nav-item">
         <a routerLink="/reservas" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
-          <span class="nav-icon">
+          <span class="nav-icon" aria-hidden="true">
             <!-- Calendar icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </span>
@@ -84,6 +84,7 @@
 
     <!-- Language Selector -->
     <div class="nav-utils">
+      <app-centro-accesibilidad></app-centro-accesibilidad>
       <app-language-selector></app-language-selector>
     </div>
   </div>

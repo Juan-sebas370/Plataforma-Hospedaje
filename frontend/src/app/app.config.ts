@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER, PLATFORM_ID } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { TitleStrategy, provideRouter, withInMemoryScrolling } from '@angular/router';
+import { TituloPagina } from './titulo-pagina';
 import { provideHttpClient, withInterceptors, HTTP_INTERCEPTORS, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -33,7 +34,9 @@ export function provideAuthInterceptor() {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), 
+    // Cada página nueva empieza arriba; con "Atrás" se vuelve a donde estaba la persona.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })),
+    { provide: TitleStrategy, useClass: TituloPagina },
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withFetch(),

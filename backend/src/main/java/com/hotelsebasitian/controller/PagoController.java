@@ -1,121 +1,103 @@
 package com.hotelsebasitian.controller;
 
 import com.hotelsebasitian.entity.Pago;
+import com.hotelsebasitian.entity.Reserva;
 import com.hotelsebasitian.repository.PagoRepository;
 import com.hotelsebasitian.repository.ReservaRepository;
-import com.hotelsebasitian.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
+/**
+ * Pagos (solo administración; ver SecurityConfig). Los pagos de Wompi los
+ * registra PagoWompiService; aquí se consultan y se registran pagos manuales.
+ * Los estados son los mismos que usa SOGO.
+ */
 @RestController
-@RequestMapping("/api/pagos")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/pagos")
+@RequiredArgsConstructor
 public class PagoController {
-    
-    @Autowired
-    private PagoRepository pagoRepository;
-    
-    @Autowired
-    private ReservaRepository reservaRepository;
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    /**
-     * Obtener todos los pagos
-     */
+
+    private static final Set<String> ESTADOS = Set.of("pendiente", "aprobado", "rechazado", "anulado", "error", "reembolsado");
+
+    private final PagoRepository pagoRepository;
+    private final ReservaRepository reservaRepository;
+
     @GetMapping
-    public ResponseEntity<?> obtenerTodosPagos() {
-        try {
-            List<Pago> pagos = pagoRepository.findAll();
-            return ResponseEntity.ok(pagos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener pagos: " + e.getMessage());
-        }
+    public List<Pago> obtenerTodosPagos() {
+        return pagoRepository.findAll();
     }
-    
-    /**
-     * Obtener pago por ID
-     */
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPagoById(@PathVariable Long id) {
-        try {
-            Optional<Pago> pago = pagoRepository.findById(id);
-            if (pago.isPresent()) {
-                return ResponseEntity.ok(pago.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener pago: " + e.getMessage());
-        }
+    public Pago obtenerPagoById(@PathVariable Long id) {
+        return buscar(id);
     }
-    
-    /**
-     * Crear nuevo pago
-     */
+
+    /** Registra un pago manual (efectivo, transferencia…) de una reserva existente. */
     @PostMapping
-    public ResponseEntity<?> crearPago(@RequestBody Pago pago) {
-        try {
-            Pago nuevoPago = pagoRepository.save(pago);
-            return ResponseEntity.ok(nuevoPago);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear pago: " + e.getMessage());
+    public ResponseEntity<Pago> crearPago(@RequestBody Pago datos) {
+        Long reservaId = datos.getReserva() == null ? null : datos.getReserva().getId();
+        if (reservaId == null) {
+            throw new RuntimeException("Indica la reserva del pago");
         }
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+
+        Pago pago = new Pago();   // id nuevo: nunca se sobrescribe un pago existente
+        pago.setReserva(reserva);
+        pago.setMonto(datos.getMonto());
+        pago.setEstado(datos.getEstado() == null ? "pendiente" : datos.getEstado());
+        pago.setNumeroTransaccion(datos.getNumeroTransaccion());
+        pago.setReferenciaBanco(datos.getReferenciaBanco());
+        pago.setFechaPago(datos.getFechaPago() == null ? LocalDateTime.now() : datos.getFechaPago());
+        validar(pago);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pagoRepository.save(pago));
     }
-    
-    /**
-     * Actualizar pago
-     */
+
+    /** Actualización parcial: solo cambia los campos que se envían. */
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarPago(@PathVariable Long id, @RequestBody Pago pagoActualizado) {
-        try {
-            Optional<Pago> pagoExistente = pagoRepository.findById(id);
-            if (pagoExistente.isPresent()) {
-                Pago pago = pagoExistente.get();
-                pago.setEstado(pagoActualizado.getEstado());
-                pago.setNumeroTransaccion(pagoActualizado.getNumeroTransaccion());
-                pago.setReferenciaBanco(pagoActualizado.getReferenciaBanco());
-                pago.setFechaPago(pagoActualizado.getFechaPago());
-                Pago pagoActual = pagoRepository.save(pago);
-                return ResponseEntity.ok(pagoActual);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar pago: " + e.getMessage());
-        }
+    public Pago actualizarPago(@PathVariable Long id, @RequestBody Pago cambios) {
+        Pago pago = buscar(id);
+        if (cambios.getEstado() != null)            pago.setEstado(cambios.getEstado());
+        if (cambios.getNumeroTransaccion() != null) pago.setNumeroTransaccion(cambios.getNumeroTransaccion());
+        if (cambios.getReferenciaBanco() != null)   pago.setReferenciaBanco(cambios.getReferenciaBanco());
+        if (cambios.getFechaPago() != null)         pago.setFechaPago(cambios.getFechaPago());
+        if (cambios.getMonto() != null)             pago.setMonto(cambios.getMonto());
+        validar(pago);
+        pago.setFechaModificacion(LocalDateTime.now());
+        return pagoRepository.save(pago);
     }
-    
-    /**
-     * Obtener pagos de una reserva
-     */
+
     @GetMapping("/reserva/{reservaId}")
-    public ResponseEntity<?> obtenerPagosPorReserva(@PathVariable Long reservaId) {
-        try {
-            return reservaRepository.findById(reservaId).map(reserva -> {
-                List<Pago> pagos = pagoRepository.findByReserva(reserva);
-                return ResponseEntity.ok(pagos);
-            }).orElseGet(() -> ResponseEntity.notFound().build());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener pagos: " + e.getMessage());
-        }
+    public List<Pago> obtenerPagosPorReserva(@PathVariable Long reservaId) {
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+        return pagoRepository.findByReserva(reserva);
     }
-    
-    /**
-     * Obtener pagos por estado
-     */
+
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<?> obtenerPagosPorEstado(@PathVariable String estado) {
-        try {
-            List<Pago> pagos = pagoRepository.findByEstado(estado);
-            return ResponseEntity.ok(pagos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener pagos: " + e.getMessage());
+    public List<Pago> obtenerPagosPorEstado(@PathVariable String estado) {
+        return pagoRepository.findByEstado(estado);
+    }
+
+    private Pago buscar(Long id) {
+        return pagoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pago no encontrado"));
+    }
+
+    private static void validar(Pago pago) {
+        if (pago.getMonto() == null || pago.getMonto().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("El monto del pago debe ser mayor que cero");
+        }
+        if (!ESTADOS.contains(pago.getEstado())) {
+            throw new RuntimeException("Estado de pago no válido. Usa uno de: " + String.join(", ", ESTADOS));
         }
     }
 }

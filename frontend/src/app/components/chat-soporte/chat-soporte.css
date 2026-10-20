@@ -1,4 +1,4 @@
-﻿.chat-soporte-container {
+.chat-soporte-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -25,7 +25,7 @@
 }
 
 .avatar-agente {
-  font-size: 32px;
+  font-size: 2rem;
   width: 50px;
   height: 50px;
   display: flex;
@@ -35,17 +35,17 @@
   border-radius: 50%;
 }
 
-.datos-agente h3 {
+.datos-agente h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 1rem;
   color: #2B2B2B;
   font-weight: 600;
 }
 
 .datos-agente p {
   margin: 5px 0 0 0;
-  font-size: 12px;
-  color: #7A7A7A;
+  font-size: 0.75rem;
+  color: #6B6560;
 }
 
 .estado {
@@ -61,18 +61,18 @@
 
 .tiempo-respuesta {
   margin: 0;
-  font-size: 12px;
-  color: #7A7A7A;
+  font-size: 0.75rem;
+  color: #6B6560;
 }
 
 .btn-cerrar {
-  background: #e74c3c;
+  background: #B83A2E;
   color: white;
   border: none;
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  font-size: 18px;
+  font-size: 1.125rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -115,7 +115,7 @@
 }
 
 .mensaje-avatar {
-  font-size: 24px;
+  font-size: 1.5rem;
   width: 36px;
   height: 36px;
   display: flex;
@@ -146,7 +146,7 @@
   border-radius: 12px;
   word-wrap: break-word;
   line-height: 1.4;
-  font-size: 14px;
+  font-size: 0.875rem;
   background: white;
   color: #2B2B2B;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -163,8 +163,8 @@
 }
 
 .mensaje-hora {
-  font-size: 11px;
-  color: #95a5a6;
+  font-size: 0.6875rem;
+  color: #6B6560;
   margin-top: 4px;
   padding: 0 4px;
 }
@@ -233,7 +233,7 @@
 
 .temas-titulo {
   margin: 0 0 12px 0;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #2B2B2B;
   font-weight: 600;
 }
@@ -249,7 +249,7 @@
   background: #E8DCCB;
   border: 1px solid #bdc3c7;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
   color: #2B2B2B;
@@ -280,7 +280,7 @@
   padding: 12px 15px;
   border: 1px solid #E8DCCB;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   resize: vertical;
   min-height: 45px;
@@ -297,7 +297,7 @@
 
 .input-mensaje:disabled {
   background-color: #E8DCCB;
-  color: #95a5a6;
+  color: #6B6560;
   cursor: not-allowed;
 }
 
@@ -326,17 +326,17 @@
 
 .info-input {
   display: block;
-  font-size: 11px;
-  color: #7A7A7A;
+  font-size: 0.6875rem;
+  color: #6B6560;
   margin-left: 5px;
 }
 
 .info-input.conectado {
-  color: #27ae60;
+  color: #1B7340;
 }
 
 .info-input.desconectado {
-  color: #e74c3c;
+  color: #B83A2E;
 }
 
 /* Footer */
@@ -345,8 +345,8 @@
   background: white;
   border-top: 1px solid #E8DCCB;
   text-align: center;
-  font-size: 11px;
-  color: #7A7A7A;
+  font-size: 0.6875rem;
+  color: #6B6560;
 }
 
 .chat-footer p {
@@ -430,7 +430,7 @@
   .avatar-agente {
     width: 45px;
     height: 45px;
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 }
 /* Tablets (max-width: 768px) */
@@ -447,7 +447,7 @@
 
   .info-tiempos {
     padding: 0 10px;
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .mensaje-contenido {
@@ -469,7 +469,7 @@
 
   .tema-btn {
     padding: 6px 10px;
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 }
 
@@ -487,11 +487,11 @@
   .avatar-agente {
     width: 42px;
     height: 42px;
-    font-size: 26px;
+    font-size: 1.625rem;
   }
 
-  .datos-agente h3 {
-    font-size: 15px;
+  .datos-agente h2 {
+    font-size: 0.9375rem;
   }
 }
 /* Mobile Landscape (max-width: 480px) */
@@ -508,11 +508,11 @@
   .avatar-agente {
     width: 40px;
     height: 40px;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
-  .datos-agente h3 {
-    font-size: 14px;
+  .datos-agente h2 {
+    font-size: 0.875rem;
   }
 
   .mensaje-contenido {
@@ -524,7 +524,7 @@
   }
 
   .chat-footer {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 }
 
@@ -541,19 +541,19 @@
   .avatar-agente {
     width: 35px;
     height: 35px;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
-  .datos-agente h3 {
-    font-size: 12px;
+  .datos-agente h2 {
+    font-size: 0.75rem;
   }
 
   .datos-agente p {
-    font-size: 9px;
+    font-size: 0.5625rem;
   }
 
   .info-tiempos {
-    font-size: 9px;
+    font-size: 0.5625rem;
     padding: 0 8px;
   }
 
@@ -562,12 +562,12 @@
   }
 
   .temas-rapidos h4 {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .tema-btn {
     padding: 5px 8px;
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 
   .chat-body {
@@ -577,11 +577,11 @@
   .mensaje-contenido {
     max-width: 95%;
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .hora-mensaje {
-    font-size: 9px;
+    font-size: 0.5625rem;
   }
 
   .input-container {
@@ -590,23 +590,23 @@
 
   .input-mensaje {
     min-height: 35px;
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 8px 10px;
   }
 
   .opciones-chat button {
     width: 30px;
     height: 30px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .btn-enviar {
     padding: 8px 12px;
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .chat-footer {
-    font-size: 9px;
+    font-size: 0.5625rem;
     padding: 8px;
   }
 }

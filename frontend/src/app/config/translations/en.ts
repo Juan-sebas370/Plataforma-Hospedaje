@@ -15,7 +15,7 @@ export const en = {
     logout: 'Logout'
   },
   home: {
-    title: 'Welcome to Hospedaje Sebastian',
+    title: 'Welcome to Hospedaje Sebastián',
     subtitle: 'Your home away from home. Comfort and first-class service.',
     checkIn: 'Check In',
     checkOut: 'Check Out',
@@ -38,8 +38,6 @@ export const en = {
     serviceParking: 'Parking',
     serviceLaundry: 'Laundry',
     serviceAir: 'Air Conditioning',
-    servicePool: 'Pool',
-    serviceRestaurant: 'Restaurant',
     serviceRoomService: 'Room Service',
     serviceTransfer: 'Airport Transfer',
     serviceSafe: 'Safe Deposit Box',
@@ -94,7 +92,7 @@ export const en = {
     paymentInfo: 'Cash, Cards, Transfers',
     promotions: 'Promotions',
     promotionInfo: '7+ nights: 15% off. Early booking: 10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: 'Available 24/7'
   },
   gallery: {
@@ -102,8 +100,8 @@ export const en = {
     subtitle: 'Discover our facilities and rooms',
     all: 'All',
     rooms: 'Rooms',
-    facilities: 'Facilities',
-    services: 'Services',
+    spaces: 'Lodging spaces',
+    attractions: 'Filandia attractions',
     noImages: 'No images in this category',
     ctaTitle: 'Ready to live the experience?',
     ctaSubtitle: 'Book now and enjoy our incredible facilities',
@@ -283,7 +281,7 @@ export const en = {
     backHome: 'Back to Home',
     myReservations: 'My Reservations',
     contactSupport: 'Contact Support',
-    thankYou: 'Thank you for choosing Hospedaje Sebastian!',
+    thankYou: 'Thank you for choosing Hospedaje Sebastián!',
     enjoyStay: 'We hope you enjoy your stay with us'
   },
   contact: {
@@ -409,6 +407,11 @@ export const en = {
     back: 'Back',
     next: 'Next',
     previous: 'Previous',
-    selectLanguage: 'Select Language'
+    selectLanguage: 'Select language',
+    step: 'Step',
+    of: 'of'
+  },
+  languages: {
+    current: 'Current language'
   }
 };

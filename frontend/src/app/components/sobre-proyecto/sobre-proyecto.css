@@ -1,0 +1,264 @@
+:host { display: block; }
+
+/* ══ Sección "Detrás de esta página" ═════════════════════════ */
+.historia {
+  padding: 4.5rem 1.5rem;
+  background:
+    radial-gradient(700px 260px at 12% 20%, rgba(14, 90, 156, .07), transparent 70%),
+    linear-gradient(180deg, #FFFFFF 0%, #F3F7FC 100%);
+}
+
+.historia__contenedor {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr) minmax(240px, 300px);
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.historia__ilustracion svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.historia__texto {
+  padding-right: 2.5rem;
+  border-right: 1.5px solid #CFDDEB;
+}
+.historia__etiqueta {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #8A5A12;
+  margin-bottom: .6rem;
+}
+.historia__texto h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+  line-height: 1.2;
+  color: #0A3D6D;
+  margin: 0 0 1rem;
+}
+.historia__texto p {
+  margin: 0 0 .9rem;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #3A3F47;
+}
+
+.historia__enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin-top: .6rem;
+  padding: .45rem 0 .4rem;
+  border: none;
+  border-bottom: 2px solid #0E5A9C;
+  background: none;
+  color: #0A3D6D;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.historia__enlace app-icono:last-child { transition: transform .2s; }
+.historia__enlace:hover app-icono:last-child { transform: translateX(4px); }
+.historia__enlace:hover { color: #0E5A9C; }
+
+.historia__apoyo {
+  background: linear-gradient(160deg, #EEF4FB 0%, #E3ECF7 100%);
+  border: 1px solid #D6E3F1;
+  border-radius: 20px;
+  padding: 1.75rem 1.6rem;
+  color: #0A3D6D;
+}
+.historia__apoyo app-icono { color: #0A3D6D; }
+.historia__apoyo h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin: .7rem 0 .6rem;
+  color: #0A3D6D;
+}
+.historia__apoyo h3::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: .6rem;
+  border-radius: 3px;
+  background: #D1902C;
+}
+.historia__apoyo p {
+  margin: 0;
+  font-size: .95rem;
+  line-height: 1.65;
+  color: #2E4560;
+}
+
+/* Tablet: ilustración + texto arriba, tarjeta abajo */
+@media (max-width: 1000px) {
+  .historia__contenedor {
+    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+    gap: 2rem;
+  }
+  .historia__texto { padding-right: 0; border-right: none; }
+  .historia__apoyo { grid-column: 1 / -1; }
+}
+
+/* Celular: todo en una columna */
+@media (max-width: 640px) {
+  .historia { padding: 3rem 1.1rem; }
+  .historia__contenedor { grid-template-columns: 1fr; gap: 1.5rem; }
+  .historia__ilustracion { max-width: 240px; margin: 0 auto; }
+  .historia__texto { text-align: left; }
+}
+
+/* ══ Ventana "Mi historia" ═══════════════════════════════════ */
+.ventana {
+  /* El reset global (* { margin: 0 }) quita el centrado nativo de <dialog> */
+  margin: auto;
+  width: min(640px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: none;
+  border-radius: 22px;
+  background: transparent;
+  color: #2B2B2B;
+  overflow: visible;
+}
+.ventana::backdrop {
+  background: rgba(10, 30, 50, .55);
+  backdrop-filter: blur(3px);
+}
+.ventana[open] { animation: aparecer .22s ease; }
+
+.ventana__tarjeta {
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(10, 30, 50, .3);
+}
+
+.ventana__cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  padding: 1.25rem 1.35rem;
+  background: linear-gradient(135deg, #0A3D6D 0%, #0E5A9C 100%);
+  color: #fff;
+  border-radius: 22px 22px 0 0;
+}
+.ventana__icono {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #D1902C;
+  color: #1F1A14;
+}
+.ventana__cabecera h2 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: #fff;
+}
+.ventana__subtitulo {
+  margin: .2rem 0 0;
+  font-size: .85rem;
+  color: rgba(255, 255, 255, .85);
+}
+.ventana__cerrar {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, .15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+.ventana__cerrar:hover { background: rgba(255, 255, 255, .28); }
+
+.ventana__cuerpo { padding: 1.5rem 1.6rem 1.6rem; }
+.ventana__cuerpo p {
+  margin: 0 0 1rem;
+  font-size: .98rem;
+  line-height: 1.75;
+  color: #3A3F47;
+}
+.ventana__saludo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem !important;
+  color: #0A3D6D !important;
+}
+
+.ventana__cierre {
+  display: flex;
+  gap: .8rem;
+  align-items: center;
+  margin: 1.4rem 0 1.2rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: #FBF3E6;
+  border-left: 4px solid #D1902C;
+}
+.ventana__cierre app-icono { color: #8A5A12; flex-shrink: 0; }
+.ventana__cierre strong {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: #0A3D6D;
+}
+.ventana__cierre span { font-size: .9rem; color: #5F5A54; }
+
+.ventana__acciones {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.btn-apoyo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .65rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid #0E5A9C;
+  color: #0E5A9C;
+  font-weight: 700;
+  font-size: .9rem;
+  background: #fff;
+  transition: background .2s;
+}
+.btn-apoyo:hover { background: #EAF2FA; }
+.btn-apoyo--principal { background: #0E5A9C; color: #fff; }
+.btn-apoyo--principal:hover { background: #0A3D6D; }
+
+.ventana__firma {
+  margin: 1.4rem 0 0 !important;
+  padding-top: 1rem;
+  border-top: 1px solid #F0E8DC;
+  text-align: center;
+  font-size: .82rem !important;
+  letter-spacing: .04em;
+  color: #6B6560 !important;
+}
+
+@keyframes aparecer { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+
+@media (max-width: 560px) {
+  .ventana__cuerpo { padding: 1.2rem 1.15rem 1.3rem; }
+  .ventana__acciones .btn-apoyo { flex: 1; justify-content: center; }
+}

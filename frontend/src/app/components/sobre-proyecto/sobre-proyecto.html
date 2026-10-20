@@ -1,0 +1,125 @@
+<section class="historia" aria-labelledby="titulo-proyecto">
+  <div class="historia__contenedor">
+
+    <!-- Ilustración: persona trabajando en su portátil, con audífono y el símbolo de sordera -->
+    <div class="historia__ilustracion" aria-hidden="true">
+      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
+        <path d="M44 92c18-50 86-74 146-62 58 12 104 56 96 112-7 52-52 92-120 98-66 6-118-20-130-68-6-26-2-50 8-80z" fill="#E4EDF7"/>
+        <!-- hojas -->
+        <g fill="#2F5F8F">
+          <path d="M40 250c-10-30-6-62 14-84 4 30 0 58-14 84z"/>
+          <path d="M44 250c4-26 18-46 42-54-6 24-20 42-42 54z" fill="#3E73A8"/>
+          <path d="M282 252c4-24 0-46-14-62-6 22-2 44 14 62z" fill="#3E73A8"/>
+          <path d="M278 252c-6-18-18-30-36-34 4 18 16 30 36 34z"/>
+        </g>
+        <!-- mesa -->
+        <rect x="58" y="246" width="224" height="6" rx="3" fill="#0A3D6D" opacity=".18"/>
+        <!-- cuerpo / buzo -->
+        <path d="M70 248c0-52 26-86 66-90h12c40 4 64 38 64 90z" fill="#1E3F66"/>
+        <path d="M124 158l17 22 17-22" fill="none" stroke="#14304F" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M133 172v22M149 172v22" stroke="#C9D6E3" stroke-width="3" stroke-linecap="round"/>
+        <!-- cuello y cabeza -->
+        <rect x="131" y="134" width="20" height="26" rx="8" fill="#E9B98F"/>
+        <circle cx="141" cy="104" r="34" fill="#F2C9A0"/>
+        <!-- oreja con audífono -->
+        <ellipse cx="174" cy="108" rx="7" ry="10" fill="#E9B98F"/>
+        <path d="M178 96c8 2 11 10 9 18-1 5-5 8-9 8" fill="none" stroke="#D1902C" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="179" cy="122" r="3.5" fill="#D1902C"/>
+        <!-- cabello -->
+        <path d="M106 102c-6-30 12-50 38-52 20-2 40 8 44 30 2 8 0 16-4 20-2-10-8-16-16-18-12 10-34 14-52 10-4 4-6 8-10 10z" fill="#0A2540"/>
+        <path d="M124 56c6-12 24-16 36-10-12 0-24 4-36 10z" fill="#0A2540"/>
+        <!-- cara: ojos cerrados y sonrisa -->
+        <path d="M122 106q5 4 10 0M150 106q5 4 10 0" fill="none" stroke="#3B2A1E" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M132 120q9 8 18 0" fill="none" stroke="#3B2A1E" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="122" cy="116" r="4" fill="#F0A98A" opacity=".55"/>
+        <circle cx="162" cy="116" r="4" fill="#F0A98A" opacity=".55"/>
+        <!-- portátil (visto desde atrás) -->
+        <path d="M150 168l86 8-8 66-86-8z" fill="#8EA4BC"/>
+        <circle cx="191" cy="206" r="6" fill="#C9D6E3"/>
+        <path d="M110 240l140 6-4 8-140-6z" fill="#6F86A0"/>
+        <!-- manos -->
+        <ellipse cx="128" cy="236" rx="11" ry="7" fill="#F2C9A0"/>
+        <!-- símbolo internacional de la sordera -->
+        <g fill="none" stroke="#0A3D6D" stroke-width="6" stroke-linecap="round">
+          <path d="M232 70c0-15 11-26 25-26s25 11 25 26c0 11-7 16-11 20-5 5-6 9-6 14a11 11 0 0 1-19 7"/>
+          <path d="M247 70a10 10 0 0 1 20 0c0 6-5 9-7 11"/>
+          <path d="M224 38l66 72" stroke="#D1902C"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Texto principal -->
+    <div class="historia__texto">
+      <span class="historia__etiqueta">Detrás de esta página</span>
+      <h2 id="titulo-proyecto">Este sitio web fue creado con mucho esfuerzo y pasión</h2>
+      <p>
+        El desarrollo de esta página y de todo el proyecto fue realizado por una persona con discapacidad
+        auditiva, que encontró en la tecnología una forma de construir su futuro y emprender.
+      </p>
+      <p>Cada visita, reserva o recomendación también ayuda a que este sueño siga creciendo.</p>
+      <button type="button" class="historia__enlace" (click)="abrir()" aria-haspopup="dialog">
+        <app-icono name="libro" [size]="20" [stroke]="1.8" />
+        <span>Conoce más sobre esta historia</span>
+        <app-icono name="arrow-right" [size]="18" [stroke]="2" />
+      </button>
+    </div>
+
+    <!-- Tarjeta de apoyo -->
+    <aside class="historia__apoyo" aria-labelledby="titulo-apoyo">
+      <app-icono name="corazon" [size]="34" [stroke]="1.6" />
+      <h3 id="titulo-apoyo">Tu apoyo hace la diferencia</h3>
+      <p>
+        Al utilizar esta página web y ser parte de este proyecto, estás apoyando el desarrollo profesional y el
+        emprendimiento de una persona con discapacidad auditiva.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<dialog #dialogo class="ventana" aria-labelledby="ventana-titulo" (click)="alHacerClicEnDialogo($event)">
+  <div class="ventana__tarjeta">
+    <header class="ventana__cabecera">
+      <span class="ventana__icono"><app-icono name="corazon" [size]="22" [stroke]="1.8" /></span>
+      <div>
+        <h2 id="ventana-titulo">Mi historia, mi sueño de emprender</h2>
+        <p class="ventana__subtitulo">Una historia de aprendizaje, esfuerzo y nuevas oportunidades.</p>
+      </div>
+      <button type="button" class="ventana__cerrar" (click)="cerrar()" aria-label="Cerrar" autofocus>
+        <app-icono name="close" [size]="18" [stroke]="2.2" />
+      </button>
+    </header>
+
+    <div class="ventana__cuerpo">
+      <p class="ventana__saludo">Hola, gracias por visitar este espacio y por interesarte en la historia que hay detrás de esta página web.</p>
+      <p>
+        Soy una persona con discapacidad auditiva y he encontrado en la tecnología y el desarrollo web una
+        oportunidad para aprender, crear y construir mi propio camino como emprendedor.
+      </p>
+      <p>
+        Crear esta página ha sido parte de un proceso de dedicación, aprendizaje y esfuerzo. Detrás de ella hay
+        muchas horas de trabajo y el deseo de sacar adelante un proyecto propio.
+      </p>
+      <p>
+        Cuando visitas esta página, reservas en nuestro hospedaje o la recomiendas a otras personas, también
+        contribuyes al crecimiento de mi emprendimiento y me animas a seguir aprendiendo y creando nuevas
+        oportunidades.
+      </p>
+      <p>Gracias por apoyar mi trabajo, confiar en nuestro hospedaje y ser parte de esta historia.</p>
+
+      <div class="ventana__cierre">
+        <app-icono name="corazon" [size]="22" [stroke]="1.8" />
+        <div>
+          <strong>Gracias por apoyar este sueño</strong>
+          <span>Tu confianza ayuda a que este emprendimiento siga creciendo.</span>
+        </div>
+      </div>
+
+      <div class="ventana__acciones">
+        <a class="btn-apoyo btn-apoyo--principal" routerLink="/reservas" (click)="cerrar()">Reservar una estadía</a>
+        <a class="btn-apoyo" routerLink="/contacto" (click)="cerrar()">Escribirnos</a>
+      </div>
+
+      <p class="ventana__firma">Hospedaje Sebastián · Filandia, Quindío</p>
+    </div>
+  </div>
+</dialog>

@@ -1,0 +1,98 @@
+<header class="paso-titulo">
+  <h2>Cuéntanos de tu viaje</h2>
+  <p>Elige el plan, las fechas y quiénes vienen. Te mostramos el precio al instante.</p>
+</header>
+
+<!-- Tipo de plan -->
+<section class="bloque" aria-labelledby="t-plan">
+  <h3 class="bloque-titulo" id="t-plan"><app-icono name="sparkle" [size]="15" /> ¿Qué plan tienes en mente?</h3>
+  <div class="tipos" role="radiogroup" aria-labelledby="t-plan">
+    @for (t of tipos; track t.id) {
+      <button type="button" class="tipo" role="radio"
+              [attr.aria-checked]="estado.config().tipo === t.id"
+              [class.tipo--activo]="estado.config().tipo === t.id"
+              (click)="elegirTipo(t.id)">
+        <span class="tipo__icono"><app-icono [name]="t.icono" [size]="22" /></span>
+        <span class="tipo__texto">
+          <strong>{{ t.nombre }}</strong>
+          <small>{{ t.descripcion }}</small>
+        </span>
+        <span class="tipo__check"><app-icono name="check" [size]="12" [stroke]="3" /></span>
+      </button>
+    }
+  </div>
+  <p class="tipo-horario"><app-icono name="clock" [size]="13" /> {{ estado.tipoInfo().horario }}</p>
+</section>
+
+<div class="columnas">
+  <!-- Fechas -->
+  <section class="bloque" aria-labelledby="t-fechas">
+    <h3 class="bloque-titulo" id="t-fechas"><app-icono name="calendar" [size]="15" /> ¿Cuándo?</h3>
+
+    <div class="fechas">
+      <div class="fecha" [class.fecha--activa]="!estado.config().fechaEntrada">
+        <span>{{ estado.esDia() ? 'Día de la visita' : 'Llegada' }}</span>
+        <strong>{{ estado.config().fechaEntrada ? formatFecha(estado.config().fechaEntrada) : 'Elegir' }}</strong>
+      </div>
+      @if (!estado.esDia()) {
+        <app-icono name="arrow-right" [size]="16" class="fechas__flecha" />
+        <div class="fecha" [class.fecha--activa]="estado.config().fechaEntrada && !estado.config().fechaSalida">
+          <span>Salida</span>
+          <strong>{{ estado.config().fechaSalida ? formatFecha(estado.config().fechaSalida) : 'Elegir' }}</strong>
+        </div>
+      }
+    </div>
+
+    <app-calendario
+      [entrada]="estado.config().fechaEntrada"
+      [salida]="estado.config().fechaSalida"
+      [unDia]="estado.esDia()"
+      (cambio)="cambiarFechas($event)" />
+
+    @if (estado.config().fechaEntrada) {
+      <div class="fechas-pie">
+        @if (estado.noches() > 0) {
+          <span class="pastilla pastilla--azul"><app-icono name="moon" [size]="12" /> {{ plural(estado.noches(), 'noche') }}</span>
+        }
+        <span class="pastilla temporada--{{ estado.temporada() }}">Temporada {{ estado.nombreTemporada() }}</span>
+        <button type="button" class="link" (click)="limpiarFechas()">Cambiar fechas</button>
+      </div>
+    }
+  </section>
+
+  <!-- Personas -->
+  <section class="bloque" aria-labelledby="t-personas">
+    <h3 class="bloque-titulo" id="t-personas"><app-icono name="users" [size]="15" /> ¿Quiénes vienen?</h3>
+
+    <ul class="personas">
+      @for (g of grupos; track g.campo) {
+        <li class="persona">
+          <div class="persona__info">
+            <strong>{{ g.titulo }}</strong>
+            <span>{{ g.detalle }}</span>
+            @if (g.nota) { <small>{{ g.nota }}</small> }
+          </div>
+          <div class="contador" role="group" [attr.aria-label]="g.titulo">
+            <button type="button" (click)="cambiar(g.campo, -1, g.min)" [disabled]="valor(g.campo) <= g.min"
+                    [attr.aria-label]="'Quitar ' + g.titulo">
+              <app-icono name="minus" [size]="14" [stroke]="2.5" />
+            </button>
+            <output aria-live="polite">{{ valor(g.campo) }}</output>
+            <button type="button" (click)="cambiar(g.campo, 1, g.min)" [disabled]="!puedeSumar(g.campo)"
+                    [attr.aria-label]="'Agregar ' + g.titulo">
+              <app-icono name="plus" [size]="14" [stroke]="2.5" />
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <div class="personas-total">
+      <strong>{{ plural(estado.totalPersonas(), 'persona') }}</strong>
+      <span>{{ estado.resumenPersonas() }}</span>
+    </div>
+    @if (lleno()) {
+      <p class="aviso aviso--dorado"><app-icono name="info" [size]="16" /> La casa completa recibe hasta 20 personas. Para grupos más grandes, escríbenos y lo organizamos.</p>
+    }
+  </section>
+</div>

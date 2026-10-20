@@ -15,7 +15,7 @@ export const pt = {
     logout: 'Sair'
   },
   home: {
-    title: 'Bem-vindo ao Hospedaje Sebastian',
+    title: 'Bem-vindo ao Hospedaje Sebastián',
     subtitle: 'Sua casa longe de casa. Conforto e serviço de primeira classe.',
     checkIn: 'Check In',
     checkOut: 'Check Out',
@@ -38,8 +38,6 @@ export const pt = {
     serviceParking: 'Estacionamento',
     serviceLaundry: 'Lavanderia',
     serviceAir: 'Ar Condicionado',
-    servicePool: 'Piscina',
-    serviceRestaurant: 'Restaurante',
     serviceRoomService: 'Serviço de Quarto',
     serviceTransfer: 'Transfer Aeroporto',
     serviceSafe: 'Cofre de Segurança',
@@ -79,7 +77,7 @@ export const pt = {
     paymentInfo: 'Dinheiro, Cartões, Transferências',
     promotions: 'Promoções',
     promotionInfo: '7+ noites: 15% desc. Reserva antecipada: 10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: 'Disponível 24/7'
   },
   gallery: {
@@ -87,8 +85,8 @@ export const pt = {
     subtitle: 'Descubra nossas instalações e quartos',
     all: 'Todas',
     rooms: 'Quartos',
-    facilities: 'Instalações',
-    services: 'Serviços',
+    spaces: 'Espacos da hospedagem',
+    attractions: 'Atracoes de Filandia',
     noImages: 'Nenhuma imagem nesta categoria',
     ctaTitle: 'Pronto para viver a experiência?',
     ctaSubtitle: 'Reserve agora e aproveite nossas incríveis instalações',
@@ -268,7 +266,7 @@ export const pt = {
     backHome: 'Voltar ao Início',
     myReservations: 'Minhas Reservas',
     contactSupport: 'Contatar Suporte',
-    thankYou: 'Obrigado por escolher Hospedaje Sebastian!',
+    thankYou: 'Obrigado por escolher Hospedaje Sebastián!',
     enjoyStay: 'Esperamos que você aproveite sua estadia conosco'
   },
   contact: {
@@ -394,6 +392,11 @@ export const pt = {
     back: 'Voltar',
     next: 'Próximo',
     previous: 'Anterior',
-    selectLanguage: 'Selecionar Idioma'
+    selectLanguage: 'Selecionar idioma',
+    step: 'Etapa',
+    of: 'de'
+  },
+  languages: {
+    current: 'Idioma atual'
   }
 };

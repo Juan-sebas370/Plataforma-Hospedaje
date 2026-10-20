@@ -1,0 +1,228 @@
+/* ══════════════════════════════════════════════════════════
+   RESERVAS — piezas visuales compartidas por todos los pasos
+   (cada componente las incluye en su styleUrl)
+   ══════════════════════════════════════════════════════════ */
+
+:host {
+  --azul: #0E5A9C;
+  --azul-dark: #0A3D6D;
+  --azul-suave: #EAF2FA;
+  --dorado: #D1902C;
+  --dorado-suave: #FBF3E6;
+  --dorado-texto: #8A5A12;
+  --crema: #F8F4EE;
+  --crema-2: #FFFDF9;
+  --borde: #E8DCCB;
+  --borde-suave: #F0E8DC;
+  --texto: #2B2B2B;
+  --gris: #6E6A64;
+  --gris-claro: #6F6A62;
+  --verde: #22704A;
+  --verde-suave: #E8F5EE;
+  --rojo: #B83A2E;
+  --rojo-suave: #FBEDEB;
+  --radio: 18px;
+  --radio-sm: 12px;
+  --sombra: 0 1px 2px rgba(43, 33, 18, .04), 0 8px 24px rgba(43, 33, 18, .06);
+  --sombra-alta: 0 2px 4px rgba(43, 33, 18, .05), 0 18px 40px rgba(43, 33, 18, .12);
+  --serif: 'Playfair Display', Georgia, serif;
+  display: block;
+}
+
+/* ── Encabezado de cada paso ─────────────────────────────── */
+.paso-titulo {
+  margin-bottom: 1.25rem;
+}
+.paso-titulo h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+  color: var(--azul-dark);
+  line-height: 1.2;
+  margin: 0 0 .3rem;
+}
+.paso-titulo p {
+  color: var(--gris);
+  font-size: .95rem;
+  margin: 0;
+}
+
+.bloque {
+  background: #fff;
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 1.25rem;
+}
+.bloque + .bloque { margin-top: 1rem; }
+
+.bloque-titulo {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin: 0 0 .9rem;
+}
+.bloque-titulo app-icono { color: var(--dorado-texto); }
+
+/* ── Botones ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .95rem;
+  padding: .8rem 1.4rem;
+  transition: background .2s, color .2s, box-shadow .2s, transform .15s, opacity .2s;
+  white-space: nowrap;
+}
+.btn:focus-visible { outline: 3px solid rgba(14, 90, 156, .35); outline-offset: 2px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn-primario {
+  background: var(--azul);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(14, 90, 156, .25);
+}
+.btn-primario:not(:disabled):hover { background: var(--azul-dark); transform: translateY(-1px); }
+
+.btn-dorado {
+  background: var(--dorado);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(209, 144, 44, .3);
+}
+.btn-dorado:not(:disabled):hover { background: #B97B1F; transform: translateY(-1px); }
+
+.btn-fantasma {
+  background: transparent;
+  color: var(--azul-dark);
+}
+.btn-fantasma:not(:disabled):hover { background: var(--azul-suave); }
+
+.btn-contorno {
+  background: #fff;
+  color: var(--azul);
+  border: 1.5px solid var(--azul);
+}
+.btn-contorno:not(:disabled):hover { background: var(--azul-suave); }
+
+.btn-sm { padding: .5rem .95rem; font-size: .85rem; }
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--azul);
+  font-weight: 600;
+  font-size: .85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.link:hover { text-decoration: underline; }
+.link:focus-visible { outline: 2px solid rgba(14, 90, 156, .35); border-radius: 4px; }
+
+/* ── Etiquetas / pastillas ───────────────────────────────── */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  border-radius: 999px;
+  padding: .25rem .65rem;
+  background: var(--crema);
+  color: var(--gris);
+  white-space: nowrap;
+}
+.pastilla--dorada { background: var(--dorado-suave); color: #8A5A12; }
+.pastilla--azul { background: var(--azul-suave); color: var(--azul-dark); }
+.pastilla--verde { background: var(--verde-suave); color: var(--verde); }
+.pastilla--roja { background: var(--rojo-suave); color: var(--rojo); }
+
+.temporada--alta { background: #FDECEA; color: #A93226; }
+.temporada--media { background: var(--dorado-suave); color: #8A5A12; }
+.temporada--baja { background: var(--verde-suave); color: var(--verde); }
+
+/* ── Avisos ──────────────────────────────────────────────── */
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  border-radius: var(--radio-sm);
+  padding: .8rem 1rem;
+  font-size: .88rem;
+  line-height: 1.45;
+  background: var(--azul-suave);
+  color: var(--azul-dark);
+}
+.aviso app-icono { flex-shrink: 0; margin-top: .1rem; }
+.aviso--error { background: var(--rojo-suave); color: var(--rojo); }
+.aviso--ok { background: var(--verde-suave); color: var(--verde); }
+.aviso--dorado { background: var(--dorado-suave); color: #7A4F10; }
+
+/* ── Campos de formulario ────────────────────────────────── */
+.campo { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+.campo label {
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+.campo .opcional { color: var(--gris-claro); font-weight: 400; }
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  font: inherit;
+  font-size: .95rem;
+  color: var(--texto);
+  background: var(--crema-2);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio-sm);
+  padding: .7rem .85rem;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.campo textarea { resize: vertical; min-height: 84px; }
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--azul);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(14, 90, 156, .1);
+}
+.campo--error input,
+.campo--error select { border-color: var(--rojo); background: #fff; }
+.campo-error { font-size: .78rem; color: var(--rojo); }
+.campo-ok { color: var(--verde); }
+
+/* ── Spinner ─────────────────────────────────────────────── */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: girar .7s linear infinite;
+  display: inline-block;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

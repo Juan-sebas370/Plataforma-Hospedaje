@@ -24,7 +24,11 @@ public class Habitacion {
     private String tipo;    // SIMPLE, DOBLE, SUITE, etc.
     private Integer piso;   // 1 o 2
     private Integer capacidad;
+    /** Tarifa por noche en temporada BAJA (nombre histórico de la columna). Se edita desde SOGO. */
     private Double precioNoche;
+    /** Tarifas por noche en temporada media y alta (SOGO/database/19_tarifas.sql). */
+    private Double precioMedia;
+    private Double precioAlta;
     private String descripcion;
 
     @ElementCollection

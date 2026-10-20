@@ -6,3 +6,8 @@
 
 /* Las páginas con hero de pantalla completa no necesitan padding-top */
 /* El navbar es fixed y se superpone al contenido */
+
+main {
+  flex: 1;
+  display: block;
+}

@@ -1,115 +1,93 @@
 package com.hotelsebasitian.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hotelsebasitian.entity.Paquete;
 import com.hotelsebasitian.repository.PaqueteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+/** Paquetes: lectura pública; crear, editar y borrar solo administración (ver SecurityConfig). */
 @RestController
-@RequestMapping("/api/paquetes")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/paquetes")
+@RequiredArgsConstructor
 public class PaqueteController {
-    
-    @Autowired
-    private PaqueteRepository paqueteRepository;
-    
-    /**
-     * Obtener todos los paquetes disponibles
-     */
+
+    private final PaqueteRepository paqueteRepository;
+    private final ObjectMapper json;
+
     @GetMapping
-    public ResponseEntity<?> obtenerPaquetesDisponibles() {
-        try {
-            List<Paquete> paquetes = paqueteRepository.findByDisponibleTrue();
-            return ResponseEntity.ok(paquetes);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener paquetes: " + e.getMessage());
-        }
+    public List<Paquete> obtenerPaquetesDisponibles() {
+        return paqueteRepository.findByDisponibleTrue();
     }
-    
-    /**
-     * Obtener paquete por ID
-     */
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPaqueteById(@PathVariable Long id) {
-        try {
-            Optional<Paquete> paquete = paqueteRepository.findById(id);
-            if (paquete.isPresent()) {
-                return ResponseEntity.ok(paquete.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener paquete: " + e.getMessage());
-        }
+    public Paquete obtenerPaqueteById(@PathVariable Long id) {
+        return buscar(id);
     }
-    
-    /**
-     * Obtener paquetes por tipo
-     */
+
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<?> obtenerPaquetesPorTipo(@PathVariable String tipo) {
-        try {
-            List<Paquete> paquetes = paqueteRepository.findByTipo(tipo);
-            return ResponseEntity.ok(paquetes);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener paquetes: " + e.getMessage());
-        }
+    public List<Paquete> obtenerPaquetesPorTipo(@PathVariable String tipo) {
+        return paqueteRepository.findByTipo(tipo);
     }
-    
-    /**
-     * Crear nuevo paquete (ADMIN)
-     */
+
     @PostMapping
-    public ResponseEntity<?> crearPaquete(@RequestBody Paquete paquete) {
-        try {
-            Paquete nuevoPaquete = paqueteRepository.save(paquete);
-            return ResponseEntity.ok(nuevoPaquete);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al crear paquete: " + e.getMessage());
-        }
+    public ResponseEntity<Paquete> crearPaquete(@RequestBody Paquete paquete) {
+        paquete.setId(null);   // nunca se sobrescribe un paquete existente
+        paquete.setFechaCreacion(LocalDateTime.now());
+        validar(paquete);
+        return ResponseEntity.status(HttpStatus.CREATED).body(paqueteRepository.save(paquete));
     }
-    
-    /**
-     * Actualizar paquete (ADMIN)
-     */
+
+    /** Actualización parcial: solo cambian los campos que vienen en el cuerpo. */
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarPaquete(@PathVariable Long id, @RequestBody Paquete paqueteActualizado) {
-        try {
-            Optional<Paquete> paqueteExistente = paqueteRepository.findById(id);
-            if (paqueteExistente.isPresent()) {
-                Paquete paquete = paqueteExistente.get();
-                paquete.setNombre(paqueteActualizado.getNombre());
-                paquete.setDescripcion(paqueteActualizado.getDescripcion());
-                paquete.setPrecioTotal(paqueteActualizado.getPrecioTotal());
-                paquete.setDisponible(paqueteActualizado.getDisponible());
-                Paquete paqueteActual = paqueteRepository.save(paquete);
-                return ResponseEntity.ok(paqueteActual);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar paquete: " + e.getMessage());
-        }
+    public Paquete actualizarPaquete(@PathVariable Long id, @RequestBody JsonNode cambios) throws IOException {
+        Paquete paquete = buscar(id);
+        LocalDateTime creado = paquete.getFechaCreacion();
+        json.readerForUpdating(paquete).readValue(cambios);
+        paquete.setId(id);
+        paquete.setFechaCreacion(creado);
+        paquete.setFechaModificacion(LocalDateTime.now());
+        validar(paquete);
+        return paqueteRepository.save(paquete);
     }
-    
-    /**
-     * Eliminar paquete (ADMIN)
-     */
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarPaquete(@PathVariable Long id) {
-        try {
-            if (paqueteRepository.existsById(id)) {
-                paqueteRepository.deleteById(id);
-                return ResponseEntity.ok("Paquete eliminado");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al eliminar paquete: " + e.getMessage());
+    public ResponseEntity<Void> eliminarPaquete(@PathVariable Long id) {
+        paqueteRepository.delete(buscar(id));
+        return ResponseEntity.noContent().build();
+    }
+
+    private Paquete buscar(Long id) {
+        return paqueteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paquete no encontrado"));
+    }
+
+    private static void validar(Paquete p) {
+        if (p.getNombre() == null || p.getNombre().isBlank()) throw new RuntimeException("Escribe el nombre del paquete");
+        if (p.getNombre().length() > 150) throw new RuntimeException("El nombre puede tener máximo 150 caracteres");
+        p.setNombre(p.getNombre().trim());
+        if (p.getPrecioTotal() == null || p.getPrecioTotal().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("El precio total es obligatorio y no puede ser negativo");
+        }
+        if (p.getPrecioPorNoche() != null && p.getPrecioPorNoche().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("El precio por noche no puede ser negativo");
+        }
+        if (p.getDescuentoPorcentaje() != null && (p.getDescuentoPorcentaje() < 0 || p.getDescuentoPorcentaje() > 100)) {
+            throw new RuntimeException("El descuento debe estar entre 0 y 100 %");
+        }
+        if (p.getNochesMinimas() != null && p.getNochesMinimas() < 1) throw new RuntimeException("Las noches mínimas deben ser al menos 1");
+        if (p.getCapacidadMaxima() != null && p.getCapacidadMaxima() < 1) throw new RuntimeException("La capacidad debe ser al menos 1 persona");
+        if (p.getFechaInicio() != null && p.getFechaFin() != null && p.getFechaFin().isBefore(p.getFechaInicio())) {
+            throw new RuntimeException("La fecha de fin no puede ser anterior a la de inicio");
         }
     }
 }

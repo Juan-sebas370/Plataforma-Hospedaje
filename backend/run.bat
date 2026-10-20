@@ -38,7 +38,7 @@ if "%choice%"=="1" (
 
 if "%choice%"=="2" (
     echo.
-    echo Iniciando aplicacion (puerto 3000)...
+    echo Iniciando aplicacion (puerto 8080 por defecto, ver application.properties)...
     call mvn spring-boot:run
     pause
     goto menu

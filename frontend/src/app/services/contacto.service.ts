@@ -14,12 +14,9 @@ export interface ContactoRequest {
 
 export interface ContactoResponse {
   id:             number;
-  nombre:         string;
-  email:          string;
-  asunto:         string;
-  mensaje:        string;
   estado:         string;
   fechaCreacion:  string;
+  mensaje:        string;
 }
 
 @Injectable({ providedIn: 'root' })

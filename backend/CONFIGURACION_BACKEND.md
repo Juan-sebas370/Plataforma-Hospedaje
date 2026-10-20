@@ -225,7 +225,7 @@ mysql -u root -p hotel_sebastian < src/main/resources/db/schema.sql
 
 ```
 Email:       sebastian@gmail.com
-Contraseña:  jiampi2018*
+Contraseña: definir una contraseña de prueba local segura
 ```
 
 Más información en: `CREDENCIALES_INICIO_RAPIDO.md`

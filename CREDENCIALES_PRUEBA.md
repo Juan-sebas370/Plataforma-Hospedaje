@@ -3,7 +3,7 @@
 ## Usuario Principal
 
 **Email:** sebastian@gmail.com  
-**Contraseña:** jiampi2018*
+**Contraseña:** definir mediante configuración local segura
 
 ### Información Adicional
 - **Nombre:** Juan Sebastián Pérez
@@ -39,7 +39,7 @@ SELECT id, email, nombre, rol, activo FROM usuarios WHERE email = 'sebastian@gma
 
 - Ir a `/login`
 - Ingresa el **email**: `sebastian@gmail.com`
-- Ingresa la **contraseña**: `jiampi2018*`
+- Ingresa la contraseña configurada para tu usuario local de pruebas.
 - Click en "Iniciar Sesión"
 
 ---

@@ -1,6 +1,7 @@
 package com.hotelsebasitian.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,18 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
+    /** Dirección pública de la web (FRONTEND_URL). Ver application.properties. */
+    @Value("${app.frontend-url:http://localhost:4200}")
+    private String frontendUrl;
+
+    /** Enlace que abre la página /reset-password de la web con el token. */
+    String enlaceRecuperacion(String resetToken) {
+        String base = frontendUrl.endsWith("/") ? frontendUrl.substring(0, frontendUrl.length() - 1) : frontendUrl;
+        return base + "/reset-password?token=" + resetToken;
+    }
+
     public void sendPasswordResetEmail(String email, String resetToken) {
-        String resetLink = "http://localhost:4200/reset-password?token=" + resetToken;
+        String resetLink = enlaceRecuperacion(resetToken);
         
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);

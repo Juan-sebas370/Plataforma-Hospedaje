@@ -1,22 +1,22 @@
 <div class="language-selector" (clickOutside)="closeDropdown()">
   <!-- Language Button -->
-  <button class="language-btn" (click)="toggleDropdown()" 
-    [attr.aria-label]="'Selector de idioma. Idioma actual: ' + getCurrentLanguage().name"
-    [attr.title]="getCurrentLanguage().name">
-    <img class="flag-icon" [src]="getCurrentLanguage().flag" [alt]="getCurrentLanguage().name + ' flag'" />
+  <button type="button" class="language-btn" (click)="toggleDropdown()"
+    [attr.aria-expanded]="showDropdown" aria-controls="lista-idiomas">
+    <img class="flag-icon" [src]="getCurrentLanguage().flag" alt="" />
+    <span class="sr-only">Idioma: {{ getCurrentLanguage().name }},</span>
     <span class="lang-code">{{ getCurrentLanguage().code.toUpperCase() }}</span>
-    <span class="arrow" [class.open]="showDropdown">▼</span>
+    <span class="arrow" [class.open]="showDropdown" aria-hidden="true">▼</span>
   </button>
 
   <!-- Language Dropdown Menu -->
-  <div class="language-dropdown" [class.show]="showDropdown" role="menu">
+  <div id="lista-idiomas" class="language-dropdown" [class.show]="showDropdown">
     <!-- Header -->
     <div class="dropdown-header">
-      <svg class="globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg aria-hidden="true" class="globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10"></circle>
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
-      <span class="header-text">{{ 'languages.selectLanguage' | translate }}</span>
+      <span class="header-text">{{ 'common.selectLanguage' | translate }}</span>
     </div>
 
     <!-- Language Options -->
@@ -26,16 +26,17 @@
           class="language-option"
           [class.active]="currentLang === lang.code"
           (click)="selectLanguage(lang.code)"
-          [attr.role]="'menuitem'"
-          [attr.aria-label]="'Cambiar a ' + lang.name"
+          type="button"
+          [attr.aria-current]="currentLang === lang.code ? 'true' : null"
+          [attr.lang]="lang.code"
         >
-          <img class="flag-large" [src]="lang.flag" [alt]="lang.name + ' flag'" />
+          <img class="flag-large" [src]="lang.flag" alt="" />
           <div class="lang-info">
-            <span class="code-badge">{{ lang.code.toUpperCase() }}</span>
+            <span class="code-badge" aria-hidden="true">{{ lang.code.toUpperCase() }}</span>
             <span class="lang-name">{{ lang.name }}</span>
           </div>
           @if (currentLang === lang.code) {
-            <span class="checkmark">
+            <span class="checkmark" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>

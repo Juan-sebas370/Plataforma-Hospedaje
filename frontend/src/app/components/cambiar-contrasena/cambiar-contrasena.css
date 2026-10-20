@@ -1,4 +1,4 @@
-﻿.cambio-contrasena-container {
+.cambio-contrasena-container {
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -13,7 +13,7 @@
 }
 
 .cambio-header h1 {
-  font-size: 32px;
+  font-size: 2rem;
   margin: 0 0 10px 0;
   font-weight: bold;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -22,7 +22,7 @@
 .cambio-header p {
   margin: 0;
   opacity: 0.95;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* Alertas */
@@ -74,7 +74,7 @@ label {
   margin-bottom: 8px;
   font-weight: 600;
   color: #2B2B2B;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .input-wrapper {
@@ -89,7 +89,7 @@ label {
   padding-right: 120px;
   border: 2px solid #E8DCCB;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: inherit;
   transition: all 0.3s ease;
   background-color: #F8F4EE;
@@ -103,7 +103,7 @@ label {
 }
 
 .form-control.is-invalid {
-  border-color: #e74c3c;
+  border-color: #B83A2E;
   background-color: #fadbd8;
 }
 
@@ -113,8 +113,8 @@ label {
   background: none;
   border: none;
   cursor: pointer;
-  color: #7A7A7A;
-  font-size: 12px;
+  color: #6B6560;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 5px 10px;
   transition: all 0.3s ease;
@@ -127,8 +127,8 @@ label {
 }
 
 .error-text {
-  color: #e74c3c;
-  font-size: 12px;
+  color: #B83A2E;
+  font-size: 0.75rem;
   margin-top: 5px;
   display: block;
 }
@@ -136,8 +136,8 @@ label {
 .form-text {
   display: block;
   margin-top: 5px;
-  color: #7A7A7A;
-  font-size: 12px;
+  color: #6B6560;
+  font-size: 0.75rem;
 }
 
 /* Separador */
@@ -169,7 +169,7 @@ label {
 
 .fortaleza-texto {
   display: block;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   margin-top: 5px;
 }
@@ -183,9 +183,9 @@ label {
   border-left: 4px solid #0E5A9C;
 }
 
-.requisitos h4 {
+.requisitos h2 {
   margin: 0 0 10px 0;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #2B2B2B;
   font-weight: 600;
   text-transform: uppercase;
@@ -199,14 +199,14 @@ label {
 }
 
 .requisitos li {
-  font-size: 12px;
-  color: #e74c3c;
+  font-size: 0.75rem;
+  color: #B83A2E;
   padding: 3px 0;
   transition: color 0.3s ease;
 }
 
 .requisitos li.cumplido {
-  color: #27ae60;
+  color: #1B7340;
 }
 
 /* Botones de Acción */
@@ -223,7 +223,7 @@ label {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -244,12 +244,12 @@ label {
 }
 
 .btn-secondary {
-  background-color: #95a5a6;
+  background-color: #5F6B6D;
   color: white;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #7A7A7A;
+  background-color: #4A5456;
   transform: translateY(-2px);
 }
 
@@ -264,12 +264,12 @@ label {
   padding: 20px;
   border-radius: 10px;
   margin-top: 30px;
-  border-left: 4px solid #e74c3c;
+  border-left: 4px solid #B83A2E;
 }
 
-.info-adicional h4 {
+.info-adicional h2 {
   margin: 0 0 12px 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #c0392b;
   font-weight: 600;
 }
@@ -281,7 +281,7 @@ label {
 }
 
 .info-adicional li {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #a93226;
   padding: 5px 0;
   padding-left: 20px;
@@ -305,7 +305,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 38px;
+    font-size: 2.375rem;
   }
 
   .formulario {
@@ -320,7 +320,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 32px;
+    font-size: 2rem;
   }
 }
 
@@ -342,7 +342,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .formulario {
@@ -359,7 +359,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .formulario {
@@ -373,7 +373,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 26px;
+    font-size: 1.625rem;
   }
 
   .formulario {
@@ -397,7 +397,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 26px;
+    font-size: 1.625rem;
   }
 
   .formulario {
@@ -417,7 +417,7 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .formulario {
@@ -430,11 +430,11 @@ label {
 
   .form-control {
     padding-right: 45px;
-    font-size: 16px; /* Previene zoom en iOS */
+    font-size: 1rem; /* Previene zoom en iOS */
   }
 
   .btn-toggle-password {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .separador {
@@ -445,12 +445,12 @@ label {
     padding: 15px;
   }
 
-  .info-adicional h4 {
-    font-size: 12px;
+  .info-adicional h2 {
+    font-size: 0.75rem;
   }
 
   .info-adicional li {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 }
 
@@ -465,12 +465,12 @@ label {
   }
 
   .cambio-header h1 {
-    font-size: 18px;
+    font-size: 1.125rem;
     margin-bottom: 5px;
   }
 
   .cambio-header p {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .formulario {
@@ -478,7 +478,7 @@ label {
   }
 
   .formulario h2 {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .form-group {
@@ -486,18 +486,18 @@ label {
   }
 
   .form-group label {
-    font-size: 11px;
+    font-size: 0.6875rem;
     margin-bottom: 5px;
   }
 
   .form-control {
     padding: 8px 10px;
     padding-right: 40px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .btn-toggle-password {
-    font-size: 10px;
+    font-size: 0.625rem;
     padding: 8px;
   }
 
@@ -506,7 +506,7 @@ label {
   }
 
   .password-indicator {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
 
   .separador {
@@ -517,18 +517,18 @@ label {
     padding: 12px;
   }
 
-  .info-adicional h4 {
-    font-size: 11px;
+  .info-adicional h2 {
+    font-size: 0.6875rem;
     margin-bottom: 8px;
   }
 
   .info-adicional li {
-    font-size: 10px;
+    font-size: 0.625rem;
     margin-bottom: 4px;
   }
 
   .btn {
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 }

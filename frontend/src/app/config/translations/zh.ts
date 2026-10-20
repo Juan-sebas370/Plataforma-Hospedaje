@@ -38,8 +38,6 @@ export const zh = {
     serviceParking: '停车场',
     serviceLaundry: '洗衣服务',
     serviceAir: '空调',
-    servicePool: '游泳池',
-    serviceRestaurant: '餐厅',
     serviceRoomService: '客房服务',
     serviceTransfer: '机场接送',
     serviceSafe: '保险箱',
@@ -79,7 +77,7 @@ export const zh = {
     paymentInfo: '现金、卡、转账',
     promotions: '促销',
     promotionInfo: '7晚以上：15% 折扣。提前预订：10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: '24/7 全天候服务'
   },
   gallery: {
@@ -87,8 +85,8 @@ export const zh = {
     subtitle: '了解我们的设施和客房',
     all: '全部',
     rooms: '客房',
-    facilities: '设施',
-    services: '服务',
+    spaces: '住宿空间',
+    attractions: '菲兰迪亚景点',
     noImages: '此类别中没有图片',
     ctaTitle: '准备好体验了吗？',
     ctaSubtitle: '立即预订，享受我们令人惊叹的设施',
@@ -394,6 +392,11 @@ export const zh = {
     back: '返回',
     next: '下一步',
     previous: '上一步',
-    selectLanguage: '选择语言'
+    selectLanguage: '选择语言',
+    step: '步骤',
+    of: '/'
+  },
+  languages: {
+    current: '当前语言'
   }
 };

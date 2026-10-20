@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -26,6 +26,10 @@ export interface Reserva {
   precioTotal?: number;
   temporada?: 'alta' | 'media' | 'baja';
   estado?: string;
+  /** Código secreto que entrega el backend al crear la reserva; permite verla y pagarla sin cuenta. */
+  codigoAcceso?: string;
+  /** Código visible de la reserva (RSV-2027-00012), el mismo que usa SOGO. */
+  codigo?: string;
 
   // Personas
   huespedes: number;
@@ -58,6 +62,17 @@ export interface ReservaResumen {
   nombreHuesped: string;
 }
 
+/** Respuesta del endpoint GET /reservas/disponibilidad */
+export interface Disponibilidad {
+  habitacionesOcupadas: number[];   // IDs de habitaciones con reserva activa
+  espaciosOcupados:     string[];   // ["piso1", "piso2", "completo"]
+  piso1Ocupado:         boolean;
+  piso2Ocupado:         boolean;
+  casaOcupada:          boolean;
+  disponible:           boolean;    // true si no hay ningún conflicto
+  mensaje:              string;     // texto para mostrar al usuario
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -71,9 +86,10 @@ export class ReservaService {
     return this.http.post<Reserva>(this.apiUrl, data);
   }
 
-  /** Obtener reserva por ID */
-  obtenerReserva(id: number): Observable<Reserva> {
-    return this.http.get<Reserva>(`${this.apiUrl}/${id}`);
+  /** Obtener reserva por ID (sin sesión hace falta el código de acceso) */
+  obtenerReserva(id: number, codigo?: string | null): Observable<Reserva> {
+    const params = codigo ? new HttpParams().set('codigo', codigo) : undefined;
+    return this.http.get<Reserva>(`${this.apiUrl}/${id}`, { params });
   }
 
   /** Reservas del usuario autenticado */
@@ -99,5 +115,15 @@ export class ReservaService {
   /** Eliminar reserva */
   eliminarReserva(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  /**
+   * Consulta disponibilidad para un rango de fechas.
+   * Devuelve habitaciones/espacios ocupados y un mensaje descriptivo.
+   */
+  verificarDisponibilidad(fechaIngreso: string, fechaSalida?: string): Observable<Disponibilidad> {
+    let params = new HttpParams().set('fechaIngreso', fechaIngreso);
+    if (fechaSalida) params = params.set('fechaSalida', fechaSalida);
+    return this.http.get<Disponibilidad>(`${this.apiUrl}/disponibilidad`, { params });
   }
 }

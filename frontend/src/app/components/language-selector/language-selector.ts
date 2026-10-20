@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { HostListener, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateService, Language } from '../../services/translate.service';
 import { TranslatePipe } from '../../shared/translate.pipe';
@@ -54,6 +54,11 @@ export class LanguageSelector implements OnInit {
   }
 
   closeDropdown(): void {
+    this.showDropdown = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  cerrarConEscape(): void {
     this.showDropdown = false;
   }
 }

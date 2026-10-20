@@ -5,11 +5,18 @@ import {
   PLATFORM_ID,
   Inject,
   ChangeDetectorRef,
+  computed,
+  inject,
+  signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe } from '../../shared/translate.pipe';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BusquedaDisponibilidadService } from '../../services/busqueda-disponibilidad.service';
+import { AccesibilidadService } from '../../services/accesibilidad.service';
+import { SobreProyecto } from '../sobre-proyecto/sobre-proyecto';
+import { GuiaTuristica } from '../guia-turistica/guia-turistica';
 
 export interface Piso {
   nombre: string;
@@ -39,32 +46,59 @@ export interface Testimonio {
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, TranslatePipe, CommonModule, FormsModule],
+  imports: [RouterLink, TranslatePipe, CommonModule, FormsModule, SobreProyecto, GuiaTuristica],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
 
   // ── Carousel ───────────────────────────────────────────────
-  images = [
-    '/assets/principal/imagen1.jpg',
-    '/assets/principal/imagen2.jpg',
-    '/assets/principal/imagen3.jpg',
-    '/assets/principal/imagen4.jpg',
+  /**
+   * Fotos de la portada (carpeta assets/principal): Filandia y el hospedaje.
+   * `encuadre` ajusta qué parte de cada foto se ve dentro del marco.
+   */
+  readonly fotosPortada = [
+    { src: '/assets/principal/imagen1.jpg', etiqueta: 'Filandia', encuadre: '50% 45%',
+      alt: 'Iglesia de la plaza principal de Filandia' },
+    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.34%20PM.jpeg', etiqueta: 'Sala de estar', encuadre: '50% 60%',
+      alt: 'Sala de estar del Hospedaje Sebastián con sofá, sillas y comedor' },
+    { src: '/assets/principal/imagen2.jpg', etiqueta: 'Calles de Filandia', encuadre: '50% 50%',
+      alt: 'Calle de Filandia con casas de balcones de colores' },
+    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.33%20PM.jpeg', etiqueta: 'Sala de estar', encuadre: '50% 55%',
+      alt: 'Sala y comedor del Hospedaje Sebastián' },
+    { src: '/assets/principal/imagen4.jpg', etiqueta: 'Filandia', encuadre: '50% 50%',
+      alt: 'Interior de la iglesia de Filandia' },
   ];
+  readonly images = this.fotosPortada.map(f => f.src);
   currentImageIndex = 0;
   private intervalId: any;
+
+  // Carrusel: se puede pausar (WCAG 2.2.2), se detiene con el mouse o el foco
+  // encima, y no avanza solo si la persona pidió reducir el movimiento.
+  private readonly accesibilidad = inject(AccesibilidadService);
+  readonly pausadoPorUsuario = signal(false);
+  readonly pausaTemporal = signal(false);
+  private readonly reanudadoPorUsuario = signal(false);
+  readonly carruselActivo = computed(() =>
+    !this.pausadoPorUsuario() && (this.reanudadoPorUsuario() || !this.accesibilidad.movimientoReducido()));
+
+  alternarCarrusel(): void {
+    const activo = this.carruselActivo();
+    this.pausadoPorUsuario.set(activo);
+    this.reanudadoPorUsuario.set(!activo);
+  }
   private isBrowser = false;
 
   // ── Buscador ───────────────────────────────────────────────
   busqueda = {
     fechaEntrada: '',
     fechaSalida: '',
-    huespedes: 2,
+    adultos: 2,
     ninos: 0,
     tipoReserva: 'individual',
   };
-  mostrarInfoNinos = false;
+  fechaMinima = '';
+  errorBusqueda = '';
 
   // ── Tipos de reserva ───────────────────────────────────────
   tiposReserva: TipoReserva[] = [
@@ -166,15 +200,19 @@ export class Home implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private cdr: ChangeDetectorRef,
+    private router: Router,
+    private busquedaService: BusquedaDisponibilidadService,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
+    this.fechaMinima = this.fechaLocal(new Date());
     if (this.isBrowser) {
       this.intervalId = setInterval(() => {
+        if (!this.carruselActivo() || this.pausaTemporal()) return;
         this.goToImage((this.currentImageIndex + 1) % this.images.length);
-      }, 4000);
+      }, 6000);
 
       const hoy    = new Date();
       const manana = new Date(hoy);
@@ -188,6 +226,14 @@ export class Home implements OnInit, OnDestroy {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
+  fotoAnterior() {
+    this.goToImage((this.currentImageIndex - 1 + this.images.length) % this.images.length);
+  }
+
+  fotoSiguiente() {
+    this.goToImage((this.currentImageIndex + 1) % this.images.length);
+  }
+
   goToImage(index: number) {
     this.currentImageIndex = index;
     try { this.cdr.detectChanges(); } catch { /* noop */ }
@@ -197,7 +243,61 @@ export class Home implements OnInit, OnDestroy {
     return d.toISOString().split('T')[0];
   }
 
+  private fechaLocal(d: Date): string {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   getRange(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i);
+  }
+
+  buscarDisponibilidad(): void {
+    if (!this.validarFechas()) return;
+
+    this.busquedaService.guardar({
+      fechaEntrada: this.busqueda.fechaEntrada,
+      fechaSalida: this.busqueda.fechaSalida,
+      adultos: this.busqueda.adultos,
+      ninos3: 0,
+      ninos10: this.busqueda.ninos,
+      ninos11: 0,
+      tipoReserva: this.busqueda.tipoReserva as 'individual' | 'familiar' | 'pasadia' | 'grupal',
+    });
+
+    // Directo al proceso de reserva: con fechas y personas ya llenas, el
+    // asistente salta a mostrar los espacios disponibles y la recomendación.
+    this.router.navigate(['/reservas'], {
+      queryParams: {
+        fechaEntrada: this.busqueda.fechaEntrada,
+        fechaSalida: this.busqueda.fechaSalida,
+        adultos: this.busqueda.adultos,
+        ninos10: this.busqueda.ninos || undefined,
+        tipo: this.busqueda.tipoReserva,
+      },
+    });
+  }
+
+  validarFechas(): boolean {
+    this.errorBusqueda = '';
+
+    if (!this.busqueda.fechaEntrada || !this.busqueda.fechaSalida) {
+      this.errorBusqueda = 'Selecciona la fecha de entrada y la fecha de salida.';
+      return false;
+    }
+
+    if (this.busqueda.fechaEntrada < this.fechaMinima) {
+      this.errorBusqueda = 'La fecha de entrada no puede ser anterior a hoy.';
+      return false;
+    }
+
+    if (this.busqueda.fechaSalida <= this.busqueda.fechaEntrada) {
+      this.errorBusqueda = 'La fecha de salida debe ser posterior a la fecha de entrada.';
+      return false;
+    }
+
+    return true;
   }
 }

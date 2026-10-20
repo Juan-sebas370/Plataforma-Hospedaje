@@ -1,0 +1,109 @@
+<header class="paso-titulo">
+  <h2>Todo listo, revisa tu reserva</h2>
+  <p>Si algo no está bien, edítalo: lo demás se queda como está.</p>
+</header>
+
+<div class="revision">
+  <!-- Viaje -->
+  <section class="bloque tarjeta">
+    <div class="tarjeta__cabecera">
+      <h3 class="bloque-titulo"><app-icono name="calendar" [size]="15" /> Tu viaje</h3>
+      <button type="button" class="link" (click)="estado.irA('viaje')"><app-icono name="edit" [size]="13" /> Editar</button>
+    </div>
+    <dl>
+      <div><dt>Plan</dt><dd>{{ estado.tipoInfo().nombre }}</dd></div>
+      <div>
+        <dt>{{ estado.esDia() ? 'Fecha' : 'Fechas' }}</dt>
+        <dd>
+          {{ formatFecha(estado.config().fechaEntrada) }}
+          @if (!estado.esDia()) { → {{ formatFecha(estado.config().fechaSalida) }} · {{ plural(estado.noches(), 'noche') }} }
+        </dd>
+      </div>
+      <div><dt>Horario</dt><dd>{{ estado.tipoInfo().horario }}</dd></div>
+      <div><dt>Personas</dt><dd>{{ estado.resumenPersonas() }}</dd></div>
+    </dl>
+  </section>
+
+  <!-- Espacio -->
+  <section class="bloque tarjeta">
+    <div class="tarjeta__cabecera">
+      <h3 class="bloque-titulo"><app-icono name="home" [size]="15" /> Tu espacio</h3>
+      @if (!estado.esDia()) {
+        <button type="button" class="link" (click)="estado.irA('espacio')"><app-icono name="edit" [size]="13" /> Editar</button>
+      }
+    </div>
+    <div class="espacio">
+      <img [src]="estado.imagenEspacio()" alt="" />
+      <div>
+        <strong>{{ estado.nombreEspacio() }}</strong>
+        @if (!estado.esDia() && estado.modo() !== 'habitaciones') {
+          <span>{{ estado.habitacionesElegidas().length }} habitaciones · solo para ustedes</span>
+        } @else if (!estado.esDia()) {
+          <span>Camas para {{ estado.capacidadElegida() }} personas</span>
+        } @else {
+          <span>Sala, cocina y zonas verdes para tu {{ estado.config().tipo === 'pasadia' ? 'pasadía' : 'jornada' }}</span>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Responsable -->
+  <section class="bloque tarjeta">
+    <div class="tarjeta__cabecera">
+      <h3 class="bloque-titulo"><app-icono name="user" [size]="15" /> Responsable</h3>
+      <button type="button" class="link" (click)="estado.irA('datos')"><app-icono name="edit" [size]="13" /> Editar</button>
+    </div>
+    <dl>
+      <div><dt>Nombre</dt><dd>{{ estado.datos().nombre }} {{ estado.datos().apellido }}</dd></div>
+      <div><dt>Documento</dt><dd>{{ documento() }}</dd></div>
+      <div><dt>Correo</dt><dd class="largo">{{ estado.datos().email }}</dd></div>
+      <div><dt>Celular</dt><dd>{{ estado.datos().codigoPais }} {{ estado.datos().telefono }}</dd></div>
+      @if (pais()) { <div><dt>País</dt><dd>{{ pais() }}</dd></div> }
+    </dl>
+    @if (estado.datos().observaciones) {
+      <p class="notas">“{{ estado.datos().observaciones }}”</p>
+    }
+  </section>
+
+  <!-- Precio -->
+  <section class="bloque tarjeta precio">
+    <h3 class="bloque-titulo"><app-icono name="wallet" [size]="15" /> Precio</h3>
+    <dl>
+      <div><dt>Tarifa por persona{{ estado.esDia() ? '' : ' / noche' }}</dt><dd>{{ formatCOP(estado.precio().porPersona) }}</dd></div>
+      <div><dt>{{ plural(estado.config().adultos + estado.config().ninos11, 'persona') }} con tarifa completa</dt><dd>{{ formatCOP(estado.precio().adultos + estado.config().ninos11 * estado.precio().porPersona) }}</dd></div>
+      @if (estado.config().ninos10) {
+        <div><dt>{{ plural(estado.config().ninos10, 'niño') }} (60 %)</dt><dd>{{ formatCOP(estado.config().ninos10 * estado.precio().porPersona * .6) }}</dd></div>
+      }
+      @if (estado.config().ninos3) {
+        <div><dt>{{ plural(estado.config().ninos3, 'bebé') }}</dt><dd class="gratis">Gratis</dd></div>
+      }
+      @if (!estado.esDia()) {
+        <div><dt>Total por noche × {{ plural(estado.noches(), 'noche') }}</dt><dd>{{ formatCOP(estado.precio().noche) }}</dd></div>
+      }
+    </dl>
+    <div class="total">
+      <span>Total a pagar</span>
+      <strong>{{ formatCOP(estado.precio().total) }}</strong>
+    </div>
+    <span class="pastilla temporada--{{ estado.temporada() }}">Temporada {{ estado.nombreTemporada() }}</span>
+  </section>
+</div>
+
+<section class="bloque pago">
+  <div class="pago__metodos">
+    <app-icono name="shield" [size]="22" />
+    <div>
+      <strong>Pago seguro con Wompi</strong>
+      <span>Tarjeta débito o crédito, PSE, Nequi y más. Tus datos bancarios nunca pasan por nuestro sistema.</span>
+    </div>
+  </div>
+
+  <label class="terminos" [class.terminos--pendiente]="estado.intentoFallido() === 'confirmar' && !estado.aceptaTerminos()">
+    <input type="checkbox" [ngModel]="estado.aceptaTerminos()" (ngModelChange)="estado.aceptaTerminos.set($event)" />
+    <span>He leído y acepto las <a href="#" target="_blank" rel="noopener">políticas de reserva</a> y el <a href="#" target="_blank" rel="noopener">reglamento interno</a> del Hospedaje Sebastián.</span>
+  </label>
+
+  @if (estado.errorReserva()) {
+    <p class="aviso aviso--error" role="alert"><app-icono name="alert" [size]="16" /> {{ estado.errorReserva() }}</p>
+  }
+</section>

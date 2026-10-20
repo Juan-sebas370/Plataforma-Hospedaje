@@ -1,0 +1,82 @@
+@if (abierto()) {
+  <section class="ventana" [class.ventana--elevada]="elevado()" role="dialog" aria-modal="false"
+           aria-labelledby="chatbot-titulo" aria-describedby="chatbot-subtitulo">
+    <header class="ventana__cabecera">
+      <span class="ventana__avatar"><img src="assets/logo.png" alt="" /></span>
+      <div class="ventana__titulos">
+        <h2 id="chatbot-titulo">{{ t('titulo') }}</h2>
+        <p id="chatbot-subtitulo"><span class="punto" aria-hidden="true"></span>{{ t('subtitulo') }}</p>
+      </div>
+      <button type="button" class="ventana__boton" (click)="reiniciar()" [attr.aria-label]="t('reiniciar')" [title]="t('reiniciar')">
+        <app-icono name="restablecer" [size]="17" [stroke]="2" />
+      </button>
+      <button type="button" class="ventana__boton" (click)="cerrar()" [attr.aria-label]="t('cerrar')" [title]="t('cerrar')">
+        <app-icono name="close" [size]="18" [stroke]="2.2" />
+      </button>
+    </header>
+
+    <div class="historial" #historial role="log" aria-live="polite" [attr.aria-label]="t('titulo')">
+      @for (m of mensajes(); track m.id) {
+        <div class="mensaje" [class.mensaje--usuario]="m.autor === 'usuario'">
+          <span class="sr-only">{{ m.autor === 'bot' ? t('asistente') : t('tu') }}:</span>
+          <p class="mensaje__burbuja">{{ m.texto }}</p>
+
+          @if (m.acciones.length) {
+            <div class="acciones">
+              @for (a of m.acciones; track $index) {
+                @if (a.ruta) {
+                  <a class="accion" [routerLink]="a.ruta" (click)="alSeguirEnlace()">
+                    {{ etiqueta(a) }} <app-icono name="arrow-right" [size]="14" [stroke]="2.2" />
+                  </a>
+                } @else {
+                  <a class="accion accion--externa" [href]="a.href">{{ etiqueta(a) }}</a>
+                }
+              }
+            </div>
+          }
+
+          @if (m.id === ultimoBot() && m.sugerencias.length && !escribiendo()) {
+            <div class="sugerencias" role="group" [attr.aria-label]="t('sugerencias')">
+              @for (id of m.sugerencias; track id) {
+                <button type="button" class="sugerencia" (click)="elegirSugerencia(id)">{{ preguntaDe(id) }}</button>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (escribiendo()) {
+        <div class="mensaje">
+          <p class="mensaje__burbuja escribiendo">
+            <span class="sr-only">{{ t('escribiendo') }}</span>
+            <span class="escribiendo__punto" aria-hidden="true"></span>
+            <span class="escribiendo__punto" aria-hidden="true"></span>
+            <span class="escribiendo__punto" aria-hidden="true"></span>
+          </p>
+        </div>
+      }
+    </div>
+
+    <form class="entrada" (submit)="enviar($event)">
+      <label class="sr-only" for="chatbot-campo">{{ t('etiquetaCampo') }}</label>
+      <input #campo id="chatbot-campo" type="text" autocomplete="off" maxlength="300"
+             [placeholder]="t('escribe')"
+             [value]="consulta()" (input)="consulta.set($any($event.target).value)" />
+      <button type="submit" class="entrada__enviar" [disabled]="!consulta().trim() || escribiendo()" [attr.aria-label]="t('enviar')">
+        <app-icono name="enviar" [size]="18" [stroke]="2" />
+      </button>
+    </form>
+    <p class="nota">{{ t('nota') }}</p>
+  </section>
+}
+
+<button #lanzador type="button" class="lanzador" [class.lanzador--abierto]="abierto()" [class.lanzador--elevado]="elevado()"
+        (click)="alternar()" [attr.aria-expanded]="abierto()"
+        [attr.aria-label]="abierto() ? t('cerrar') : t('abrir')">
+  @if (abierto()) {
+    <app-icono name="close" [size]="24" [stroke]="2.2" />
+  } @else {
+    <app-icono name="mensaje" [size]="26" [stroke]="1.9" />
+    <span class="lanzador__etiqueta" aria-hidden="true">{{ t('burbuja') }}</span>
+  }
+</button>

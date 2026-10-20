@@ -1,0 +1,78 @@
+<button #boton type="button" class="disparador"
+        [class.disparador--activo]="a11y.cantidadActivas() > 0"
+        [attr.aria-expanded]="abierto()"
+        aria-controls="panel-accesibilidad"
+        (click)="alternarPanel()">
+  <app-icono name="accesibilidad" [size]="20" [stroke]="2" />
+  <span class="disparador__texto">Accesibilidad</span>
+  @if (a11y.cantidadActivas() > 0) {
+    <span class="disparador__contador">{{ a11y.cantidadActivas() }}<span class="sr-only"> ajustes activos</span></span>
+  }
+</button>
+
+@if (abierto()) {
+  <section #panel id="panel-accesibilidad" class="panel" tabindex="-1"
+           aria-labelledby="titulo-accesibilidad" (focusout)="alPerderFoco($event)">
+    <header class="panel__cabecera">
+      <span class="panel__icono"><app-icono name="accesibilidad" [size]="22" [stroke]="2" /></span>
+      <div>
+        <h2 id="titulo-accesibilidad">Accesibilidad</h2>
+        <p>Ajusta el sitio a tu manera</p>
+      </div>
+      <button type="button" class="panel__cerrar" (click)="cerrar(true)" aria-label="Cerrar accesibilidad">
+        <app-icono name="close" [size]="18" [stroke]="2.2" />
+      </button>
+    </header>
+
+    <div class="panel__cuerpo">
+      <!-- Tamaño del texto -->
+      <section class="grupo" aria-labelledby="g-texto">
+        <h3 id="g-texto">Tamaño del texto</h3>
+        <div class="texto" role="group" aria-labelledby="g-texto">
+          <button type="button" (click)="a11y.cambiarTexto(-1)" [disabled]="!a11y.puedeDisminuir()">
+            <app-icono name="texto-menos" [size]="18" [stroke]="2" /> <span>Reducir</span>
+          </button>
+          <button type="button" class="texto__valor" (click)="a11y.textoNormal()"
+                  [attr.aria-label]="'Tamaño actual ' + a11y.porcentajeTexto() + ' por ciento. Volver al tamaño normal'">
+            {{ a11y.porcentajeTexto() }} %
+          </button>
+          <button type="button" (click)="a11y.cambiarTexto(1)" [disabled]="!a11y.puedeAumentar()">
+            <app-icono name="texto-mas" [size]="18" [stroke]="2" /> <span>Aumentar</span>
+          </button>
+        </div>
+      </section>
+
+      @for (g of grupos; track g.titulo) {
+        <section class="grupo" [attr.aria-label]="g.titulo">
+          <h3>{{ g.titulo }}</h3>
+          <div class="opciones">
+            @for (o of g.opciones; track o.id) {
+              <button type="button" class="opcion"
+                      [class.opcion--activa]="a11y.preferencias()[o.id]"
+                      [attr.aria-pressed]="a11y.preferencias()[o.id]"
+                      [attr.aria-describedby]="'ayuda-' + o.id"
+                      (click)="a11y.alternar(o.id)">
+                <span class="opcion__icono"><app-icono [name]="o.icono" [size]="20" [stroke]="1.9" /></span>
+                <span class="opcion__titulo">{{ o.titulo }}</span>
+                <span class="opcion__estado" aria-hidden="true">
+                  @if (a11y.preferencias()[o.id]) { <app-icono name="check" [size]="11" [stroke]="3.2" /> Activo } @else { Inactivo }
+                </span>
+                <span class="sr-only" [id]="'ayuda-' + o.id">{{ o.ayuda }}</span>
+              </button>
+            }
+          </div>
+        </section>
+      }
+    </div>
+
+    <footer class="panel__pie">
+      <button type="button" class="restablecer" (click)="a11y.restablecer()" [disabled]="!a11y.hayCambios()">
+        <app-icono name="restablecer" [size]="16" [stroke]="2" /> Restablecer configuración
+      </button>
+      <p class="nota">
+        <app-icono name="teclado" [size]="14" />
+        <span>Todo el sitio funciona con teclado (<kbd>Tab</kbd>, <kbd>Enter</kbd>, <kbd>Esc</kbd>) y con lectores de pantalla.</span>
+      </p>
+    </footer>
+  </section>
+}

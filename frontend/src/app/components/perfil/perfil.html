@@ -1,4 +1,4 @@
-﻿<div class="perfil-container">
+<div class="perfil-container">
   <div class="perfil-header">
     <h1>Mi Perfil</h1>
     <p class="miembro-desde">Miembro desde {{ usuario?.createdAt | date: 'MMMM yyyy' }}</p>
@@ -32,12 +32,12 @@
 
   <!-- Mensajes de estado -->
   @if (successMessage) {
-    <div class="alert alert-success">
+    <div class="alert alert-success" role="status">
       {{ successMessage }}
     </div>
   }
   @if (errorMessage) {
-    <div class="alert alert-error">
+    <div class="alert alert-error" role="alert">
       {{ errorMessage }}
     </div>
   }
@@ -66,9 +66,11 @@
           id="nombre"
           formControlName="nombre"
           class="form-control"
-          [class.is-invalid]="submitted && f['nombre'].errors">
+          [class.is-invalid]="submitted && f['nombre'].errors"
+          [attr.aria-invalid]="submitted && !!f['nombre'].errors"
+          [attr.aria-describedby]="submitted && f['nombre'].errors ? 'err-nombre' : null">
         @if (submitted && f['nombre'].errors) {
-          <div class="error-text">
+          <div class="error-text" id="err-nombre">
             @if (f['nombre'].errors['required']) {
               <span>El nombre es requerido</span>
             }
@@ -87,8 +89,10 @@
           formControlName="email"
           class="form-control"
           [class.is-invalid]="submitted && f['email'].errors"
+          [attr.aria-invalid]="submitted && !!f['email'].errors"
+          aria-describedby="ayuda-email"
           [disabled]="true">
-        <small class="form-text">El correo no puede ser modificado</small>
+        <small class="form-text" id="ayuda-email">El correo no puede ser modificado</small>
       </div>
 
       <div class="form-group">
@@ -99,9 +103,11 @@
           formControlName="telefono"
           class="form-control"
           [class.is-invalid]="submitted && f['telefono'].errors"
+          [attr.aria-invalid]="submitted && !!f['telefono'].errors"
+          [attr.aria-describedby]="submitted && f['telefono'].errors ? 'err-telefono' : null"
           placeholder="+1 234 567 8900">
         @if (submitted && f['telefono'].errors) {
-          <div class="error-text">
+          <div class="error-text" id="err-telefono">
             @if (f['telefono'].errors['required']) {
               <span>El teléfono es requerido</span>
             }
@@ -129,9 +135,11 @@
             id="ciudad"
             formControlName="ciudad"
             class="form-control"
-            [class.is-invalid]="submitted && f['ciudad'].errors">
+            [class.is-invalid]="submitted && f['ciudad'].errors"
+          [attr.aria-invalid]="submitted && !!f['ciudad'].errors"
+          [attr.aria-describedby]="submitted && f['ciudad'].errors ? 'err-ciudad' : null">
           @if (submitted && f['ciudad'].errors) {
-            <div class="error-text">
+            <div class="error-text" id="err-ciudad">
               @if (f['ciudad'].errors['required']) {
                 <span>La ciudad es requerida</span>
               }
@@ -146,9 +154,11 @@
             id="pais"
             formControlName="pais"
             class="form-control"
-            [class.is-invalid]="submitted && f['pais'].errors">
+            [class.is-invalid]="submitted && f['pais'].errors"
+          [attr.aria-invalid]="submitted && !!f['pais'].errors"
+          [attr.aria-describedby]="submitted && f['pais'].errors ? 'err-pais' : null">
           @if (submitted && f['pais'].errors) {
-            <div class="error-text">
+            <div class="error-text" id="err-pais">
               @if (f['pais'].errors['required']) {
                 <span>El país es requerido</span>
               }

@@ -29,6 +29,7 @@ export class TranslateService {
         this.currentLang.set(savedLang);
         this.currentLang$.next(savedLang);
       }
+      document.documentElement.lang = this.currentLang();
     }
   }
 
@@ -58,25 +59,26 @@ export class TranslateService {
 
   translate(key: string): string {
     const lang = this.currentLang();
-    const translation = this.translations[lang];
-    
+    const value = this.findTranslation(this.translations[lang], key)
+      ?? this.findTranslation(this.translations['es'], key);
+
+    return value ?? key;
+  }
+
+  private findTranslation(translation: Translation | undefined, key: string): string | undefined {
     if (!translation) {
-      return key;
+      return undefined;
     }
 
-    // Navegar por la ruta de keys (ej: "nav.home")
-    const keys = key.split('.');
-    let value: any = translation;
-    
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k];
-      } else {
-        return key; // Si no encuentra la traducción, devuelve la key
+    let value: string | Translation = translation;
+    for (const part of key.split('.')) {
+      if (!value || typeof value !== 'object' || !(part in value)) {
+        return undefined;
       }
+      value = value[part];
     }
-    
-    return typeof value === 'string' ? value : key;
+
+    return typeof value === 'string' ? value : undefined;
   }
 
   // Método abreviado para usar en templates

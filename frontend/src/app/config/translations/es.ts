@@ -15,7 +15,7 @@ export const es = {
     logout: 'Cerrar Sesión'
   },
   home: {
-    title: 'Bienvenido a Hospedaje Sebastian',
+    title: 'Bienvenido a Hospedaje Sebastián',
     subtitle: 'Tu hogar lejos de casa. Comodidad y servicio de primera clase.',
     checkIn: 'Entrada',
     checkOut: 'Salida',
@@ -38,8 +38,6 @@ export const es = {
     serviceParking: 'Parqueadero',
     serviceLaundry: 'Lavandería',
     serviceAir: 'Aire Acondicionado',
-    servicePool: 'Piscina',
-    serviceRestaurant: 'Restaurante',
     serviceRoomService: 'Room Service',
     serviceTransfer: 'Transfer Aeropuerto',
     serviceSafe: 'Caja de Seguridad',
@@ -94,7 +92,7 @@ export const es = {
     paymentInfo: 'Efectivo, Tarjetas, Transferencias',
     promotions: 'Promociones',
     promotionInfo: '7+ noches: 15% desc. Reserva anticipada: 10%',
-    contactPhone: '+57 300 123 4567',
+    contactPhone: '+57 314 755 6717',
     available247: 'Disponible 24/7'
   },
   gallery: {
@@ -102,8 +100,8 @@ export const es = {
     subtitle: 'Descubre nuestras instalaciones y habitaciones',
     all: 'Todas',
     rooms: 'Habitaciones',
-    facilities: 'Instalaciones',
-    services: 'Servicios',
+    spaces: 'Espacios del hospedaje',
+    attractions: 'Atracciones de Filandia',
     noImages: 'No hay imágenes en esta categoría',
     ctaTitle: '¿Listo para vivir la experiencia?',
     ctaSubtitle: 'Reserva ahora y disfruta de nuestras increíbles instalaciones',
@@ -283,7 +281,7 @@ export const es = {
     backHome: 'Volver al Inicio',
     myReservations: 'Mis Reservas',
     contactSupport: 'Contactar Soporte',
-    thankYou: '¡Gracias por elegir Hospedaje Sebastian!',
+    thankYou: '¡Gracias por elegir Hospedaje Sebastián!',
     enjoyStay: 'Esperamos que disfrutes tu estadía con nosotros'
   },
   contact: {
@@ -356,7 +354,9 @@ export const es = {
       privacyMiddle: 'y',
       terms: 'términos de uso',
       clearButton: 'Limpiar Formulario',
-      sendButton: 'Enviar Mensaje'
+      sendButton: 'Enviar Mensaje',
+      successTitle: '¡Mensaje enviado exitosamente!',
+      successMessage: 'Recibimos tu mensaje. Revisa tu correo electrónico y espera nuestra respuesta.'
     },
     quickResponse: {
       title: 'Respuesta Rápida',
@@ -405,6 +405,11 @@ export const es = {
     back: 'Volver',
     next: 'Siguiente',
     previous: 'Anterior',
-    selectLanguage: 'Seleccionar Idioma'
+    selectLanguage: 'Seleccionar idioma',
+    step: 'Paso',
+    of: 'de'
+  },
+  languages: {
+    current: 'Idioma actual'
   }
 };

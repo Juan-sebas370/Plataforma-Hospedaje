@@ -1,114 +1,139 @@
-﻿<div class="home-container">
+<div class="home-container">
 
   <!-- ══ HERO ══════════════════════════════════════════════ -->
   <section class="hero">
-    <div class="hero-gallery">
+    <!-- Fondo: la misma foto del frente, desenfocada, para que el texto se lea bien -->
+    <div class="hero-fondo" aria-hidden="true">
       @for (img of images; track img; let i = $index) {
-        <img
-          class="gallery-image"
-          [src]="img"
-          [class.active]="currentImageIndex === i"
-          [attr.aria-hidden]="currentImageIndex !== i"
-          alt="Hospedaje Sebastián Filandia" />
+        <img class="hero-fondo__img" [src]="img" [class.active]="currentImageIndex === i" alt="" />
       }
       <div class="hero-overlay"></div>
     </div>
 
-    <div class="hero-content">
-      <span class="hero-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-        Filandia, Quindío
-      </span>
-      <h1 class="hero-title">Hospedaje Sebastián</h1>
-      <p class="hero-subtitle">Tu hogar lejos de casa, en el corazón de Filandia.<br>Descansa, comparte y disfruta la magia del Paisaje Cultural Cafetero.</p>
-      <div class="hero-actions">
-        <button class="btn-hero-primary" routerLink="/reservas">Reservar ahora</button>
-        <a class="btn-hero-ghost" routerLink="/habitaciones">Explorar habitaciones</a>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <span class="hero-badge">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Filandia, Quindío
+        </span>
+        <h1 class="hero-title">{{ 'home.title' | translate }}</h1>
+        <p class="hero-subtitle">{{ 'home.subtitle' | translate }}</p>
+        <div class="hero-actions">
+          <a class="btn-hero-primary" routerLink="/reservas">
+            {{ 'home.bookNow' | translate }}
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn-hero-ghost" routerLink="/servicios">{{ 'home.viewDetails' | translate }}</a>
+        </div>
       </div>
-    </div>
 
-    <div class="gallery-dots">
-      @for (img of images; track $index) {
-        <button class="dot" [class.active]="currentImageIndex === $index" (click)="goToImage($index)" [attr.aria-label]="'Imagen ' + ($index + 1)"></button>
-      }
+      <!-- Frente: la foto nítida, que cambia sola -->
+      <div class="hero-visor" role="group" aria-roledescription="carrusel" aria-label="Fotos del Hospedaje Sebastián"
+           (mouseenter)="pausaTemporal.set(true)" (mouseleave)="pausaTemporal.set(false)"
+           (focusin)="pausaTemporal.set(true)" (focusout)="pausaTemporal.set(false)">
+        <div class="hero-marco">
+          @for (f of fotosPortada; track f.src; let i = $index) {
+            <img class="hero-foto" [src]="f.src" [style.object-position]="f.encuadre"
+                 [class.active]="currentImageIndex === i"
+                 [alt]="f.alt" [attr.aria-hidden]="currentImageIndex !== i"
+                 [attr.fetchpriority]="i === 0 ? 'high' : null" [attr.loading]="i === 0 ? null : 'lazy'" />
+          }
+          <span class="hero-etiqueta" aria-hidden="true">{{ fotosPortada[currentImageIndex].etiqueta }}</span>
+          <span class="sr-only" aria-live="polite">Foto {{ currentImageIndex + 1 }} de {{ images.length }}: {{ fotosPortada[currentImageIndex].alt }}</span>
+
+          <div class="hero-controles">
+            <button type="button" class="hero-control" (click)="fotoAnterior()" aria-label="Foto anterior">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button type="button" class="hero-control" (click)="alternarCarrusel()"
+                    [attr.aria-label]="carruselActivo() ? 'Pausar el cambio automático de fotos' : 'Reanudar el cambio automático de fotos'">
+              @if (carruselActivo()) {
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg>
+              } @else {
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+              }
+            </button>
+            <button type="button" class="hero-control" (click)="fotoSiguiente()" aria-label="Foto siguiente">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ══ BUSCADOR ═══════════════════════════════════════════ -->
   <section class="buscador-section">
     <div class="buscador-card">
-      <h2 class="buscador-title">Consulta disponibilidad</h2>
+      <h2 class="buscador-title">{{ 'home.search' | translate }}</h2>
       <div class="buscador-grid">
         <div class="buscador-campo">
-          <label>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Llegada
+          <label for="b-entrada">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            {{ 'home.checkIn' | translate }}
           </label>
-          <input type="date" [(ngModel)]="busqueda.fechaEntrada" />
+          <input id="b-entrada" [attr.aria-describedby]="errorBusqueda ? 'b-error' : null" type="date" [(ngModel)]="busqueda.fechaEntrada" [min]="fechaMinima" (ngModelChange)="validarFechas()" />
         </div>
         <div class="buscador-campo">
-          <label>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Salida
+          <label for="b-salida">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            {{ 'home.checkOut' | translate }}
           </label>
-          <input type="date" [(ngModel)]="busqueda.fechaSalida" />
+          <input id="b-salida" [attr.aria-describedby]="errorBusqueda ? 'b-error' : null" type="date" [(ngModel)]="busqueda.fechaSalida" [min]="busqueda.fechaEntrada || fechaMinima" (ngModelChange)="validarFechas()" />
         </div>
         <div class="buscador-campo">
-          <label>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Huéspedes
+          <label for="b-adultos">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Adultos
           </label>
-          <select [(ngModel)]="busqueda.huespedes">
+          <select id="b-adultos" [(ngModel)]="busqueda.adultos">
             @for (n of getRange(20); track n) {
-              <option [value]="n + 1">{{ n + 1 }} {{ n === 0 ? 'persona' : 'personas' }}</option>
+              <option [ngValue]="n + 1">{{ n + 1 }} {{ n === 0 ? 'adulto' : 'adultos' }}</option>
             }
           </select>
         </div>
         <div class="buscador-campo">
-          <label>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <label for="b-ninos">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M17 13a3 3 0 1 0 0-6"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 16a5 5 0 0 1 6 5"/></svg>
+            Niños (4 a 10 años)
+          </label>
+          <select id="b-ninos" [(ngModel)]="busqueda.ninos">
+            @for (n of getRange(11); track n) {
+              <option [ngValue]="n">{{ n }} {{ n === 1 ? 'niño' : 'niños' }}</option>
+            }
+          </select>
+        </div>
+        <div class="buscador-campo">
+          <label for="b-tipo">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Tipo de reserva
           </label>
-          <select [(ngModel)]="busqueda.tipoReserva">
+          <select id="b-tipo" [(ngModel)]="busqueda.tipoReserva">
             <option value="individual">Individual</option>
             <option value="familiar">Familiar</option>
             <option value="pasadia">Pasadía</option>
             <option value="grupal">Grupo de trabajo</option>
           </select>
         </div>
-        <button class="btn-buscar" routerLink="/reservas">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Buscar disponibilidad
+        <button class="btn-buscar" type="button" (click)="buscarDisponibilidad()">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          {{ 'home.search' | translate }}
         </button>
       </div>
 
-      <!-- Info niños: colapsable -->
-      <div class="buscador-ninos">
-        <button class="buscador-ninos-toggle" (click)="mostrarInfoNinos = !mostrarInfoNinos" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Información sobre tarifas infantiles
-          <svg class="toggle-chevron" [class.open]="mostrarInfoNinos" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        @if (mostrarInfoNinos) {
-          <div class="buscador-ninos-info">
-            <div class="ninos-grid">
-              <div><span class="ninos-label">0–3 años</span><span class="ninos-valor">Gratis</span></div>
-              <div><span class="ninos-label">4–10 años</span><span class="ninos-valor">60% del adulto</span></div>
-              <div><span class="ninos-label">11+ años</span><span class="ninos-valor">Tarifa adulto</span></div>
-            </div>
-            <p>Los niños menores de 4 años pueden compartir cama con los padres sin costo adicional.</p>
-          </div>
-        }
-      </div>
+      @if (errorBusqueda) {
+        <p class="buscador-error" id="b-error" role="alert">{{ errorBusqueda }}</p>
+      }
+
     </div>
   </section>
 
   <!-- ══ TIPOS DE RESERVA ═══════════════════════════════════ -->
   <section class="tipos-section">
     <div class="section-header">
-      <span class="section-tag">Modalidades</span>
-      <h2>Elige tu experiencia</h2>
-      <p>Tenemos diferentes opciones para disfrutar Hospedaje Sebastián según lo que necesites</p>
+      <span class="section-tag">{{ 'home.servicesTitle' | translate }}</span>
+      <h2>{{ 'home.featuresTitle' | translate }}</h2>
+      <p>{{ 'home.subtitle' | translate }}</p>
     </div>
     <div class="tipos-grid">
       @for (tipo of tiposReserva; track tipo.id) {
@@ -134,7 +159,7 @@
           <p>{{ tipo.descripcion }}</p>
           <span class="tipo-precio">{{ tipo.precio }}</span>
           <a class="tipo-link" routerLink="/servicios">
-            Ver detalles
+            {{ 'home.viewDetails' | translate }}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
@@ -145,9 +170,9 @@
   <!-- ══ HABITACIONES / PISOS ═══════════════════════════════ -->
   <section class="pisos-section" id="pisos">
     <div class="section-header">
-      <span class="section-tag">Alojamiento</span>
-      <h2>Encuentra el espacio ideal para tu estadía</h2>
-      <p>Dos pisos independientes, reservables por separado o juntos</p>
+      <span class="section-tag">{{ 'home.featuredRooms' | translate }}</span>
+      <h2>{{ 'home.feature1Title' | translate }}</h2>
+      <p>{{ 'home.feature1Desc' | translate }}</p>
     </div>
     <div class="pisos-grid">
       @for (piso of pisos; track piso.nombre) {
@@ -176,7 +201,7 @@
                 <span>Hasta {{ piso.capacidadMax }} huéspedes</span>
               </div>
             </div>
-            <button class="btn-piso" routerLink="/reservas">Ver {{ piso.nombre }}</button>
+            <a class="btn-piso" routerLink="/habitaciones" [queryParams]="{ piso: piso.nombre === 'Piso 1' ? 1 : 2 }">Ver {{ piso.nombre }}</a>
           </div>
         </div>
       }
@@ -196,7 +221,7 @@
             <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg><span>3 camarotes</span></div>
             <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Hasta 20 huéspedes</span></div>
           </div>
-          <button class="btn-piso btn-piso-completo" routerLink="/reservas">Reservar casa completa</button>
+          <a class="btn-piso btn-piso-completo" routerLink="/reservas" [queryParams]="{ tipo: 'familiar', espacio: 'completo' }">Reservar casa completa</a>
         </div>
       </div>
     </div>
@@ -257,10 +282,10 @@
             Espacio de entretenimiento
           </li>
         </ul>
-        <button class="btn-mezanine" routerLink="/servicios">
+        <a class="btn-mezanine" routerLink="/galeria" [queryParams]="{ categoria: 'espacios' }">
           Conocer nuestros espacios
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
+        </a>
       </div>
     </div>
   </section>
@@ -324,6 +349,9 @@
     </div>
   </section>
 
+  <!-- ══ HISTORIA DEL PROYECTO ══════════════════════════════ -->
+  <app-sobre-proyecto />
+
   <!-- ══ PET FRIENDLY ═══════════════════════════════════════ -->
   <section class="pet-section">
     <div class="pet-inner">
@@ -334,13 +362,20 @@
         <span class="section-tag">Mascotas bienvenidas</span>
         <h2>¿Viajas con tu mascota?</h2>
         <p>En Hospedaje Sebastián somos pet friendly. Consulta nuestras habitaciones habilitadas para mascotas y conoce nuestras condiciones.</p>
-        <button class="btn-pet" routerLink="/servicios">
+        <a class="btn-pet" routerLink="/servicios" fragment="mascotas">
           Ver política de mascotas
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
+        </a>
       </div>
     </div>
   </section>
+
+  <!-- ══ GUÍA TURÍSTICA (carrusel) ═════════════════════════ -->
+  @defer (on viewport) {
+    <app-guia-turistica />
+  } @placeholder {
+    <div class="guia-espacio" aria-hidden="true"></div>
+  }
 
   <!-- ══ FILANDIA ═══════════════════════════════════════════ -->
   <section class="filandia-section">
@@ -416,14 +451,14 @@
     <div class="testimonios-grid">
       @for (t of testimonios; track t.nombre) {
         <div class="testimonio-card">
-          <div class="testimonio-estrellas">
+          <div class="testimonio-estrellas" role="img" [attr.aria-label]="t.estrellas + ' de 5 estrellas'">
             @for (s of getRange(t.estrellas); track s) {
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#D1902C" stroke="#D1902C" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#D1902C" stroke="#D1902C" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             }
           </div>
           <p class="testimonio-texto">"{{ t.texto }}"</p>
           <div class="testimonio-autor">
-            <div class="testimonio-avatar">{{ t.nombre.charAt(0) }}</div>
+            <div class="testimonio-avatar" aria-hidden="true">{{ t.nombre.charAt(0) }}</div>
             <div>
               <strong>{{ t.nombre }}</strong>
               <span>{{ t.ciudad }}</span>
@@ -440,8 +475,8 @@
       <h2>Tu próxima experiencia comienza en Filandia</h2>
       <p>Reserva tu estadía y disfruta de un lugar pensado para descansar, compartir y descubrir el corazón del Quindío.</p>
       <div class="cta-actions">
-        <button class="btn-cta-primary" routerLink="/reservas">Reservar ahora</button>
-        <button class="btn-cta-ghost" routerLink="/contacto">Hablar con nosotros</button>
+        <a class="btn-cta-primary" routerLink="/reservas">Reservar ahora</a>
+        <a class="btn-cta-ghost" routerLink="/contacto">Hablar con nosotros</a>
       </div>
     </div>
   </section>

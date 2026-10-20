@@ -1,0 +1,207 @@
+<header class="paso-titulo">
+  <h2>¿Dónde se van a quedar?</h2>
+  <p>
+    Opciones para <strong>{{ plural(estado.personasConCama(), 'persona') }}</strong>
+    @if (estado.config().ninos3) { (los bebés duermen con sus papás) }
+    del {{ formatFecha(estado.config().fechaEntrada) }} al {{ formatFecha(estado.config().fechaSalida) }}.
+  </p>
+</header>
+
+@if (estado.consultando()) {
+  <p class="aviso"><span class="spinner"></span> Revisando qué está libre en tus fechas…</p>
+} @else if (estado.errorDisponibilidad()) {
+  <p class="aviso aviso--error" role="alert">
+    <app-icono name="alert" [size]="16" /> {{ estado.errorDisponibilidad() }}
+    <button type="button" class="link" (click)="estado.consultarDisponibilidad()">Reintentar</button>
+  </p>
+} @else if (estado.disponibilidad() && !estado.disponibilidad()!.disponible && estado.disponibilidad()!.mensaje) {
+  <p class="aviso aviso--dorado"><app-icono name="info" [size]="16" /> {{ estado.disponibilidad()!.mensaje }}</p>
+}
+
+@if (estado.errorHabitaciones()) {
+  <p class="aviso aviso--error" role="alert"><app-icono name="alert" [size]="16" /> {{ estado.errorHabitaciones() }}</p>
+}
+
+<!-- ══ Recomendación para grupos ═════════════════════════════ -->
+@if (estado.esGrupo() && estado.opcionesGrupo().length) {
+  <section class="bloque recomendacion" aria-labelledby="t-rec">
+    <div class="recomendacion__cabecera">
+      <h3 class="bloque-titulo" id="t-rec"><app-icono name="sparkle" [size]="15" /> Mi recomendación para tu grupo</h3>
+    </div>
+
+    <div class="opciones">
+      @for (o of estado.opcionesGrupo(); track o.id) {
+        <article class="opcion"
+                 [class.opcion--recomendada]="o === estado.opcionRecomendada()"
+                 [class.opcion--elegida]="estado.opcionActual() === o.id">
+          @if (o === estado.opcionRecomendada()) {
+            <span class="opcion__cinta"><app-icono name="star" [size]="12" /> Recomendada</span>
+          }
+          <div class="opcion__foto" [style.background-image]="'url(' + o.imagen + ')'"></div>
+          <div class="opcion__cuerpo">
+            <h4>{{ o.titulo }}</h4>
+            <p>{{ o.detalle }}</p>
+            <div class="opcion__etiquetas">
+              <span class="pastilla"><app-icono name="users" [size]="12" /> Hasta {{ o.capacidad }}</span>
+              @for (t of etiquetas(o); track t) { <span class="pastilla pastilla--verde">{{ t }}</span> }
+            </div>
+            <div class="opcion__precio">
+              <strong>{{ formatCOP(o.precio.total) }}</strong>
+              <span>{{ formatCOP(o.precio.porPersona) }} por persona / noche</span>
+            </div>
+            <button type="button" class="btn btn-sm"
+                    [class.btn-primario]="estado.opcionActual() !== o.id"
+                    [class.btn-contorno]="estado.opcionActual() === o.id"
+                    (click)="elegirOpcion(o)">
+              @if (estado.opcionActual() === o.id) { <app-icono name="check" [size]="14" [stroke]="2.5" /> Elegida } @else { Elegir }
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+
+    @if (estado.razonRecomendacion()) {
+      <p class="recomendacion__razon"><app-icono name="info" [size]="15" /> {{ estado.razonRecomendacion() }}</p>
+    }
+  </section>
+}
+
+<!-- ══ A la medida ══════════════════════════════════════════ -->
+<section class="bloque" aria-labelledby="t-medida">
+  <div class="medida__cabecera">
+    <h3 class="bloque-titulo" id="t-medida">
+      <app-icono name="home" [size]="15" />
+      {{ estado.esGrupo() && estado.opcionesGrupo().length ? 'O arma tu reserva a la medida' : 'Elige tu espacio' }}
+    </h3>
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" [attr.aria-selected]="vista() === 'habitaciones'" [class.pestana--activa]="vista() === 'habitaciones'" (click)="vista.set('habitaciones')">
+        <app-icono name="bed" [size]="15" /> Habitaciones
+      </button>
+      <button type="button" role="tab" [attr.aria-selected]="vista() === 'pisos'" [class.pestana--activa]="vista() === 'pisos'" (click)="vista.set('pisos')">
+        <app-icono name="layers" [size]="15" /> Piso completo
+      </button>
+      <button type="button" role="tab" [attr.aria-selected]="vista() === 'casa'" [class.pestana--activa]="vista() === 'casa'" (click)="vista.set('casa')">
+        <app-icono name="home" [size]="15" /> Casa completa
+      </button>
+    </div>
+  </div>
+
+  <!-- Medidor de capacidad -->
+  <div class="capacidad" [class.capacidad--ok]="porcentajeCapacidad() >= 100">
+    <div class="capacidad__texto">
+      <span>Camas para <strong>{{ estado.capacidadElegida() }}</strong> de {{ plural(estado.personasConCama(), 'persona') }}</span>
+      @if (porcentajeCapacidad() >= 100) {
+        <span class="capacidad__ok"><app-icono name="check" [size]="14" [stroke]="2.5" /> Todos tienen dónde dormir</span>
+      }
+    </div>
+    <div class="capacidad__barra"><div [style.width.%]="porcentajeCapacidad()"></div></div>
+  </div>
+
+  @switch (vista()) {
+    @case ('habitaciones') {
+      @if (estado.cargandoHabitaciones()) {
+        <p class="aviso"><span class="spinner"></span> Cargando habitaciones…</p>
+      }
+      @for (grupo of habitacionesPorPiso(); track grupo.piso) {
+        <h4 class="piso-titulo">Piso {{ grupo.piso }}</h4>
+        <div class="habitaciones">
+          @for (h of grupo.habitaciones; track h.id) {
+            <article class="hab" [class.hab--elegida]="elegida(h)" [class.hab--ocupada]="estado.estaOcupada(h.id)">
+              <button type="button" class="hab__foto" (click)="detalle.set(h)">
+                <span class="sr-only">Ver fotos y detalles de la {{ h.nombre }}</span>
+                <img [src]="h.imagenes[0]" [alt]="h.nombre" loading="lazy" />
+                @if (h.imagenes.length > 1) {
+                  <span class="hab__fotos"><app-icono name="image" [size]="12" /> {{ h.imagenes.length }}</span>
+                }
+                @if (estado.estaOcupada(h.id)) { <span class="hab__ocupada">No disponible</span> }
+                @else if (h.destacado) { <span class="hab__destacado">{{ h.destacado }}</span> }
+              </button>
+              <div class="hab__cuerpo">
+                <div class="hab__cabecera">
+                  <h5>{{ h.nombre }}</h5>
+                </div>
+                <p>{{ h.resumen }}</p>
+                <div class="hab__chips">
+                  <span><app-icono name="users" [size]="13" /> {{ h.capacidad }}</span>
+                  <span><app-icono name="bed" [size]="13" /> {{ h.camas }}</span>
+                  <span [class.chip--privado]="h.banoPrivado"><app-icono name="bath" [size]="13" /> {{ h.banoPrivado ? 'Baño privado' : 'Baño compartido' }}</span>
+                </div>
+                <div class="hab__acciones">
+                  <button type="button" class="link" (click)="detalle.set(h)"><app-icono name="image" [size]="13" /> Ver detalles</button>
+                  <button type="button" class="btn btn-sm"
+                          [class.btn-primario]="!elegida(h)" [class.btn-contorno]="elegida(h)"
+                          [disabled]="estado.estaOcupada(h.id)"
+                          [attr.aria-pressed]="elegida(h)"
+                          (click)="estado.alternarHabitacion(h.id)">
+                    @if (elegida(h)) { <app-icono name="check" [size]="14" [stroke]="2.5" /> Elegida } @else { <app-icono name="plus" [size]="14" [stroke]="2.5" /> Agregar }
+                  </button>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    }
+
+    @case ('pisos') {
+      <div class="espacios">
+        @for (e of pisos; track e.id) {
+          <ng-container *ngTemplateOutlet="tarjetaEspacio; context: { $implicit: e }" />
+        }
+      </div>
+    }
+
+    @case ('casa') {
+      <div class="espacios espacios--uno">
+        <ng-container *ngTemplateOutlet="tarjetaEspacio; context: { $implicit: casa }" />
+      </div>
+    }
+  }
+</section>
+
+<ng-template #tarjetaEspacio let-e>
+  <article class="espacio"
+           [class.espacio--elegido]="espacioElegido(e.id)"
+           [class.espacio--ocupado]="estado.espacioOcupado(e.id)">
+    <div class="espacio__foto" [style.background-image]="'url(' + e.imagen + ')'">
+      @if (estado.espacioOcupado(e.id)) { <span class="hab__ocupada">No disponible en tus fechas</span> }
+    </div>
+    <div class="espacio__cuerpo">
+      <div class="hab__cabecera">
+        <h5>{{ e.nombre }}</h5>
+        <span class="pastilla pastilla--azul"><app-icono name="users" [size]="12" /> Hasta {{ e.capacidadMax }}</span>
+      </div>
+      <p class="espacio__sub">{{ e.subtitulo }} · {{ e.habitaciones }}</p>
+      <p class="espacio__camas"><app-icono name="bed" [size]="13" /> {{ e.camas }}</p>
+      <ul class="espacio__ventajas">
+        @for (v of e.ventajas; track v) { <li><app-icono name="check" [size]="13" [stroke]="2.5" /> {{ v }}</li> }
+      </ul>
+      <div class="espacio__pie">
+        <div class="opcion__precio">
+          @if (estado.config().fechaEntrada) {
+            <strong>{{ formatCOP(estado.precioDeEspacio(e.id).total) }}</strong>
+            <span>para tu grupo · {{ formatCOP(estado.precioDeEspacio(e.id).porPersona) }} por persona / noche</span>
+          }
+        </div>
+        <button type="button" class="btn btn-sm"
+                [class.btn-primario]="!espacioElegido(e.id)" [class.btn-contorno]="espacioElegido(e.id)"
+                [disabled]="estado.espacioOcupado(e.id)"
+                (click)="estado.elegirEspacio(e.id)">
+          @if (espacioElegido(e.id)) { <app-icono name="check" [size]="14" [stroke]="2.5" /> Elegido } @else { Elegir {{ e.nombre.toLowerCase() }} }
+        </button>
+      </div>
+      @if (capacidadInsuficiente(e.id) && !estado.espacioOcupado(e.id)) {
+        <p class="aviso aviso--dorado espacio__aviso"><app-icono name="info" [size]="14" /> Tiene camas para {{ e.capacidadMax }}; tu grupo es de {{ estado.personasConCama() }}. Puedes sumarle habitaciones del otro piso.</p>
+      }
+    </div>
+  </article>
+</ng-template>
+
+@if (detalle(); as h) {
+  <app-habitacion-modal
+    [habitacion]="h"
+    [seleccionada]="elegida(h)"
+    [ocupada]="estado.estaOcupada(h.id)"
+    (alternar)="estado.alternarHabitacion(h.id)"
+    (cerrar)="detalle.set(null)" />
+}

@@ -16,8 +16,10 @@ public class Pago {
     @JoinColumn(name = "reserva_id", nullable = false)
     private Reserva reserva;
     
+    // Muchas reservas son de huéspedes sin cuenta (no requieren login para
+    // reservar), así que no siempre hay un Usuario asociado al pago.
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
     
     @ManyToOne
@@ -46,9 +48,11 @@ public class Pago {
     private LocalDateTime fechaModificacion;
     
     // Constructores
+    // Sin estado por defecto: este constructor también lo usa Jackson al leer
+    // ediciones parciales, y un "pendiente" implícito pisaría el estado real.
+    // Quien crea un pago (PagoController, PagoWompiService) fija el estado.
     public Pago() {
         this.fechaCreacion = LocalDateTime.now();
-        this.estado = "pendiente";
     }
     
     // Getters and Setters

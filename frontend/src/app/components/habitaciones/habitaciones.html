@@ -7,6 +7,28 @@
     <p>Dos pisos independientes, 6 habitaciones, para grupos de 2 a 20 personas</p>
   </section>
 
+  @if (tieneBusqueda) {
+    <section class="busqueda-resumen">
+      <strong>Disponibilidad consultada</strong>
+      <span>{{ busqueda.fechaEntrada }} → {{ busqueda.fechaSalida }}</span>
+      <span>{{ busqueda.adultos }} adultos · {{ busqueda.ninos3 + busqueda.ninos10 + busqueda.ninos11 }} niños</span>
+      @if (busqueda.tipoReserva) { <span>Tipo: {{ busqueda.tipoReserva }}</span> }
+    </section>
+    @if (recomendacion) {
+      <p class="recomendacion-hospedaje">{{ recomendacion }}</p>
+    }
+    @if (alternativasEspacio.length > 0) {
+      <section class="alternativas-resumen">
+        <strong>Alternativas disponibles para tu grupo</strong>
+        <div class="alternativas-lista">
+          @for (alternativa of alternativasEspacio; track alternativa.id) {
+            <span>{{ alternativa.nombre }} · hasta {{ alternativa.capacidad }} personas · {{ formatearPrecio(alternativa.precio) }}/noche</span>
+          }
+        </div>
+      </section>
+    }
+  }
+
   <!-- ══ BÚSQUEDA + FILTROS ══════════════════════════════════ -->
   <section class="controles-section">
     <div class="controles-inner">
@@ -32,7 +54,7 @@
       </div>
     }
 
-    @if (!cargando && habitacionesFiltradas.length === 0) {
+    @if (!cargando && habitacionesFiltradas.length === 0 && habitacionesNoDisponibles.length === 0) {
       <div class="no-resultados">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8DCCB" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <p>No se encontraron habitaciones</p>
@@ -40,12 +62,13 @@
       </div>
     }
 
-    @for (hab of habitacionesFiltradas; track hab.id) {
+    <h2 class="sr-only">Lista de habitaciones</h2>
+      @for (hab of habitacionesFiltradas; track hab.id) {
       <article class="hab-card" [class.hab-card--piso2]="hab.piso === 2">
 
         <!-- Imagen -->
-        <div class="hab-card__imagen"
-             [style.backgroundImage]="'url(' + hab.imagenes[0] + ')'">
+           <div class="hab-card__imagen"
+             [style.backgroundImage]="'url(' + imagenPrincipal(hab) + ')'">
           <span class="piso-tag">Piso {{ hab.piso }} · Hab. {{ hab.numero }}</span>
           @if (hab.imagenes.length > 1) {
             <span class="fotos-tag">
@@ -102,14 +125,48 @@
               <strong>{{ formatearPrecio(hab.precioNoche) }}</strong>
               <span class="precio-noche">/ noche</span>
             </div>
-            <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">
-              Ver detalle
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
+            <div class="hab-card__actions">
+              <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">
+                Ver detalle
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+              <button class="btn-reservar-habitacion" (click)="reservarHabitacion(hab)">
+                Reservar
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
           </div>
         </div>
 
       </article>
+    }
+
+    @if (!cargando && habitacionesNoDisponibles.length > 0) {
+      <div class="no-disponibles-heading">
+        <h2>Otras opciones</h2>
+        <p>No disponibles para los criterios seleccionados</p>
+      </div>
+      @for (hab of habitacionesNoDisponibles; track hab.id) {
+        <article class="hab-card hab-card--no-disponible">
+          <div class="hab-card__imagen" [style.backgroundImage]="'url(' + imagenPrincipal(hab) + ')'">
+            <span class="piso-tag">Piso {{ hab.piso }} · Hab. {{ hab.numero }}</span>
+            <span class="estado-no-disponible">No disponible</span>
+          </div>
+          <div class="hab-card__body">
+            <div class="hab-card__top">
+              <div>
+                <h3>Habitación {{ hab.numero }}</h3>
+                <p class="hab-sub">{{ tipoCama(hab.tipo) }} · Capacidad {{ hab.capacidad }}</p>
+              </div>
+            </div>
+            <p class="hab-desc">{{ motivoNoDisponible(hab) }}</p>
+            <div class="hab-card__footer">
+              <span>Disponible con otras fechas o grupo</span>
+              <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">Ver detalle</button>
+            </div>
+          </div>
+        </article>
+      }
     }
   </section>
 
@@ -120,7 +177,7 @@
 
         <!-- Galería de imágenes -->
         <div class="modal-galeria">
-          <img [src]="habitacionSeleccionada.imagenes[imagenActivaIdx]"
+          <img [src]="habitacionSeleccionada.imagenes[imagenActivaIdx] || imagenPrincipal(habitacionSeleccionada)"
                [alt]="'Habitación ' + habitacionSeleccionada.numero" />
           @if (habitacionSeleccionada.imagenes.length > 1) {
             <div class="galeria-dots">
@@ -179,7 +236,7 @@
 
           <!-- Servicios -->
           <div class="modal-servicios">
-            <h4>Servicios incluidos</h4>
+            <h3>Servicios incluidos</h3>
             <ul class="servicios-list">
               @for (s of habitacionSeleccionada.servicios; track $index) {
                 <li>
@@ -193,7 +250,7 @@
           <!-- Acciones -->
           <div class="modal-actions">
             <button class="btn-modal-cerrar" (click)="cerrarDetalle()">Volver</button>
-            <button class="btn-modal-reservar" routerLink="/reservas">
+            <button class="btn-modal-reservar" (click)="reservarHabitacion(habitacionSeleccionada)">
               Reservar esta habitación
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
@@ -204,6 +261,7 @@
   }
 
   <!-- ══ RESUMEN POR PISO ════════════════════════════════════ -->
+  @if (!tieneBusqueda || esGrupoGrande) {
   <section class="pisos-section">
     <div class="section-header">
       <span class="section-tag">Distribución</span>
@@ -256,7 +314,14 @@
             }
           </div>
 
-          <button class="btn-reservar-piso" routerLink="/reservas">Reservar {{ piso.titulo }}</button>
+          @if (esAlternativaDisponible('piso' + piso.piso)) {
+            <span class="alternativa-badge">Recomendado para tu búsqueda</span>
+          }
+          <button class="btn-reservar-piso"
+                  [disabled]="tieneBusqueda && esGrupoGrande && !esAlternativaDisponible('piso' + piso.piso)"
+                  (click)="reservarEspacio('piso' + piso.piso)">
+            Reservar {{ piso.titulo }}
+          </button>
         </div>
       }
 
@@ -289,10 +354,18 @@
             <span class="metric-label">Camarotes</span>
           </div>
         </div>
-        <button class="btn-reservar-piso btn-reservar-piso--gold" routerLink="/reservas">Reservar casa completa</button>
+        @if (esAlternativaDisponible('completo')) {
+          <span class="alternativa-badge alternativa-badge--gold">Recomendado para tu búsqueda</span>
+        }
+        <button class="btn-reservar-piso btn-reservar-piso--gold"
+                [disabled]="tieneBusqueda && esGrupoGrande && !esAlternativaDisponible('completo')"
+                (click)="reservarEspacio('completo')">
+          Reservar casa completa
+        </button>
       </div>
     </div>
   </section>
+  }
 
   <!-- ══ SERVICIOS GENERALES ═════════════════════════════════ -->
   <section class="servicios-generales-section">
@@ -306,42 +379,42 @@
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
         </div>
-        <h4>WiFi Gratuito</h4>
+        <h3>WiFi Gratuito</h3>
         <p>Disponible en todo el espacio</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6"/><path d="M6.34 7.34a8 8 0 1 0 11.31 0"/></svg>
         </div>
-        <h4>Agua Caliente</h4>
+        <h3>Agua Caliente</h3>
         <p>En cada baño, disponible 24 h</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
         </div>
-        <h4>Cocina Equipada</h4>
+        <h3>Cocina Equipada</h3>
         <p>Para preparar tus comidas</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M6 7h.01M10 7h.01"/></svg>
         </div>
-        <h4>Lavandería</h4>
+        <h3>Lavandería</h3>
         <p>Servicio disponible bajo pedido</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
         </div>
-        <h4>TV en Sala de Estar</h4>
+        <h3>TV en Sala de Estar</h3>
         <p>Sala común con televisor</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         </div>
-        <h4>Lencería Completa</h4>
+        <h3>Lencería Completa</h3>
         <p>Toallas, almohadas, sábanas y cobijas</p>
       </div>
     </div>
@@ -352,7 +425,7 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/><rect x="2" y="6" width="20" height="12" rx="3"/></svg>
       </div>
       <div>
-        <h4>Mezanine — Sala de Juegos</h4>
+        <h3>Mezanine — Sala de Juegos</h3>
         <p>Sala de juegos con varios juegos de mesa y mesa de ping pong para uso de todos los huéspedes.</p>
       </div>
     </div>

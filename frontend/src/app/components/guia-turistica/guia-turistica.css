@@ -1,0 +1,140 @@
+:host { display: block; }
+
+.guia {
+  padding: 4.5rem 0 4rem;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+.guia__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .9rem;
+  padding: 0 1.25rem;
+  margin-bottom: 2rem;
+}
+.guia__cabecera h2 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  line-height: 1.2;
+  color: #0A3D6D;
+  text-align: center;
+}
+
+/* Botón de pausa discreto junto al título */
+.pausa {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #D6CBB9;
+  background: #fff;
+  color: #0A3D6D;
+  display: grid;
+  place-items: center;
+  transition: background .2s, border-color .2s;
+}
+.pausa:hover { background: #EAF2FA; border-color: #0E5A9C; }
+
+/* ── Cinta continua ─────────────────────────────────────── */
+.cinta {
+  /* Desvanecido suave en los bordes */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+.pista {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  margin: 0;
+  padding: .5rem 0 1rem;
+  list-style: none;
+}
+.pista--animada { animation: desfile var(--duracion, 90s) linear infinite; }
+/* Se detiene con el mouse o el foco del teclado encima */
+.cinta:hover .pista,
+.cinta:focus-within .pista { animation-play-state: paused; }
+
+/* Quieta (pausa o "reducir movimiento"): se recorre deslizando */
+.cinta--quieta {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  padding: 0 1.25rem;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.cinta--quieta .lugar { scroll-snap-align: start; }
+
+@keyframes desfile {
+  from { transform: translateX(0); }
+  /* La pista tiene los lugares dos veces: al mover la mitad, empalma sin corte */
+  to { transform: translateX(calc(-50% - .625rem)); }
+}
+
+.lugar a {
+  position: relative;
+  display: block;
+  width: clamp(240px, 26vw, 340px);
+  aspect-ratio: 4 / 5;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #EFE7DA;
+  box-shadow: 0 12px 30px rgba(10, 30, 50, .14);
+}
+.lugar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s ease;
+}
+.lugar a:hover img,
+.lugar a:focus-visible img { transform: scale(1.06); }
+.lugar a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(5, 25, 45, .82) 100%);
+}
+.lugar__nombre {
+  position: absolute;
+  z-index: 1;
+  left: 1.1rem;
+  right: 1.1rem;
+  bottom: 1rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+}
+
+.guia__pie { text-align: center; margin-top: 1.75rem; padding: 0 1.25rem; }
+.guia__enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 48px;
+  padding: .75rem 1.6rem;
+  border-radius: 999px;
+  border: 1.5px solid #0A3D6D;
+  color: #0A3D6D;
+  font-weight: 700;
+  font-size: .95rem;
+  transition: background .2s, color .2s;
+}
+.guia__enlace:hover { background: #0A3D6D; color: #fff; }
+
+@media (max-width: 560px) {
+  .guia { padding: 3.25rem 0 3rem; }
+  .pista { gap: .9rem; }
+  .lugar a { width: 72vw; border-radius: 18px; }
+  @keyframes desfile {
+    to { transform: translateX(calc(-50% - .45rem)); }
+  }
+}

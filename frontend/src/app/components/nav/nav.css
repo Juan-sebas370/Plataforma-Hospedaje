@@ -1,20 +1,38 @@
-﻿/* ────────────────────────────────────────────────────────────────
+/* ────────────────────────────────────────────────────────────────
    NAVBAR STYLES - Multi-language Navigation Component
    ──────────────────────────────────────────────────────────────── */
 
 /* ── MAIN NAVBAR CONTAINER ── */
 .navbar {
+  /* Los cortes de la barra se miden en rem con container queries: así cambian
+     tanto por el ancho de la pantalla como por el tamaño de texto que elija la
+     persona (Centro de accesibilidad o ajustes del navegador). */
+  container: barra / inline-size;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
   box-shadow: 0 4px 30px rgba(14, 90, 156, 0.35);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: box-shadow .35s ease, border-color .35s ease;
 }
+/* El azul va en una capa propia para poder desvanecerlo (un degradado no se anima) */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #0E5A9C 0%, #0A3D6D 100%);
+  transition: opacity .35s ease;
+}
+
+/* Inicio, arriba del todo: sin fondo, se ve la foto desenfocada de la portada */
+.navbar--transparente {
+  box-shadow: none;
+  border-bottom-color: transparent;
+}
+.navbar--transparente::before { opacity: 0; }
 
 /* ── NAV CONTAINER ── */
 .nav-container {
@@ -22,7 +40,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.8rem 2.5rem;
-  max-width: 1400px;
+  max-width: 87.5rem;
   margin: 0 auto;
   width: 100%;
   gap: 2rem;
@@ -211,7 +229,8 @@
    MOBILE & TABLET RESPONSIVE STYLES
    ──────────────────────────────────────────────────────────────── */
 
-@media (max-width: 1024px) {
+/* Modo compacto: sin íconos y con menos espacio entre enlaces */
+@container barra (max-width: 88rem) {
   .nav-container {
     padding: 0.8rem 1.5rem;
     gap: 1.5rem;
@@ -227,7 +246,7 @@
   }
 
   .nav-icon {
-    font-size: 1.1rem;
+    display: none;
   }
 
   .brand-text {
@@ -235,7 +254,8 @@
   }
 }
 
-@media (max-width: 768px) {
+/* Menú hamburguesa: cuando los enlaces ya no caben en una línea */
+@container barra (max-width: 76rem) {
   .nav-container {
     padding: 0.8rem 1rem;
     gap: 1rem;
@@ -257,8 +277,8 @@
 
   /* Mobile Menu Styles */
   .nav-links {
-    position: fixed;
-    top: 64px;
+    position: absolute;
+    top: 100%;
     left: 0;
     right: 0;
     flex-direction: column;
@@ -271,10 +291,14 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     z-index: 99;
+    visibility: hidden;
+    transition: max-height .3s ease, opacity .3s ease, visibility 0s linear .3s;
   }
 
   /* Show menu when active */
   .nav-links.active {
+    visibility: visible;
+    transition: max-height .3s ease, opacity .3s ease, visibility 0s;
     max-height: 500px;
     opacity: 1;
   }
@@ -302,6 +326,7 @@
   }
 
   .nav-icon {
+    display: inline-block;
     font-size: 1.5rem;
   }
 

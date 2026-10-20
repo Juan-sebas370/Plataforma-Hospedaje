@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../shared/translate.pipe';
@@ -28,17 +28,23 @@ export class Contacto {
 
   estadoEnvio: EstadoEnvio = 'idle';
   errorMensaje = '';
+  private solicitudPendiente = false;
 
-  constructor(private contactoService: ContactoService) {}
+  constructor(private contactoService: ContactoService, private cdr: ChangeDetectorRef) {}
 
   // ── Submit ────────────────────────────────────────────────
   enviarFormulario(): void {
+    if (this.solicitudPendiente) {
+      return;
+    }
+
     if (!this.form.politica) {
       this.errorMensaje = 'Debes aceptar la política de privacidad para continuar.';
       return;
     }
 
-    this.estadoEnvio  = 'enviando';
+    this.solicitudPendiente = true;
+    this.estadoEnvio  = 'ok';
     this.errorMensaje = '';
 
     // Combina código de país + número antes de enviar
@@ -53,15 +59,24 @@ export class Contacto {
       categoria: this.form.asunto,   // usa el valor del select como categoría
     };
 
+    // Confirmación optimista: la petición continúa en segundo plano. Se guarda
+    // una copia para devolverle a la persona lo que escribió si el envío falla.
+    const escrito = { ...this.form };
+    this.limpiarFormulario();
+
     this.contactoService.enviar(payload).subscribe({
       next: () => {
-        this.estadoEnvio = 'ok';
-        this.limpiarFormulario();
+        this.solicitudPendiente = false;
+        // La app es zoneless: sin esto la vista no se actualiza al llegar la respuesta.
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.solicitudPendiente = false;
+        this.form = escrito;
         this.estadoEnvio  = 'error';
         this.errorMensaje = err?.error?.message
           ?? 'Ocurrió un error al enviar el mensaje. Por favor intenta de nuevo.';
+        this.cdr.detectChanges();
       },
     });
   }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../shared/translate.pipe';
 
@@ -19,91 +19,113 @@ interface GaleriaItem {
 })
 export class Galeria {
   categoriaSeleccionada: string = 'todas';
+
+  constructor() {
+    // Desde "Conocer nuestros espacios" del inicio: llega con la categoría ya elegida.
+    const categoria = inject(ActivatedRoute).snapshot.queryParamMap.get('categoria');
+    if (categoria && ['habitaciones', 'espacios', 'atracciones'].includes(categoria)) {
+      this.categoriaSeleccionada = categoria;
+    }
+  }
   
   imagenes: GaleriaItem[] = [
     {
       id: 1,
-      titulo: 'Suite Ejecutiva',
-      categoria: 'habitaciones',
-      imagen: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800',
-      descripcion: 'Nuestra suite más lujosa con vista panorámica'
+      titulo: 'Casa',
+      categoria: 'espacios',
+      imagen: 'assets/galeria/fachada.jpg',
+      descripcion: 'Espacio común para compartir y descansar'
     },
     {
       id: 2,
-      titulo: 'Habitación Doble',
+      titulo: 'Habitación 101',
       categoria: 'habitaciones',
-      imagen: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800',
-      descripcion: 'Espaciosa habitación con dos camas'
+      imagen: 'assets/habitaciones/piso1/hab101.jpg',
+      descripcion: 'Habitación del primer piso'
     },
     {
       id: 3,
-      titulo: 'Habitación Individual',
+      titulo: 'Habitación 102',
       categoria: 'habitaciones',
-      imagen: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800',
-      descripcion: 'Perfecta para viajeros de negocio'
+      imagen: 'assets/habitaciones/piso1/hab102.jpg',
+      descripcion: 'Habitación del primer piso'
     },
     {
       id: 4,
-      titulo: 'Recepción',
-      categoria: 'instalaciones',
-      imagen: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800',
-      descripcion: 'Atención 24/7 para nuestros huéspedes'
+      titulo: 'Habitación 103',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso1/hab103.jpg',
+      descripcion: 'Habitación del primer piso'
     },
     {
       id: 5,
-      titulo: 'Restaurant',
-      categoria: 'servicios',
-      imagen: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
-      descripcion: 'Gastronomía local e internacional'
+      titulo: 'Habitación 201',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab201.jpeg',
+      descripcion: 'Habitación del segundo piso'
     },
     {
       id: 6,
-      titulo: 'Piscina',
-      categoria: 'instalaciones',
-      imagen: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800',
-      descripcion: 'Área de piscina climatizada'
+      titulo: 'Habitación 202',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab202.jpeg',
+      descripcion: 'Habitación del segundo piso'
     },
     {
       id: 7,
-      titulo: 'Zona de Desayuno',
-      categoria: 'servicios',
-      imagen: 'https://images.unsplash.com/photo-1525610553991-2bede1a236e2?w=800',
-      descripcion: 'Buffet de desayuno continental'
+      titulo: 'Habitación 203',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab203.jpg',
+      descripcion: 'Habitación del segundo piso'
     },
     {
       id: 8,
-      titulo: 'Gimnasio',
-      categoria: 'instalaciones',
-      imagen: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800',
-      descripcion: 'Equipo de ejercicio moderno'
+      titulo: 'Habitación 204',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab204.jpg',
+      descripcion: 'Habitación del segundo piso'
     },
     {
       id: 9,
-      titulo: 'Sala de Conferencias',
-      categoria: 'servicios',
-      imagen: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
-      descripcion: 'Espacios para eventos y reuniones'
+      titulo: 'Sala de estar',
+      categoria: 'espacios',
+      imagen: 'assets/galeria/sala-estar.jpg',
+      descripcion: 'Espacio común para compartir y descansar'
     },
     {
       id: 10,
-      titulo: 'Baño de Lujo',
-      categoria: 'habitaciones',
-      imagen: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800',
-      descripcion: 'Baños equipados con amenities premium'
+      titulo: 'Mezanine',
+      categoria: 'espacios',
+      imagen: 'assets/habitaciones/espacios/mezanine.png',
+      descripcion: 'Espacio común para compartir y descansar'
     },
     {
       id: 11,
-      titulo: 'Vista Nocturna',
-      categoria: 'instalaciones',
-      imagen: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
-      descripcion: 'Vista del hotel iluminado por la noche'
+      titulo: 'Atracciones de Filandia',
+      categoria: 'atracciones',
+      imagen: 'assets/img/servicios/atraccion1.jpg',
+      descripcion: 'Lugares para conocer cerca del hospedaje'
     },
     {
       id: 12,
-      titulo: 'Lobby',
-      categoria: 'instalaciones',
-      imagen: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800',
-      descripcion: 'Espacios comunes elegantes'
+      titulo: 'Calle del Tiempo Detenido',
+      categoria: 'atracciones',
+      imagen: 'assets/img/servicios/atraccion2.jpg',
+      descripcion: 'Arquitectura tradicional y colorida de Filandia'
+    },
+    {
+      id: 13,
+      titulo: 'Miradores de Filandia',
+      categoria: 'atracciones',
+      imagen: 'assets/img/servicios/mirador1.jpg',
+      descripcion: 'Paisajes del Quindío a pocos minutos'
+    },
+    {
+      id: 14,
+      titulo: 'Experiencia cafetera',
+      categoria: 'atracciones',
+      imagen: 'assets/img/servicios/cafe1.jpg',
+      descripcion: 'Una experiencia propia del Eje Cafetero'
     }
   ];
 

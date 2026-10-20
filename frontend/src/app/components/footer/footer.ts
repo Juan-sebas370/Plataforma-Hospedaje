@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateService } from '../../services/translate.service';
-import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule, RouterLink, TranslatePipe],
+  imports: [CommonModule, RouterLink],
   templateUrl: './footer.html',
   styleUrls: ['./footer.css'],
 })
@@ -24,8 +23,14 @@ export class Footer {
   readonly metodosPago = ['Visa', 'Mastercard', 'Nequi', 'Daviplata', 'Bancolombia'];
 
   abrirWhatsApp(): void {
-    window.open('https://wa.me/573001234567?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20hospedaje.', '_blank', 'noopener,noreferrer');
-  }
+  const telefono = '573147556717';
+  const mensaje = 'Hola, estoy interesado en realizar una reserva en Hospedaje Sebastián Filandia.';
+  
+  window.open(
+    `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`,
+    '_blank'
+  );
+}
 
   abrirMaps(): void {
     window.open('https://www.google.com/maps/search/Filandia+Quindio+Colombia', '_blank', 'noopener,noreferrer');

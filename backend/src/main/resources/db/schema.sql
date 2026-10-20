@@ -114,7 +114,7 @@ CREATE INDEX idx_usuario_email ON usuarios (email);
 CREATE TABLE pagos (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   reserva_id BIGINT NOT NULL,
-  usuario_id BIGINT NOT NULL,
+  usuario_id BIGINT NULL, -- las reservas de huéspedes sin cuenta no tienen usuario
   monto DECIMAL(10,2) NOT NULL,
   metodo_pago VARCHAR(50) NOT NULL,
   estado VARCHAR(30) NOT NULL,
@@ -252,10 +252,13 @@ INSERT INTO metodos_pago (nombre, descripcion, tipo, activo, comision_porcentaje
 ('Mastercard', 'Tarjeta de crédito Mastercard', 'tarjeta_credito', 1, 2.5, 0, 'Inmediata'),
 ('American Express', 'Tarjeta American Express', 'tarjeta_credito', 1, 3.0, 0, 'Inmediata');
 
--- Datos iniciales - Credenciales de Integración (VALORES DE PRUEBA)
+-- Datos iniciales - Credenciales de Integración
+-- NUNCA pongas claves reales (ni siquiera de sandbox) en este archivo: se versiona en git.
+-- Configura las claves reales por fuera del repositorio (variables de entorno, secretos del
+-- proveedor de hosting, etc.) y actualiza esta tabla desde ahí, no editando este script.
 INSERT INTO integracion_proveedores (metodo_pago_id, clave_publica, clave_privada, webhook_url, webhook_secreto, ambiente, sincronizado) VALUES
-(1, 'pk_test_visa_2024', 'sk_test_visa_secret_2024', 'https://webhook.example.com/visa', 'visa_webhook_secret_2024', 'sandbox', 1),
-(2, 'pk_test_paypal_2024', 'sk_test_paypal_secret_2024', 'https://webhook.example.com/paypal', 'paypal_webhook_secret_2024', 'sandbox', 1);
+(1, 'REEMPLAZAR_CLAVE_PUBLICA_VISA', 'REEMPLAZAR_CLAVE_PRIVADA_VISA', 'https://webhook.example.com/visa', 'REEMPLAZAR_WEBHOOK_SECRETO_VISA', 'sandbox', 0),
+(2, 'REEMPLAZAR_CLAVE_PUBLICA_PAYPAL', 'REEMPLAZAR_CLAVE_PRIVADA_PAYPAL', 'https://webhook.example.com/paypal', 'REEMPLAZAR_WEBHOOK_SECRETO_PAYPAL', 'sandbox', 0);
 
 -- Tabla de Promociones y Descuentos
 CREATE TABLE promociones (

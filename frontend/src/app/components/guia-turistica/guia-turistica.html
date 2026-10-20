@@ -1,0 +1,40 @@
+<section class="guia" aria-labelledby="guia-titulo">
+  <div class="guia__cabecera">
+    <h2 id="guia-titulo">Cosas para hacer en Filandia</h2>
+    <button type="button" class="pausa" (click)="alternar()"
+            [attr.aria-label]="enMovimiento() ? 'Pausar el desfile de fotos' : 'Reanudar el desfile de fotos'">
+      <app-icono [name]="enMovimiento() ? 'pausa' : 'play'" [size]="14" [stroke]="2.4" />
+    </button>
+  </div>
+
+  <div class="cinta" [class.cinta--quieta]="!enMovimiento()">
+    <ul class="pista" [class.pista--animada]="enMovimiento() && visible()" [style.--duracion]="duracion">
+      @for (l of lugares; track l.id) {
+        <li class="lugar">
+          <a [href]="l.mapsUrl" target="_blank" rel="noopener noreferrer"
+             [attr.aria-label]="l.nombre + ', ver en Google Maps (pestaña nueva)'">
+            <img [src]="l.imagen" alt="" loading="lazy" />
+            <span class="lugar__nombre">{{ l.nombre }}</span>
+          </a>
+        </li>
+      }
+      <!-- Copia para que la cinta se repita sin cortes; oculta a lectores de pantalla y al teclado -->
+      @if (enMovimiento()) {
+        @for (l of lugares; track l.id) {
+          <li class="lugar" aria-hidden="true">
+            <a [href]="l.mapsUrl" target="_blank" rel="noopener noreferrer" tabindex="-1">
+              <img [src]="l.imagen" alt="" loading="lazy" />
+              <span class="lugar__nombre">{{ l.nombre }}</span>
+            </a>
+          </li>
+        }
+      }
+    </ul>
+  </div>
+
+  <div class="guia__pie">
+    <a class="guia__enlace" routerLink="/servicios" fragment="guia">
+      Ver la guía completa <app-icono name="arrow-right" [size]="16" [stroke]="2.2" />
+    </a>
+  </div>
+</section>

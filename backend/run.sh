@@ -36,7 +36,7 @@ menu() {
             ;;
         2)
             echo ""
-            echo "Iniciando aplicación (puerto 3000)..."
+            echo "Iniciando aplicación (puerto 8080 por defecto, ver application.properties)..."
             mvn spring-boot:run
             menu
             ;;

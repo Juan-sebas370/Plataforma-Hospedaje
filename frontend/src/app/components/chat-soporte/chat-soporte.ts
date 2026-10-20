@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -221,6 +221,6 @@ export class ChatSoporte implements OnInit {
    * Obtiene el color del estado
    */
   getColorEstado(): string {
-    return this.conectado ? '#27ae60' : '#e74c3c';
+    return this.conectado ? '#1B7340' : '#B83A2E';
   }
 }

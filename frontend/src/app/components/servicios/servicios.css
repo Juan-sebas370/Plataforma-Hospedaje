@@ -1,4 +1,4 @@
-﻿/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════
    SERVICIOS — estilos principales
    ═══════════════════════════════════════════════════════════ */
 
@@ -581,7 +581,7 @@
   margin: 0;
 }
 
-.pet-politica h4 {
+.pet-politica h3 {
   font-size: 0.85rem;
   font-weight: 700;
   color: #0E5A9C;
@@ -818,7 +818,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.78rem;
-  color: #888;
+  color: #6B6560;
 }
 
 .lugar-maps-btn {
@@ -1146,3 +1146,6 @@
     display: none;
   }
 }
+
+/* Ancla #mascotas: que la barra de navegación fija no tape el título al llegar */
+.seccion-pet { scroll-margin-top: 90px; }

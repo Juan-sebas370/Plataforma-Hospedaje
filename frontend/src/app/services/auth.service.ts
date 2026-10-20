@@ -13,11 +13,20 @@ interface LoginRequest {
 
 interface LoginResponse {
   token: string;
-  user: {
-    id: string;
-    email: string;
-    nombre: string;
-  };
+  tipo: string;
+  id: number;
+  email: string;
+  nombre: string;
+  apellido: string;
+  rol: string;
+}
+
+interface UsuarioResponse {
+  id: number;
+  email: string;
+  nombre: string;
+  apellido: string;
+  rol: string;
 }
 
 interface PasswordResetRequest {
@@ -57,7 +66,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request).pipe(
       tap((response) => {
         this.setToken(response.token);
-        this.setUser(response.user);
+        this.setUser(response);
         this.isAuthenticatedSubject.next(true);
       })
     );
@@ -111,7 +120,15 @@ export class AuthService {
       return null;
     }
     const userData = localStorage.getItem(this.userKey);
-    return userData ? JSON.parse(userData) : null;
+    if (!userData) {
+      return null;
+    }
+    try {
+      return JSON.parse(userData);
+    } catch {
+      localStorage.removeItem(this.userKey);
+      return null;
+    }
   }
 
   /**
@@ -133,14 +150,8 @@ export class AuthService {
   /**
    * Registra un nuevo usuario
    */
-  register(userData: any): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/register`, userData).pipe(
-      tap((response) => {
-        this.setToken(response.token);
-        this.setUser(response.user);
-        this.isAuthenticatedSubject.next(true);
-      })
-    );
+  register(userData: any): Observable<UsuarioResponse> {
+    return this.http.post<UsuarioResponse>(`${this.apiUrl}/register`, userData);
   }
 
   requestPasswordReset(email: string): Observable<any> {

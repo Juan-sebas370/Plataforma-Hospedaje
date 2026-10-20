@@ -1,5 +1,6 @@
 package com.hotelsebasitian.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @JsonIgnore
     private String password;
     private String nombre;
     private String apellido;
@@ -37,7 +39,9 @@ public class Usuario {
     private Boolean activo;
     private LocalDateTime fechaRegistro;
     private LocalDateTime ultimaConexion;
+    @JsonIgnore
     private String resetToken;
+    @JsonIgnore
     private LocalDateTime resetTokenExpiry;
 
 }

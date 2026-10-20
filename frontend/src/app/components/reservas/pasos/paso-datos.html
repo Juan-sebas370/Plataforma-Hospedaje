@@ -1,0 +1,99 @@
+<header class="paso-titulo">
+  <h2>¿A nombre de quién reservamos?</h2>
+  <p>Con estos datos te enviamos la confirmación. Nada más.</p>
+</header>
+
+@if (conSesion) {
+  <p class="aviso aviso--ok sesion"><app-icono name="check" [size]="16" [stroke]="2.5" /> Completamos algunos datos con tu cuenta. Revísalos y agrega lo que falte.</p>
+}
+
+<form class="bloque formulario" (submit)="$event.preventDefault(); estado.siguiente()" novalidate>
+  <fieldset>
+    <legend class="bloque-titulo"><app-icono name="user" [size]="15" /> Responsable de la reserva</legend>
+    <div class="rejilla">
+      <div class="campo" [class.campo--error]="error('nombre')">
+        <label for="f-nombre">Nombre</label>
+        <input id="f-nombre" name="nombre" autocomplete="given-name" placeholder="Ej. Juana"
+               [ngModel]="datos().nombre" (ngModelChange)="set('nombre', $event)" (blur)="tocar('nombre')"
+               [attr.aria-invalid]="!!error('nombre')" aria-describedby="e-nombre" />
+        <span class="campo-error" id="e-nombre">{{ error('nombre') }}</span>
+      </div>
+      <div class="campo" [class.campo--error]="error('apellido')">
+        <label for="f-apellido">Apellido</label>
+        <input id="f-apellido" name="apellido" autocomplete="family-name" placeholder="Ej. Restrepo"
+               [ngModel]="datos().apellido" (ngModelChange)="set('apellido', $event)" (blur)="tocar('apellido')"
+               [attr.aria-invalid]="!!error('apellido')" aria-describedby="e-apellido" />
+        <span class="campo-error" id="e-apellido">{{ error('apellido') }}</span>
+      </div>
+      <div class="campo" [class.campo--error]="error('tipoDocumento')">
+        <label for="f-tipodoc">Tipo de documento</label>
+        <select id="f-tipodoc" name="tipoDocumento"
+                [ngModel]="datos().tipoDocumento" (ngModelChange)="set('tipoDocumento', $event)" (blur)="tocar('tipoDocumento')"
+                [attr.aria-invalid]="!!error('tipoDocumento')" aria-describedby="e-tipodoc">
+          <option value="" disabled>Selecciona…</option>
+          @for (d of documentos; track d.id) { <option [value]="d.id">{{ d.nombre }}</option> }
+        </select>
+        <span class="campo-error" id="e-tipodoc">{{ error('tipoDocumento') }}</span>
+      </div>
+      <div class="campo" [class.campo--error]="error('numeroDocumento')">
+        <label for="f-numdoc">Número de documento</label>
+        <input id="f-numdoc" name="numeroDocumento" inputmode="text" placeholder="Ej. 1094567890"
+               [ngModel]="datos().numeroDocumento" (ngModelChange)="set('numeroDocumento', $event)" (blur)="tocar('numeroDocumento')"
+               [attr.aria-invalid]="!!error('numeroDocumento')" aria-describedby="e-numdoc" />
+        <span class="campo-error" id="e-numdoc">{{ error('numeroDocumento') }}</span>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend class="bloque-titulo"><app-icono name="mail" [size]="15" /> Contacto</legend>
+    <div class="rejilla">
+      <div class="campo campo--ancho" [class.campo--error]="error('email')">
+        <label for="f-email">Correo electrónico</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" placeholder="tucorreo@ejemplo.com"
+               [ngModel]="datos().email" (ngModelChange)="set('email', $event)" (blur)="tocar('email')"
+               [attr.aria-invalid]="!!error('email')" aria-describedby="e-email" />
+        <span class="campo-error" id="e-email">{{ error('email') }}</span>
+      </div>
+      <div class="campo" >
+        <label for="f-pais">País de residencia</label>
+        <select id="f-pais" name="pais" autocomplete="country"
+                [ngModel]="datos().pais" (ngModelChange)="cambiarPais($event)">
+          @for (p of paises; track p.iso) { <option [value]="p.iso">{{ p.nombre }}</option> }
+        </select>
+      </div>
+      <div class="campo" [class.campo--error]="error('telefono')">
+        <label for="f-tel">Celular / WhatsApp</label>
+        <div class="telefono">
+          <select name="codigoPais" aria-label="Indicativo del país" autocomplete="tel-country-code"
+                  [ngModel]="datos().codigoPais" (ngModelChange)="set('codigoPais', $event)">
+            @for (p of indicativos; track p.iso) { <option [value]="p.codigo">{{ p.iso }} {{ p.codigo }}</option> }
+          </select>
+          <input id="f-tel" name="telefono" type="tel" autocomplete="tel-national" placeholder="300 123 4567"
+                 [ngModel]="datos().telefono" (ngModelChange)="set('telefono', $event)" (blur)="tocar('telefono')"
+                 [attr.aria-invalid]="!!error('telefono')" aria-describedby="e-tel" />
+        </div>
+        <span class="campo-error" id="e-tel">{{ error('telefono') }}</span>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="notas">
+    @if (verNotas()) {
+      <div class="campo">
+        <label for="f-notas">Solicitudes especiales <span class="opcional">(opcional)</span></label>
+        <textarea id="f-notas" name="observaciones" rows="3"
+                  placeholder="Ej. llegamos tarde, traemos un bebé y necesitamos cuna, celebramos un cumpleaños…"
+                  [ngModel]="datos().observaciones" (ngModelChange)="set('observaciones', $event)"></textarea>
+      </div>
+    } @else {
+      <button type="button" class="link" (click)="verNotas.set(true)">
+        <app-icono name="plus" [size]="14" [stroke]="2.5" /> Agregar una solicitud especial (llegada tarde, cuna, celebración…)
+      </button>
+    }
+  </div>
+
+  <button type="submit" hidden></button>
+</form>
+
+<p class="privacidad"><app-icono name="lock" [size]="13" /> Tus datos solo se usan para gestionar tu reserva y se guardan temporalmente en este navegador mientras reservas.</p>

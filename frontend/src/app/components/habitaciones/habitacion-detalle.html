@@ -7,7 +7,7 @@
   <div class="detalle-header">
     <div>
       <span class="habitacion-label">Habitación {{ habitacion.numero }}</span>
-      <h2>{{ habitacion.tipo }} · {{ habitacion.piso }}° piso</h2>
+      <h1>{{ habitacion.tipo }} · {{ habitacion.piso }}° piso</h1>
       <p class="detalle-subtitle">{{ habitacion.capacidad }} {{ habitacion.capacidad === 1 ? 'persona' : 'personas' }} · {{ tipoBano() }}</p>
     </div>
     <div class="detalle-acciones">
@@ -61,7 +61,7 @@
         </div>
 
         <div class="detalle-card">
-          <h3>{{ 'rooms.includedTitle' | translate }}</h3>
+          <h2>{{ 'rooms.includedTitle' | translate }}</h2>
           <ul class="amenities-list">
             <li *ngIf="habitacion.wifi">WiFi ilimitado</li>
             <li *ngIf="habitacion.television">Televisión por cable</li>
@@ -73,12 +73,12 @@
         </div>
 
         <div class="detalle-card descripcion-bloque">
-          <h3>{{ 'rooms.descriptionTitle' | translate }}</h3>
+          <h2>{{ 'rooms.descriptionTitle' | translate }}</h2>
           <p>{{ habitacion.descripcion }}</p>
         </div>
 
         <div class="detalle-card">
-          <h3>{{ 'rooms.beforeBookingTitle' | translate }}</h3>
+          <h2>{{ 'rooms.beforeBookingTitle' | translate }}</h2>
           <ul class="politicas-list">
             <li>{{ 'rooms.policyOne' | translate }}</li>
             <li>{{ 'rooms.policyTwo' | translate }}</li>

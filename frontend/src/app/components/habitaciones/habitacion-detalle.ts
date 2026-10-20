@@ -1,4 +1,4 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HabitacionService, Habitacion } from '../../services/habitacion.service';
@@ -144,6 +144,7 @@ export class HabitacionDetalle implements OnInit {
     private route: ActivatedRoute,
     private habitacionService: HabitacionService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -174,9 +175,13 @@ export class HabitacionDetalle implements OnInit {
 
     this.habitacionService.obtenerPorId(id).subscribe({
       next: (habitacion) => {
-        this.habitacion = habitacion;
-        this.selectedImage = habitacion.imagenes[0] || '';
+        // Las habitaciones creadas en SOGO pueden no traer fotos: se usan las del catálogo.
+        const imagenes = habitacion.imagenes?.length ? habitacion.imagenes : (habitacionEjemplo?.imagenes ?? []);
+        this.habitacion = { ...habitacion, imagenes, servicios: habitacion.servicios ?? habitacionEjemplo?.servicios ?? [] };
+        this.selectedImage = imagenes[0] || '';
         this.cargando = false;
+        // La app es zoneless: sin esto la vista no se actualiza al llegar la respuesta.
+        this.cdr.detectChanges();
       },
       error: () => {
         if (!habitacionEjemplo) {
@@ -184,6 +189,7 @@ export class HabitacionDetalle implements OnInit {
           this.habitacion = null;
         }
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -205,7 +211,7 @@ export class HabitacionDetalle implements OnInit {
     if (!this.habitacion || !this.isBrowser) {
       return;
     }
-    const telefono = '573001234567';
+    const telefono = '573147556717';
     const mensaje = `Hola, quiero reservar la habitación ${this.habitacion.numero}.`;
     window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
   }

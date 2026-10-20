@@ -9,7 +9,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class HealthController {
 
     @GetMapping("/")

@@ -1,4 +1,4 @@
-﻿.contacto-container {
+.contacto-container {
   min-height: 100vh;
   background: linear-gradient(to bottom, #F8F4EE 0%, #E8DCCB 100%);
 }
@@ -185,7 +185,7 @@
 
 .red-social:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
 .red-social.instagram:hover { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: white; }
-.red-social.whatsapp:hover  { background: #25d366; color: white; }
+.red-social.whatsapp:hover  { background: #107C41; color: white; }
 .red-social span { font-size: 0.78rem; text-align: center; }
 
 /* Ubicación Card */
@@ -445,13 +445,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b07020;
+  color: #8A5A12;
   flex-shrink: 0;
 }
 
-.rapida-content h4 { color: #2B2B2B; font-size: 0.92rem; margin-bottom: 0.2rem; }
+.rapida-content h3 { color: #2B2B2B; font-size: 0.92rem; margin-bottom: 0.2rem; }
 .rapida-content p  { color: #555; line-height: 1.5; font-size: 0.85rem; margin: 0; }
-.rapida-content strong { color: #b07020; }
+.rapida-content strong { color: #8A5A12; }
 
 /* FAQ Section */
 .faq-section {
@@ -609,7 +609,7 @@
 }
 
 .whatsapp-link {
-  background: #25D366;
+  background: #107C41;
   color: white;
 }
 
@@ -690,6 +690,16 @@
   background: rgba(39, 174, 96, 0.1);
   border: 1px solid rgba(39, 174, 96, 0.3);
   color: #155724;
+}
+
+.form-feedback--ok span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.form-feedback--ok strong {
+  font-size: 0.95rem;
 }
 
 .form-feedback--error {

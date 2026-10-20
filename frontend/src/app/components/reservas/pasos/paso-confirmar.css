@@ -1,0 +1,92 @@
+.revision {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.revision .bloque + .bloque { margin-top: 0; }
+
+.tarjeta__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .6rem;
+}
+.tarjeta__cabecera .bloque-titulo { margin: 0; }
+
+dl { margin: 0; display: grid; gap: .45rem; }
+dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: .88rem;
+}
+dt { color: var(--gris); }
+dd { margin: 0; font-weight: 600; text-align: right; }
+dd.largo { overflow-wrap: anywhere; }
+dd.gratis { color: var(--verde); }
+
+.notas {
+  margin: .7rem 0 0;
+  padding: .6rem .8rem;
+  background: var(--crema);
+  border-radius: var(--radio-sm);
+  font-size: .82rem;
+  font-style: italic;
+  color: var(--gris);
+}
+
+.espacio { display: flex; gap: .9rem; align-items: center; }
+.espacio img {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: var(--crema);
+}
+.espacio strong { display: block; color: var(--azul-dark); }
+.espacio span { font-size: .82rem; color: var(--gris); }
+
+.precio .total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: .8rem 0 .6rem;
+  padding-top: .8rem;
+  border-top: 1px dashed var(--borde);
+}
+.precio .total span { font-weight: 600; }
+.precio .total strong { font-family: var(--serif); font-size: 1.5rem; color: var(--azul-dark); }
+
+.pago { margin-top: 1rem; }
+.pago__metodos {
+  display: flex;
+  gap: .8rem;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--borde-suave);
+}
+.pago__metodos app-icono { color: var(--verde); flex-shrink: 0; }
+.pago__metodos strong { display: block; }
+.pago__metodos span { font-size: .85rem; color: var(--gris); }
+
+.terminos {
+  display: flex;
+  gap: .7rem;
+  align-items: flex-start;
+  font-size: .9rem;
+  cursor: pointer;
+  padding: .7rem .8rem;
+  border-radius: var(--radio-sm);
+  border: 1.5px solid transparent;
+  transition: border-color .2s, background .2s;
+}
+.terminos input { width: 20px; height: 20px; flex-shrink: 0; margin-top: .1rem; accent-color: var(--azul); cursor: pointer; }
+.terminos a { color: var(--azul); font-weight: 600; text-decoration: underline; }
+.terminos--pendiente { border-color: var(--rojo); background: var(--rojo-suave); }
+.pago .aviso { margin-top: .8rem; }
+
+@media (max-width: 760px) {
+  .revision { grid-template-columns: 1fr; }
+}

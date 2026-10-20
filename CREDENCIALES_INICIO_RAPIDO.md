@@ -33,7 +33,7 @@ Content-Type: application/json
 
 {
   "email": "sebastian@gmail.com",
-  "password": "jiampi2018*"
+  "password": "<PASSWORD_CONFIGURADO>"
 }
 ```
 
@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ```
 Email:       sebastian@gmail.com
-Contraseña:  jiampi2018*
+Contraseña: definir una contraseña local segura
 Nombre:      Juan Sebastián Pérez
 Teléfono:    +57 300 123 4567
 Documento:   CC 1234567890
@@ -67,7 +67,7 @@ curl -X POST http://localhost:3000/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "sebastian@gmail.com",
-    "password": "jiampi2018*"
+    "password": "<PASSWORD_CONFIGURADO>"
   }'
 ```
 

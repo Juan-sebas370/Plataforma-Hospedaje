@@ -2,10 +2,12 @@
  * Configuración global de la aplicación
  */
 
+import { environment } from '../../environments/environment';
+
 export const CONFIG = {
   // URLs
-  API_BASE_URL: 'http://localhost:3000/api',
-  WS_URL: 'ws://localhost:3000/ws',
+  API_BASE_URL: environment.apiUrl,
+  WS_URL: environment.wsUrl,
 
   // Timeouts
   REQUEST_TIMEOUT: 30000, // 30 segundos
@@ -49,15 +51,12 @@ export const CONFIG = {
     'reset-password',
   ],
 
-  // Rutas protegidas
+  // Rutas protegidas (requieren cuenta). Reservar, pagar y confirmar NO
+  // requieren login — el huésped ingresa sus propios datos al reservar.
   PROTECTED_ROUTES: [
     'perfil',
     'cambiar-contrasena',
     'dashboard',
-    'reservas',
-    'confirmacion',
-    'chat-soporte',
-    'pagos',
   ],
 };
 

@@ -1,10 +1,13 @@
 package com.hotelsebasitian.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,6 +78,27 @@ public class Reserva {
     private String tipoDocumento;   // CC, CE, TI, PA, NIT, DNI, RG
     private String numeroDocumento;
     private String observaciones;
+
+    /**
+     * Código secreto que recibe el huésped al crear la reserva. Junto con el id
+     * le permite ver y pagar su reserva sin cuenta; sin él nadie puede leer los
+     * datos personales probando ids consecutivos. Lo genera el servidor.
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "codigo_acceso", length = 64)
+    private String codigoAcceso;
+
+    /**
+     * Código visible de la reserva (RSV-2027-00012), el mismo que muestra y
+     * busca SOGO. Lo asigna el trigger trg_reservas_before_insert de MySQL
+     * (SOGO/database/01b_reparar_reservas.sql); Hibernate lo vuelve a leer
+     * después de insertar. Si no hay trigger queda null y la web usa RSV-<id>,
+     * igual que SOGO.
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Generated(event = EventType.INSERT)
+    @Column(name = "codigo", length = 20, insertable = false, updatable = false)
+    private String codigo;
 
     // ── Auditoría ─────────────────────────────────────────
     private LocalDateTime fechaCreacion;

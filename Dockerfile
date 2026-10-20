@@ -1,6 +1,5 @@
-# Dockerfile para aplicación Angular
+# Dockerfile para el frontend Angular (con SSR)
 # ===================================
-# Configuración para build y run de Hotel Sebastian frontend
 
 # STAGE 1: BUILD
 FROM node:20-alpine AS builder
@@ -11,12 +10,12 @@ WORKDIR /app
 COPY frontend/package*.json ./
 
 # Instalar dependencias
-RUN npm install
+RUN npm ci
 
 # Copiar código fuente
 COPY frontend/ .
 
-# Build para producción
+# Build para producción (genera dist/frontend/browser y dist/frontend/server)
 RUN npm run build -- --configuration production
 
 # STAGE 2: SERVE
@@ -24,18 +23,16 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Instalar http-server para servir archivos estáticos
-RUN npm install -g http-server
+# Copiar solo el build desde el stage anterior
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src/assets ./src/assets
 
-# Copiar archivos built desde stage 1
-COPY --from=builder /app/dist /app/dist
+# El servidor SSR (dist/frontend/server/server.mjs) escucha en la variable de
+# entorno PORT (por defecto 4000 en local) — así funciona igual en Railway,
+# Render, Fly, etc.
+EXPOSE 4000
 
-# Exponer puerto
-EXPOSE 4200
-
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:4200', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+  CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 4000), (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-# Comando para iniciar
-CMD ["http-server", "dist", "-p", "4200", "--cors"]
+CMD ["node", "dist/frontend/server/server.mjs"]

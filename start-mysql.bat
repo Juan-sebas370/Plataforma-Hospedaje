@@ -21,10 +21,9 @@ echo.
 echo Database Info:
 echo   Host: localhost
 echo   Port: 3306
-echo   Database: hospedaje_db
-echo   User: hospedaje_user
-echo   Password: hospedaje_pass
-echo   Root Password: root123
+echo   Database: configurada en docker-compose
+echo   User: configurado en docker-compose
+echo   Password: configurada mediante variables de entorno
 echo.
 echo To stop MySQL: docker-compose down
 echo To view logs: docker-compose logs mysql
