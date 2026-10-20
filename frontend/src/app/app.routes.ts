@@ -35,6 +35,10 @@ export const routes: Routes = [
     path: 'reset-password', title: 'Restablecer contraseña',
     loadComponent: () => import('./components/restablecer-contrasena/restablecer-contrasena').then(m => m.RestablecerContrasena),
   },
+  {
+    path: 'politicas', title: 'Políticas y reglamento',
+    loadComponent: () => import('./components/politicas/politicas').then(m => m.Politicas),
+  },
   { path: 'pagos', title: 'Pago de la reserva', loadComponent: () => import('./components/pagos/pagos').then(m => m.Pagos) },
   { path: '**', redirectTo: '' }
 ];

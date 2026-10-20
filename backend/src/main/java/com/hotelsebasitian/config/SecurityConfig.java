@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/health", "/error").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         // Habitaciones, paquetes y promociones: lectura pública, escritura solo admin
-                        .requestMatchers(HttpMethod.GET, "/habitaciones/**", "/paquetes/**", "/tarifas", "/tarifas/temporadas").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/habitaciones/**", "/paquetes/**", "/tarifas", "/tarifas/temporadas", "/hospedaje").permitAll()
                         // Promociones: el público solo puede validar un código que ya conoce;
                         // el listado y el detalle de los códigos son de administración.
                         .requestMatchers(HttpMethod.GET, "/promociones/validar/**").permitAll()

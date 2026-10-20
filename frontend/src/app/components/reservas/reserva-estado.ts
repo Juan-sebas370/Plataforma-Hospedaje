@@ -83,7 +83,9 @@ export class ReservaEstado {
   readonly espacio = signal<EspacioId>('piso1');
   readonly seleccion = signal<number[]>([]);
   readonly datos = signal<DatosHuesped>({ ...DATOS_VACIOS });
+  /** Casillas del último paso: no se guardan en el borrador, se marcan cada vez. */
   readonly aceptaTerminos = signal(false);
+  readonly autorizaDatos = signal(false);
   /** Pasos ya visitados: permite saltar entre ellos desde el stepper o el resumen. */
   readonly visitados = signal<Set<PasoId>>(new Set(['viaje']));
   /** Paso en el que la persona intentó continuar con algo pendiente (para resaltarlo). */
@@ -600,7 +602,9 @@ export class ReservaEstado {
       case 'viaje': return this.problemaViaje();
       case 'espacio': return this.problemaEspacio();
       case 'datos': return this.problemaDatos();
-      case 'confirmar': return this.aceptaTerminos() ? '' : 'Acepta las políticas de reserva para confirmar.';
+      case 'confirmar':
+        if (!this.aceptaTerminos()) return 'Acepta la Política de reservas y el Reglamento interno para confirmar.';
+        return this.autorizaDatos() ? '' : 'Autoriza el tratamiento de tus datos personales para confirmar.';
     }
   }
 
@@ -680,6 +684,8 @@ export class ReservaEstado {
       tipoDocumento: d.tipoDocumento,
       numeroDocumento: d.numeroDocumento.trim(),
       observaciones: d.observaciones.trim() || undefined,
+      aceptaPoliticas: this.aceptaTerminos(),
+      autorizaDatos: this.autorizaDatos(),
     };
     return this.reservaService.crearReserva(payload).pipe(map(r => ({ id: r.id!, codigo: r.codigoAcceso ?? '' })));
   }

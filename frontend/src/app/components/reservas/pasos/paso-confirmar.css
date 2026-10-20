@@ -83,7 +83,41 @@ dd.gratis { color: var(--verde); }
   transition: border-color .2s, background .2s;
 }
 .terminos input { width: 20px; height: 20px; flex-shrink: 0; margin-top: .1rem; accent-color: var(--azul); cursor: pointer; }
-.terminos a { color: var(--azul); font-weight: 600; text-decoration: underline; }
+.terminos + .terminos, .terminos__error + .terminos { margin-top: .35rem; }
+.terminos__error {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  margin: .3rem 0 0 .8rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--rojo);
+}
+.terminos .enlace {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--azul);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.terminos .enlace:focus-visible { outline: 3px solid var(--dorado, #B87A1F); outline-offset: 2px; border-radius: 3px; }
+
+.politicas {
+  margin-bottom: .8rem;
+  padding: .85rem 1rem;
+  border-radius: var(--radio-sm);
+  background: #F8F4EE;
+  border: 1px solid var(--borde-suave);
+}
+.politicas__titulo { display: flex; align-items: center; gap: .45rem; margin: 0 0 .55rem; font-size: .92rem; color: var(--azul); }
+.politicas__puntos { margin: 0; padding: 0; list-style: none; display: grid; gap: .4rem; }
+.politicas__puntos li { display: flex; gap: .55rem; align-items: flex-start; font-size: .86rem; line-height: 1.45; color: var(--texto, #2B2B2B); }
+.politicas__puntos app-icono { color: var(--azul); flex-shrink: 0; margin-top: .1rem; }
 .terminos--pendiente { border-color: var(--rojo); background: var(--rojo-suave); }
 .pago .aviso { margin-top: .8rem; }
 

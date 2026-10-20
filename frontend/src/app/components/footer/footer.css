@@ -378,3 +378,6 @@
   .footer-body { padding: 1.5rem 0.75rem; }
   .footer-grid { gap: 1.5rem; }
 }
+
+.footer-politicas a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.footer-politicas a:hover { color: #fff; }

@@ -98,12 +98,47 @@
     </div>
   </div>
 
-  <label class="terminos" [class.terminos--pendiente]="estado.intentoFallido() === 'confirmar' && !estado.aceptaTerminos()">
-    <input type="checkbox" [ngModel]="estado.aceptaTerminos()" (ngModelChange)="estado.aceptaTerminos.set($event)" />
-    <span>He leído y acepto las <a href="#" target="_blank" rel="noopener">políticas de reserva</a> y el <a href="#" target="_blank" rel="noopener">reglamento interno</a> del Hospedaje Sebastián.</span>
+  <div class="politicas" aria-labelledby="politicas-titulo">
+    <h4 id="politicas-titulo" class="politicas__titulo"><app-icono name="info" [size]="17" /> Antes de confirmar, ten en cuenta</h4>
+    <ul class="politicas__puntos">
+      @for (p of puntos(); track p.texto) {
+        <li><app-icono [name]="p.icono" [size]="16" /><span>{{ p.texto }}</span></li>
+      }
+    </ul>
+  </div>
+
+  <label class="terminos" [class.terminos--pendiente]="faltaPoliticas()">
+    <input type="checkbox" [ngModel]="estado.aceptaTerminos()" (ngModelChange)="estado.aceptaTerminos.set($event)"
+           [attr.aria-invalid]="faltaPoliticas()" [attr.aria-describedby]="faltaPoliticas() ? 'error-politicas' : null" />
+    <span>
+      He leído y acepto la
+      <button type="button" class="enlace" (click)="abrir('reserva', $event)">Política de reservas y cancelación</button>
+      y el <button type="button" class="enlace" (click)="abrir('reglamento', $event)">Reglamento interno</button>
+      del Hospedaje Sebastián.
+    </span>
   </label>
+  @if (faltaPoliticas()) {
+    <p id="error-politicas" class="terminos__error" role="alert"><app-icono name="alert" [size]="14" /> Marca esta casilla para confirmar tu reserva.</p>
+  }
+
+  <label class="terminos" [class.terminos--pendiente]="faltaDatos()">
+    <input type="checkbox" [ngModel]="estado.autorizaDatos()" (ngModelChange)="estado.autorizaDatos.set($event)"
+           [attr.aria-invalid]="faltaDatos()" [attr.aria-describedby]="faltaDatos() ? 'error-datos' : null" />
+    <span>
+      Autorizo al Hospedaje Sebastián a tratar mis datos personales para gestionar mi reserva, según la
+      <button type="button" class="enlace" (click)="abrir('datos', $event)">Política de tratamiento de datos</button>
+      (Ley 1581 de 2012).
+    </span>
+  </label>
+  @if (faltaDatos()) {
+    <p id="error-datos" class="terminos__error" role="alert"><app-icono name="alert" [size]="14" /> Sin esta autorización no podemos registrar tu reserva.</p>
+  }
 
   @if (estado.errorReserva()) {
     <p class="aviso aviso--error" role="alert"><app-icono name="alert" [size]="16" /> {{ estado.errorReserva() }}</p>
   }
 </section>
+
+@if (politica(); as p) {
+  <app-politica-modal [inicial]="p" (cerrar)="politica.set(null)" />
+}

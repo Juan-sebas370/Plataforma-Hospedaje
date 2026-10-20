@@ -128,6 +128,10 @@ const VER_GALERIA: Accion = {
   ruta: '/galeria',
   etiqueta: { es: 'Ver galería', en: 'See gallery', fr: 'Voir la galerie', pt: 'Ver galeria', ko: '갤러리 보기', zh: '查看相册' },
 };
+const VER_POLITICAS: Accion = {
+  ruta: '/politicas',
+  etiqueta: { es: 'Ver políticas', en: 'See policies', fr: 'Voir les politiques', pt: 'Ver políticas', ko: '정책 보기', zh: '查看政策' },
+};
 const LLAMAR: Accion = {
   href: CONTACTO.telefonos[0].href,
   etiqueta: {
@@ -269,12 +273,12 @@ export const INTENCIONES: Intencion[] = [
     claves: ['mascota', 'perro', 'gato', 'pet', 'dog', 'cat', 'animal', 'chien', 'cachorro', 'gato', '반려', '강아지', '고양이', '宠物', '狗', '猫'],
     pregunta: { es: '¿Aceptan mascotas?', en: 'Are pets allowed?', fr: 'Acceptez-vous les animaux ?', pt: 'Aceitam pets?', ko: '반려동물 동반 가능한가요?', zh: '可以带宠物吗？' },
     respuesta: {
-      es: 'Sí, somos pet friendly. Máximo una mascota por reserva, bajo responsabilidad del propietario y con correa en las zonas comunes. Puede aplicar un cargo adicional de limpieza.',
-      en: "Yes, we're pet friendly. Maximum one pet per booking, under the owner's responsibility and on a leash in common areas. An extra cleaning fee may apply.",
-      fr: "Oui, les animaux sont les bienvenus. Un animal maximum par réservation, sous la responsabilité du propriétaire et en laisse dans les espaces communs. Des frais de ménage peuvent s'appliquer.",
-      pt: 'Sim, somos pet friendly. No máximo um pet por reserva, sob responsabilidade do tutor e com coleira nas áreas comuns. Pode haver taxa extra de limpeza.',
-      ko: '네, 반려동물 동반이 가능합니다. 예약당 1마리까지, 보호자 책임 하에 공용 공간에서는 목줄을 착용해야 합니다. 추가 청소비가 발생할 수 있습니다.',
-      zh: '可以，我们欢迎宠物。每次预订限带一只宠物，由主人负责看管，在公共区域需系牵引绳。可能会收取额外清洁费。',
+      es: 'Sí, somos pet friendly. Máximo una mascota por reserva, bajo responsabilidad del propietario y con correa en las zonas comunes. No hay cargo fijo: solo se cobra si deja daños o suciedad fuera de lo normal. Avísanos al reservar.',
+      en: "Yes, we're pet friendly. Maximum one pet per booking, under the owner's responsibility and on a leash in common areas. There is no fixed fee: we only charge if the pet causes damage or unusual dirt. Let us know when booking.",
+      fr: "Oui, les animaux sont les bienvenus. Un animal maximum par réservation, sous la responsabilité du propriétaire et en laisse dans les espaces communs. Pas de frais fixes : seuls les dégâts ou une saleté inhabituelle sont facturés. Prévenez-nous lors de la réservation.",
+      pt: 'Sim, somos pet friendly. No máximo um pet por reserva, sob responsabilidade do tutor e com coleira nas áreas comuns. Não há taxa fixa: só cobramos se houver danos ou sujeira fora do normal. Avise-nos ao reservar.',
+      ko: '네, 반려동물 동반이 가능합니다. 예약당 1마리까지, 보호자 책임 하에 공용 공간에서는 목줄을 착용해야 합니다. 고정 요금은 없으며, 파손이나 과도한 오염이 있을 때만 비용이 청구됩니다. 예약 시 미리 알려주세요.',
+      zh: '可以，我们欢迎宠物。每次预订限带一只宠物，由主人负责看管，在公共区域需系牵引绳。不收取固定费用，仅在造成损坏或异常脏污时收费。请在预订时告知我们。',
     },
     acciones: [VER_SERVICIOS],
     siguientes: ['servicios', 'reservar'],
@@ -340,18 +344,33 @@ export const INTENCIONES: Intencion[] = [
     siguientes: ['grupos', 'servicios'],
   },
   {
+    id: 'normas',
+    claves: ['norma', 'regla', 'reglamento', 'fumar', 'cigarr', 'vape', 'visitante', 'visitas', 'ruido', 'silencio', 'fiesta', 'rules', 'smok', 'visitor', 'noise', 'quiet', 'party', 'regle', 'fumer', 'bruit', 'regras', 'fumar', 'barulho', '규칙', '흡연', '방문', '소음', '规则', '吸烟', '访客', '噪音'],
+    pregunta: { es: 'Normas de la casa', en: 'House rules', fr: 'Règlement de la maison', pt: 'Regras da casa', ko: '숙소 이용 규칙', zh: '入住规则' },
+    respuesta: {
+      es: 'Silencio de 10:00 p.m. a 7:00 a.m. No se permite fumar ni vapear dentro de la casa (solo en zonas exteriores). No se permiten visitantes: solo ingresan las personas de la reserva. Cada adulto presenta su documento al llegar y los menores vienen con un adulto responsable.',
+      en: 'Quiet hours from 10:00 p.m. to 7:00 a.m. No smoking or vaping inside the house (outdoor areas only). No visitors: only the people on the booking may enter. Every adult shows an ID on arrival and minors must come with a responsible adult.',
+      fr: "Silence de 22 h à 7 h. Il est interdit de fumer ou de vapoter à l'intérieur (uniquement à l'extérieur). Pas de visiteurs : seules les personnes de la réservation peuvent entrer. Chaque adulte présente une pièce d'identité à l'arrivée et les mineurs viennent avec un adulte responsable.",
+      pt: 'Silêncio das 22h às 7h. Não é permitido fumar nem usar vape dentro da casa (somente nas áreas externas). Não são permitidas visitas: só entram as pessoas da reserva. Cada adulto apresenta documento na chegada e menores vêm com um adulto responsável.',
+      ko: '오후 10시부터 오전 7시까지는 정숙 시간입니다. 실내 흡연·전자담배는 금지이며 실외에서만 가능합니다. 방문객은 허용되지 않으며 예약된 인원만 출입할 수 있습니다. 성인은 도착 시 신분증을 제시해야 하며 미성년자는 보호자와 동반해야 합니다.',
+      zh: '晚上 10:00 至早上 7:00 为安静时间。屋内禁止吸烟和电子烟（仅限室外区域）。不允许访客，只有预订中的人员可以进入。每位成人入住时需出示证件，未成年人须由负责的成人陪同。',
+    },
+    acciones: [VER_POLITICAS],
+    siguientes: ['cancelacion', 'mascotas', 'horarios'],
+  },
+  {
     id: 'cancelacion',
     claves: ['cancel', 'cancelar', 'cancelo', 'cancela', 'reembolso', 'devolu', 'cambiar fecha', 'modificar', 'refund', 'change date', 'annul', 'rembours', 'reembolso', '취소', '환불', '取消', '退款'],
     pregunta: { es: 'Cancelar o cambiar mi reserva', en: 'Cancel or change my booking', fr: 'Annuler ou modifier ma réservation', pt: 'Cancelar ou alterar reserva', ko: '예약 취소·변경', zh: '取消或更改预订' },
     respuesta: {
-      es: 'Para cancelar o cambiar las fechas de una reserva, escríbenos o llámanos con tu código de reserva y te ayudamos personalmente con las condiciones de tu caso.',
-      en: 'To cancel or change the dates of a booking, write or call us with your booking code and we will help you personally with the conditions for your case.',
-      fr: "Pour annuler ou modifier les dates d'une réservation, écrivez-nous ou appelez-nous avec votre code de réservation : nous vous aiderons personnellement selon votre situation.",
-      pt: 'Para cancelar ou mudar as datas de uma reserva, escreva ou ligue para nós com o código da reserva e ajudaremos pessoalmente com as condições do seu caso.',
-      ko: '예약 취소나 날짜 변경은 예약 번호와 함께 연락 주시면 고객님의 상황에 맞는 조건을 직접 안내해 드립니다.',
-      zh: '如需取消或更改预订日期，请携带预订编号联系我们，我们会根据您的情况亲自为您说明相关条件。',
+      es: 'Si cancelas hasta 72 horas antes de la llegada (3:00 p.m.), te devolvemos el 100 %. Con menos de 72 horas o si no llegas, se cobra la primera noche y te devolvemos el resto; en pasadías y grupos de trabajo no hay reembolso después de ese plazo. Para cancelar o cambiar fechas, escríbenos con tu código de reserva (RSV-…).',
+      en: 'If you cancel up to 72 hours before arrival (3:00 p.m.), we refund 100 %. With less than 72 hours or if you do not arrive, the first night is charged and the rest is refunded; day passes and work groups are not refunded after that deadline. To cancel or change dates, write to us with your booking code (RSV-…).',
+      fr: "Si vous annulez jusqu'à 72 heures avant l'arrivée (15 h), nous remboursons 100 %. À moins de 72 heures ou en cas de non-présentation, la première nuit est facturée et le reste remboursé ; les journées et groupes de travail ne sont plus remboursés après ce délai. Pour annuler ou changer de dates, écrivez-nous avec votre code de réservation (RSV-…).",
+      pt: 'Se cancelar até 72 horas antes da chegada (15h), devolvemos 100 %. Com menos de 72 horas ou se não comparecer, cobra-se a primeira noite e devolvemos o restante; day use e grupos de trabalho não são reembolsados depois desse prazo. Para cancelar ou mudar datas, escreva-nos com o código da reserva (RSV-…).',
+      ko: '도착(오후 3시) 72시간 전까지 취소하시면 100% 환불됩니다. 72시간 이내 취소 또는 노쇼 시 첫날 숙박 요금이 부과되고 나머지는 환불됩니다. 데이유즈와 워크숍 단체는 그 이후 환불되지 않습니다. 취소나 날짜 변경은 예약 번호(RSV-…)와 함께 문의해 주세요.',
+      zh: '在到达（下午 3:00）前 72 小时以上取消，全额退款。不足 72 小时取消或未入住，将收取第一晚房费并退还其余款项；日间套餐和工作团体超过该期限后不予退款。如需取消或更改日期，请附上预订编号（RSV-…）联系我们。',
     },
-    acciones: [VER_CONTACTO, LLAMAR],
+    acciones: [VER_POLITICAS, VER_CONTACTO],
   },
   {
     id: 'accesibilidad',

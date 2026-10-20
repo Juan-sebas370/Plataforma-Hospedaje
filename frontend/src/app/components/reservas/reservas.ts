@@ -73,6 +73,14 @@ export class Reservas implements OnInit {
     if (this.estado.enviando()) return;
     if (this.estado.problemaPasoActual()) {
       this.estado.intentoFallido.set('confirmar');
+      // Lleva al huésped a la casilla que falta (en celular el aviso de la barra inferior no se ve)
+      if (this.isBrowser) {
+        setTimeout(() => {
+          const casilla = document.querySelector<HTMLInputElement>('.terminos--pendiente input');
+          casilla?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          casilla?.focus({ preventScroll: true });
+        });
+      }
       return;
     }
     this.estado.enviando.set(true);

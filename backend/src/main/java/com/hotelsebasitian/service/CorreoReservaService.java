@@ -117,11 +117,14 @@ public class CorreoReservaService {
                         + "<li>" + llegada + "</li>"
                         + "<li>Lleva el documento de identidad de cada huésped adulto.</li>"
                         + "<li>Dirección: " + DIRECCION + " · <a href=\"" + mapa() + "\" style=\"color:#0E5A9C\">Cómo llegar</a></li>"
-                        + "<li>¿Cambios o cancelación? Escríbenos con tu código <strong>" + d.codigo + "</strong>.</li>"
+                        + "<li>¿Cambios o cancelación? Escríbenos con tu código <strong>" + d.codigo + "</strong>. Hasta 72 horas antes de la llegada el reembolso es total.</li>"
+                        + "<li>Silencio de 10:00 p.m. a 7:00 a.m.; no se fuma dentro de la casa y solo ingresan las personas de la reserva. "
+                        + "<a href=\"" + d.enlacePoliticas + "\" style=\"color:#0E5A9C\">Política de reservas y Reglamento interno</a></li>"
                         + "</ul>");
         String texto = "Hola " + d.nombre + ",\n\n¡Tu reserva " + d.codigo + " está confirmada! Recibimos tu pago.\n\n"
                 + d.resumenTexto("Total pagado") + "\n" + llegada + "\nLleva el documento de identidad de cada huésped adulto.\n"
-                + "Dirección: " + DIRECCION + "\nVer tu reserva y su código QR: " + d.enlaceReserva + "\n\n" + pie();
+                + "Dirección: " + DIRECCION + "\nVer tu reserva y su código QR: " + d.enlaceReserva
+                + "\nPolítica de reservas y Reglamento interno: " + d.enlacePoliticas + "\n\n" + pie();
         enviar(d.email, asunto, html, texto, qr, d.codigo);
     }
 
@@ -166,6 +169,7 @@ public class CorreoReservaService {
         String params = "reservaId=" + r.getId() + "&codigo=" + URLEncoder.encode(Objects.toString(r.getCodigoAcceso(), ""), StandardCharsets.UTF_8);
         d.enlacePago = base + "/pagos?" + params;
         d.enlaceReserva = base + "/confirmacion?" + params;
+        d.enlacePoliticas = base + "/politicas";
 
         d.filas.put("Código", d.codigo);
         if (d.deDia) {
@@ -278,7 +282,7 @@ public class CorreoReservaService {
 
     /** Lo que se muestra de la reserva, ya escapado para HTML. */
     private static class Datos {
-        String codigo, nombre, nombreHtml, email, llegada, total, enlacePago, enlaceReserva;
+        String codigo, nombre, nombreHtml, email, llegada, total, enlacePago, enlaceReserva, enlacePoliticas;
         boolean deDia;
         final Map<String, String> filas = new LinkedHashMap<>();
 

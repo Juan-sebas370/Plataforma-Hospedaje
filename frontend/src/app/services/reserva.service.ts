@@ -30,6 +30,12 @@ export interface Reserva {
   codigoAcceso?: string;
   /** Código visible de la reserva (RSV-2027-00012), el mismo que usa SOGO. */
   codigo?: string;
+  /** Casillas del último paso (solo se envían; el backend guarda la fecha y la versión). */
+  aceptaPoliticas?: boolean;
+  autorizaDatos?: boolean;
+  politicasAceptadasAt?: string;
+  versionPoliticas?: string;
+  consentimientoDatosAt?: string;
 
   // Personas
   huespedes: number;

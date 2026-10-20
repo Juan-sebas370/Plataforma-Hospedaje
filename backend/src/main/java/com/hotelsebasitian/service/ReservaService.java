@@ -35,6 +35,13 @@ public class ReservaService {
     private static final Set<String> MODOS = Set.of("habitaciones", "piso", "casa");
     private static final Set<String> ESTADOS = Set.of("PENDIENTE", "CONFIRMADA", "CANCELADA", "COMPLETADA", "NO_PRESENTADA");
     private static final int MAX_NOCHES = 60;
+    /**
+     * Versión vigente de la Política de reservas, el Reglamento interno y la
+     * Política de datos. Debe coincidir con VERSION_POLITICAS de la web
+     * (frontend/src/app/data/politicas.ts): si se cambian los textos, se
+     * actualizan ambas.
+     */
+    public static final String VERSION_POLITICAS = "2026-10-20";
     private static final int MAX_ANIOS_ANTICIPACION = 2;
     /** Mismas reglas que el paso "Tus datos" de la web (reserva-estado.ts). */
     private static final Pattern EMAIL = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$");
@@ -216,6 +223,7 @@ public class ReservaService {
         reserva.setEstado("PENDIENTE");
         reserva.setCodigoAcceso(nuevoCodigo());
         validarNueva(reserva);
+        registrarAceptacion(reserva);
 
         Reserva guardada;
         reservaLock.lock();
@@ -238,6 +246,23 @@ public class ReservaService {
             log.error("No se pudo preparar el correo de la reserva {}", guardada.getId(), e);
         }
         return guardada;
+    }
+
+    /**
+     * Sin las dos aceptaciones no hay reserva. Se guardan la fecha y hora (del
+     * servidor, no del navegador) y la versión de las políticas aceptadas.
+     */
+    private static void registrarAceptacion(Reserva r) {
+        if (!Boolean.TRUE.equals(r.getAceptaPoliticas())) {
+            throw new RuntimeException("Para reservar debes aceptar la Política de reservas y el Reglamento interno");
+        }
+        if (!Boolean.TRUE.equals(r.getAutorizaDatos())) {
+            throw new RuntimeException("Para reservar debes autorizar el tratamiento de tus datos personales");
+        }
+        LocalDateTime ahora = LocalDateTime.now(ZONA_HOTEL);
+        r.setPoliticasAceptadasAt(ahora);
+        r.setConsentimientoDatosAt(ahora);
+        r.setVersionPoliticas(VERSION_POLITICAS);
     }
 
     private static String nuevoCodigo() {

@@ -100,6 +100,32 @@ public class Reserva {
     @Column(name = "codigo", length = 20, insertable = false, updatable = false)
     private String codigo;
 
+    // ── Aceptación de políticas (prueba ante cualquier reclamo) ──────────
+    /** Casilla "acepto la Política de reservas y el Reglamento interno" (llega de la web; no se guarda tal cual). */
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean aceptaPoliticas;
+
+    /** Casilla "autorizo el tratamiento de mis datos personales" (Ley 1581 de 2012). */
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean autorizaDatos;
+
+    /** Cuándo aceptó la Política de reservas y el Reglamento interno (lo fija el servidor). */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "politicas_aceptadas_at")
+    private LocalDateTime politicasAceptadasAt;
+
+    /** Versión de las políticas que aceptó (fecha de publicación, p. ej. 2026-10-20). */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "version_politicas", length = 20)
+    private String versionPoliticas;
+
+    /** Cuándo autorizó el tratamiento de datos. Columna compartida con SOGO (dataConsentAt). */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "consentimiento_datos_at")
+    private LocalDateTime consentimientoDatosAt;
+
     // ── Auditoría ─────────────────────────────────────────
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaModificacion;
