@@ -6,7 +6,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.hotelsebasitian.entity.Habitacion;
 import com.hotelsebasitian.entity.Reserva;
 import com.hotelsebasitian.repository.HabitacionRepository;
 import jakarta.mail.internet.InternetAddress;
@@ -15,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -130,7 +131,7 @@ public class CorreoReservaService {
 
     // ── Envío ─────────────────────────────────────────────
 
-    private void enviar(String para, String asunto, String html, String texto, byte[] qr, String codigo) {
+    private void enviar(String para, @NonNull String asunto, @NonNull String html, @NonNull String texto, byte[] qr, String codigo) {
         if (para == null || para.isBlank()) return;
         if (remitente == null || remitente.isBlank()) {
             log.warn("Correo de la reserva {} sin enviar: falta configurar MAIL_USERNAME", codigo);
@@ -142,7 +143,7 @@ public class CorreoReservaService {
                 MimeMessageHelper m = new MimeMessageHelper(mensaje, true, StandardCharsets.UTF_8.name());
                 m.setFrom(new InternetAddress(remitente, "Hospedaje Sebastián", StandardCharsets.UTF_8.name()));
                 m.setReplyTo(CORREO_HOTEL);
-                m.setTo(para);
+                m.setTo(new InternetAddress(para));
                 m.setSubject(asunto);
                 m.setText(texto, html);
                 if (qr != null) m.addInline("qr", new ByteArrayResource(qr), "image/png");
@@ -159,9 +160,9 @@ public class CorreoReservaService {
     private Datos datos(Reserva r) {
         Datos d = new Datos();
         d.codigo = r.getCodigo() != null && !r.getCodigo().isBlank() ? r.getCodigo() : "RSV-" + r.getId();
-        d.nombre = Optional.ofNullable(r.getNombreHuesped()).map(String::trim).filter(s -> !s.isEmpty())
+        d.nombre = Optional.ofNullable(r.getNombreHuesped()).map(s -> s.trim()).filter(s -> !s.isEmpty())
                 .map(s -> s.split("\\s+")[0]).orElse("");
-        d.nombreHtml = HtmlUtils.htmlEscape(d.nombre, "UTF-8");
+        d.nombreHtml = html(d.nombre);
         d.email = r.getEmailContacto();
         d.deDia = "pasadia".equals(r.getTipoReserva()) || "grupal".equals(r.getTipoReserva());
         d.llegada = fecha(r.getFechaIngreso());
@@ -199,7 +200,7 @@ public class CorreoReservaService {
         if (r.getHabitacionesIds() != null) ids.addAll(r.getHabitacionesIds());
         if (r.getHabitacionId() != null) ids.add(r.getHabitacionId());
         List<String> nums = habitacionRepository.findAllById(ids).stream()
-                .map(Habitacion::getNumero).filter(Objects::nonNull).sorted().collect(Collectors.toList());
+                .map(h -> h.getNumero()).filter(Objects::nonNull).sorted().collect(Collectors.toList());
         if (nums.isEmpty()) return ids.size() == 1 ? "1 habitación" : ids.size() + " habitaciones";
         if (nums.size() == 1) return "Habitación " + nums.get(0);
         return "Habitaciones " + String.join(", ", nums.subList(0, nums.size() - 1)) + " y " + nums.get(nums.size() - 1);
@@ -234,12 +235,17 @@ public class CorreoReservaService {
     private static String boton(String enlace, String texto) {
         return "<table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:22px auto 0\"><tr>"
                 + "<td style=\"border-radius:999px;background:#0E5A9C\">"
-                + "<a href=\"" + HtmlUtils.htmlEscape(enlace, "UTF-8") + "\" style=\"display:inline-block;padding:13px 28px;font-weight:700;font-size:15px;color:#ffffff;text-decoration:none;border-radius:999px\">"
+                + "<a href=\"" + html(enlace) + "\" style=\"display:inline-block;padding:13px 28px;font-weight:700;font-size:15px;color:#ffffff;text-decoration:none;border-radius:999px\">"
                 + texto + "</a></td></tr></table>";
     }
 
+    /** Escapa texto para HTML; un valor nulo queda vacío. */
+    private static @NonNull String html(@Nullable String texto) {
+        return texto == null ? "" : HtmlUtils.htmlEscape(texto, "UTF-8");
+    }
+
     /** Correo con estilos en línea y tablas: así se ve bien en Gmail, Outlook y el celular. */
-    private static String plantilla(String titulo, String saludo, String colorTitulo, String cuerpo, String accion, String extra) {
+    private static @NonNull String plantilla(String titulo, String saludo, String colorTitulo, String cuerpo, String accion, String extra) {
         return "<!doctype html><html lang=\"es\"><body style=\"margin:0;padding:0;background:#F8F4EE\">"
                 + "<table role=\"presentation\" width=\"100%\" style=\"background:#F8F4EE;padding:24px 12px\"><tr><td align=\"center\">"
                 + "<table role=\"presentation\" width=\"100%\" style=\"max-width:560px;background:#ffffff;border:1px solid #E8DCCB;border-radius:18px;overflow:hidden;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:#2B2B2B\">"
@@ -290,10 +296,10 @@ public class CorreoReservaService {
             StringBuilder t = new StringBuilder("<table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;font-size:14px\">");
             filas.forEach((k, v) -> t.append("<tr><td style=\"padding:7px 0;color:#5F5A54;border-bottom:1px solid #F0E8DC\">").append(k)
                     .append("</td><td align=\"right\" style=\"padding:7px 0;font-weight:600;border-bottom:1px solid #F0E8DC\">")
-                    .append(HtmlUtils.htmlEscape(v, "UTF-8")).append("</td></tr>"));
+                    .append(html(v)).append("</td></tr>"));
             t.append("<tr><td style=\"padding:12px 0 0;font-size:15px\">").append(etiquetaTotal)
                     .append("</td><td align=\"right\" style=\"padding:12px 0 0;font-size:20px;font-weight:700;color:#0A3D6D\">")
-                    .append(HtmlUtils.htmlEscape(total, "UTF-8")).append("</td></tr></table>");
+                    .append(html(total)).append("</td></tr></table>");
             return t.toString();
         }
 

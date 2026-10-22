@@ -46,11 +46,10 @@ public class TarifaService {
     public void crearTarifasIniciales() {
         if (tarifas.count() > 0) return;
         LocalDateTime ahora = LocalDateTime.now();
-        tarifas.saveAll(List.of(
-                new TarifaReserva(null, "individual", "Hospedaje individual", 35000.0, 45000.0, 60000.0, ahora),
-                new TarifaReserva(null, "familiar", "Familia o grupo", 35000.0, 45000.0, 60000.0, ahora),
-                new TarifaReserva(null, "pasadia", "Pasadía", 35000.0, 45000.0, 60000.0, ahora),
-                new TarifaReserva(null, "grupal", "Grupo de trabajo", 60000.0, 75000.0, 90000.0, ahora)));
+        tarifas.save(new TarifaReserva(null, "individual", "Hospedaje individual", 35000.0, 45000.0, 60000.0, ahora));
+        tarifas.save(new TarifaReserva(null, "familiar", "Familia o grupo", 35000.0, 45000.0, 60000.0, ahora));
+        tarifas.save(new TarifaReserva(null, "pasadia", "Pasadía", 35000.0, 45000.0, 60000.0, ahora));
+        tarifas.save(new TarifaReserva(null, "grupal", "Grupo de trabajo", 60000.0, 75000.0, 90000.0, ahora));
     }
 
     /** Calcula y fija en la reserva: temporada, noches, precio por noche y total. */

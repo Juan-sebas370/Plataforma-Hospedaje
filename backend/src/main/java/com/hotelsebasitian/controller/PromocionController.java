@@ -58,8 +58,8 @@ public class PromocionController {
     /** Actualización parcial: solo cambian los campos que vienen en el cuerpo. */
     @PutMapping("/{id}")
     public Promocion actualizarPromocion(@PathVariable Long id, @RequestBody JsonNode cambios) throws IOException {
-        Promocion promocion = promocionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Promoción no encontrada"));
+        Promocion promocion = id == null ? null : promocionRepository.findById(id).orElse(null);
+        if (promocion == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Promoción no encontrada");
         LocalDateTime creada = promocion.getFechaCreacion();
         Integer usos = promocion.getUsosActuales();
         json.readerForUpdating(promocion).readValue(cambios);

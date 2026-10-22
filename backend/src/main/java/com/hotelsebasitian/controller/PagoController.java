@@ -6,6 +6,7 @@ import com.hotelsebasitian.repository.PagoRepository;
 import com.hotelsebasitian.repository.ReservaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -47,8 +48,8 @@ public class PagoController {
         if (reservaId == null) {
             throw new RuntimeException("Indica la reserva del pago");
         }
-        Reserva reserva = reservaRepository.findById(reservaId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+        Reserva reserva = reservaId == null ? null : reservaRepository.findById(reservaId).orElse(null);
+        if (reserva == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada");
 
         Pago pago = new Pago();   // id nuevo: nunca se sobrescribe un pago existente
         pago.setReserva(reserva);
@@ -77,8 +78,8 @@ public class PagoController {
 
     @GetMapping("/reserva/{reservaId}")
     public List<Pago> obtenerPagosPorReserva(@PathVariable Long reservaId) {
-        Reserva reserva = reservaRepository.findById(reservaId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+        Reserva reserva = reservaId == null ? null : reservaRepository.findById(reservaId).orElse(null);
+        if (reserva == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada");
         return pagoRepository.findByReserva(reserva);
     }
 
@@ -87,9 +88,10 @@ public class PagoController {
         return pagoRepository.findByEstado(estado);
     }
 
-    private Pago buscar(Long id) {
-        return pagoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pago no encontrado"));
+    private @NonNull Pago buscar(Long id) {
+        Pago pago = id == null ? null : pagoRepository.findById(id).orElse(null);
+        if (pago == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pago no encontrado");
+        return pago;
     }
 
     private static void validar(Pago pago) {

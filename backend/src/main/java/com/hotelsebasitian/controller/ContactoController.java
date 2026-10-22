@@ -4,6 +4,7 @@ import com.hotelsebasitian.entity.Contacto;
 import com.hotelsebasitian.repository.ContactoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -116,9 +117,10 @@ public class ContactoController {
         return contactoRepository.save(c);
     }
 
-    private Contacto buscar(Long id) {
-        return contactoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Mensaje no encontrado"));
+    private @NonNull Contacto buscar(Long id) {
+        Contacto contacto = id == null ? null : contactoRepository.findById(id).orElse(null);
+        if (contacto == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mensaje no encontrado");
+        return contacto;
     }
 
     /** Texto recortado; null si es opcional y viene vacío. */

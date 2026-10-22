@@ -6,6 +6,7 @@ import com.hotelsebasitian.repository.HabitacionRepository;
 import com.hotelsebasitian.repository.ReservaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,9 +24,10 @@ public class HabitacionService {
         return habitacionRepository.findAll();
     }
 
-    public Habitacion obtenerPorId(Long id) {
-        return habitacionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Habitación no encontrada con id: " + id));
+    public @NonNull Habitacion obtenerPorId(Long id) {
+        Habitacion habitacion = id == null ? null : habitacionRepository.findById(id).orElse(null);
+        if (habitacion == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Habitación no encontrada con id: " + id);
+        return habitacion;
     }
 
     public List<Habitacion> obtenerDisponibles() {

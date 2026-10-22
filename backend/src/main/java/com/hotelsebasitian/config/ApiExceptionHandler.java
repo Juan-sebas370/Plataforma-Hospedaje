@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -69,7 +70,7 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest().body(Map.of("error", message, "message", message));
     }
 
-    private ResponseEntity<Map<String, String>> error(HttpStatus status, String message) {
+    private ResponseEntity<Map<String, String>> error(@NonNull HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of("error", message, "message", message));
     }
 }

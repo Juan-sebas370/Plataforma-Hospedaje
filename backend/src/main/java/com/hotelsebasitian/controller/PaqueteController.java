@@ -6,6 +6,7 @@ import com.hotelsebasitian.entity.Paquete;
 import com.hotelsebasitian.repository.PaqueteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -66,9 +67,10 @@ public class PaqueteController {
         return ResponseEntity.noContent().build();
     }
 
-    private Paquete buscar(Long id) {
-        return paqueteRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paquete no encontrado"));
+    private @NonNull Paquete buscar(Long id) {
+        Paquete paquete = id == null ? null : paqueteRepository.findById(id).orElse(null);
+        if (paquete == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Paquete no encontrado");
+        return paquete;
     }
 
     private static void validar(Paquete p) {

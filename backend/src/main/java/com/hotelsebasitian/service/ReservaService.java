@@ -9,6 +9,7 @@ import com.hotelsebasitian.repository.ReservaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -60,9 +61,10 @@ public class ReservaService {
         return reservaRepository.findAll();
     }
 
-    public Reserva obtenerPorId(Long id) {
-        return reservaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+    public @NonNull Reserva obtenerPorId(Long id) {
+        Reserva reserva = id == null ? null : reservaRepository.findById(id).orElse(null);
+        if (reserva == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada");
+        return reserva;
     }
 
     /**
@@ -346,7 +348,7 @@ public class ReservaService {
                 if (elegidas.size() != ids.size()) {
                     throw new RuntimeException("Alguna de las habitaciones elegidas no existe");
                 }
-                Set<Integer> pisos = elegidas.stream().map(Habitacion::getPiso).filter(Objects::nonNull).collect(Collectors.toSet());
+                Set<Integer> pisos = elegidas.stream().map(h -> h.getPiso()).filter(Objects::nonNull).collect(Collectors.toSet());
                 r.setEspacio(pisos.size() > 1 ? "completo" : pisos.contains(2) ? "piso2" : "piso1");
             }
         }
@@ -418,7 +420,7 @@ public class ReservaService {
                         " no está disponible del " + rango + ". Ya tiene habitaciones reservadas.");
                 }
                 List<String> nums = todas.stream().filter(h -> interseccion.contains(h.getId()))
-                    .map(Habitacion::getNumero).sorted().collect(Collectors.toList());
+                    .map(h -> h.getNumero()).sorted().collect(Collectors.toList());
                 throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "La(s) habitación(es) " + String.join(", ", nums) +
                     " no está(n) disponible(s) del " + rango + ". Por favor elige otras fechas u habitaciones.");

@@ -81,14 +81,14 @@ public class PagoWompiService {
      * @return el estado de la transacción según Wompi (APPROVED, DECLINED, PENDING...)
      */
     public String verificarTransaccion(Long reservaId, String transaccionId) {
-        Reserva reserva = reservaRepository.findById(reservaId)
-                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+        Reserva reserva = reservaId == null ? null : reservaRepository.findById(reservaId).orElse(null);
+        if (reserva == null) throw new RuntimeException("Reserva no encontrada");
 
         Map<String, Object> transaction = wompiService.consultarTransaccion(transaccionId);
 
         // La transacción tiene que ser de ESTA reserva: evita que se use el id
         // de un pago ajeno (o de otra reserva más barata) para confirmarla.
-        if (!reservaId.equals(reservaDeReferencia(transaction))) {
+        if (!reserva.getId().equals(reservaDeReferencia(transaction))) {
             throw new RuntimeException("La transacción no corresponde a esta reserva");
         }
         if (!montoCoincide(reserva, transaction)) {

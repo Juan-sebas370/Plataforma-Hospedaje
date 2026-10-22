@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -72,7 +73,7 @@ public class AuthService {
                 .fechaRegistro(LocalDateTime.now())
                 .build();
 
-        usuarioRepository.save(usuario);
+        usuarioRepository.save(Objects.requireNonNull(usuario));
 
         return UsuarioDTO.builder()
             .id(usuario.getId())
