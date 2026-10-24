@@ -1,14 +1,16 @@
 # Cloudflare Pages: las rutas que se renderizan en el navegador (RenderMode.Client
 # en app.routes.server.ts) no tienen HTML propio; se sirven con index.csr.html.
+# El destino va sin ".html": Pages quita la extensión y, si el destino la lleva,
+# responde con una redirección (cambia la URL) en vez de reescribir.
 # Las prerenderizadas (/, /inicio, /habitaciones, /galeria, /servicios) ya tienen
 # su index.html. Si agregas una ruta Client nueva, agrégala aquí también.
-/habitaciones/:id    /index.csr.html  200
-/reservas            /index.csr.html  200
-/contacto            /index.csr.html  200
-/confirmacion        /index.csr.html  200
-/perfil              /index.csr.html  200
-/cambiar-contrasena  /index.csr.html  200
-/chat-soporte        /index.csr.html  200
-/reset-password      /index.csr.html  200
-/politicas           /index.csr.html  200
-/pagos               /index.csr.html  200
+/habitaciones/:id    /index.csr  200
+/reservas            /index.csr  200
+/contacto            /index.csr  200
+/confirmacion        /index.csr  200
+/perfil              /index.csr  200
+/cambiar-contrasena  /index.csr  200
+/chat-soporte        /index.csr  200
+/reset-password      /index.csr  200
+/politicas           /index.csr  200
+/pagos               /index.csr  200
