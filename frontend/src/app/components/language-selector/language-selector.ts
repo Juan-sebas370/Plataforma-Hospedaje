@@ -21,12 +21,12 @@ export class LanguageSelector implements OnInit {
   showDropdown = false;
 
   languages: LanguageOption[] = [
-    { code: 'es', name: 'Español', flag: '/flags/es.png' },
-    { code: 'en', name: 'English', flag: '/flags/en.png' },
-    { code: 'fr', name: 'Français', flag: '/flags/fr.png' },
-    { code: 'pt', name: 'Português', flag: '/flags/pt.png' },
-    { code: 'ko', name: '한국어', flag: '/flags/ko.png' },
-    { code: 'zh', name: '中文', flag: '/flags/zh.png' }
+    { code: 'es', name: 'Español', flag: '/assets/flags/es.png' },
+    { code: 'en', name: 'English', flag: '/assets/flags/en.png' },
+    { code: 'fr', name: 'Français', flag: '/assets/flags/fr.png' },
+    { code: 'pt', name: 'Português', flag: '/assets/flags/pt.png' },
+    { code: 'ko', name: '한국어', flag: '/assets/flags/ko.png' },
+    { code: 'zh', name: '中文', flag: '/assets/flags/zh.png' }
   ];
 
   constructor(public translateService: TranslateService) {}
