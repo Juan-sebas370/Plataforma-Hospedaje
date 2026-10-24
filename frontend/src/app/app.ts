@@ -7,10 +7,12 @@ import { Nav } from './components/nav/nav';
 import { Footer } from './components/footer/footer';
 import { Chatbot } from './components/chatbot/chatbot';
 import { AccesibilidadService } from './services/accesibilidad.service';
+import { AvisoPreparacion } from './components/aviso-preparacion/aviso-preparacion';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Nav, Footer, Chatbot],
+  imports: [RouterOutlet, Nav, Footer, Chatbot, AvisoPreparacion],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -19,6 +21,9 @@ export class App {
   private readonly title = inject(Title);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly contenido = viewChild.required<ElementRef<HTMLElement>>('contenido');
+
+  /** Hospedaje en preparación: ventana de "aún no recibimos reservas". */
+  readonly avisoPreparacion = !environment.reservasHabilitadas;
 
   /** Texto que los lectores de pantalla anuncian al cambiar de página. */
   readonly anuncio = signal('');

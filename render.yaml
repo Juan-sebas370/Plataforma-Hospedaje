@@ -22,6 +22,9 @@ services:
         value: https://hospedajesebastianfilandia.com,https://www.hospedajesebastianfilandia.com
       - key: MAIL_FROM
         value: reservas@hospedajesebastianfilandia.com
+      # Sitio en preparación: la API no acepta reservas ni pagos. Cambiar a "true" al abrir.
+      - key: RESERVAS_HABILITADAS
+        value: "false"
       - key: JWT_SECRET
         generateValue: true
       # MySQL de Aiven, ej.: jdbc:mysql://HOST:PUERTO/defaultdb?sslMode=REQUIRED&serverTimezone=UTC&characterEncoding=UTF-8

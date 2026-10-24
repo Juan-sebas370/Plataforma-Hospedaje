@@ -5,6 +5,7 @@ import com.hotelsebasitian.entity.Reserva;
 import com.hotelsebasitian.service.PagoWompiService;
 import com.hotelsebasitian.service.ReservaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -26,6 +28,17 @@ public class ReservaController {
 
     private final ReservaService reservaService;
     private final PagoWompiService pagoWompiService;
+
+    /** Con RESERVAS_HABILITADAS=false la web aún no recibe reservas ni pagos (sitio en preparación). */
+    @Value("${app.reservas.habilitadas:true}")
+    private boolean reservasHabilitadas;
+
+    private void exigirReservasHabilitadas() {
+        if (!reservasHabilitadas) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "El hospedaje todavía no recibe reservas en línea");
+        }
+    }
 
     /**
      * GET /api/reservas/disponibilidad?fechaIngreso=2026-09-10&fechaSalida=2026-09-12
@@ -64,6 +77,7 @@ public class ReservaController {
     @GetMapping("/{id}/checkout-wompi")
     public ResponseEntity<WompiCheckoutResponse> generarCheckoutWompi(
             @PathVariable Long id, @RequestParam(required = false) String codigo) {
+        exigirReservasHabilitadas();
         conAcceso(id, codigo);
         return ResponseEntity.ok(reservaService.generarCheckoutWompi(id));
     }
@@ -105,6 +119,7 @@ public class ReservaController {
      */
     @PostMapping
     public ResponseEntity<Reserva> crear(@RequestBody Reserva reserva) {
+        exigirReservasHabilitadas();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reservaService.crear(reserva, usuarioActual()));
     }

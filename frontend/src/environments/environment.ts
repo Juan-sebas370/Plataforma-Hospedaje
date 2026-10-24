@@ -6,6 +6,9 @@ export const environment = {
   apiUrl: 'http://localhost:8080/api',
   wsUrl: 'ws://localhost:8080/ws',
 
+  // Ver environment.production.ts
+  reservasHabilitadas: true,
+
   // Timeouts
   requestTimeout: 30000,
   reconnectTimeout: 5000,

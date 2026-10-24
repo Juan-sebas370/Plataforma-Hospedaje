@@ -8,4 +8,5 @@
 </div>
 <!-- El asistente se descarga cuando el navegador queda libre: no retrasa la carga de la página -->
 @defer (on idle) { <app-chatbot /> }
+@if (avisoPreparacion) { <app-aviso-preparacion [ventana]="true" /> }
 <p class="sr-only" aria-live="polite" aria-atomic="true">{{ anuncio() }}</p>

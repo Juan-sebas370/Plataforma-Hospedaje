@@ -6,6 +6,10 @@ export const environment = {
   apiUrl: 'https://api.hospedajesebastianfilandia.com/api',
   wsUrl: 'wss://api.hospedajesebastianfilandia.com/ws',
 
+  // false mientras el hospedaje se formaliza: se muestra el aviso "aún no recibimos
+  // reservas" y /reservas y /pagos quedan cerradas (el backend también las rechaza).
+  reservasHabilitadas: false,
+
   // Timeouts
   requestTimeout: 30000,
   reconnectTimeout: 5000,
