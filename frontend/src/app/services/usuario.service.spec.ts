@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 /**
  * Tests unitarios para UsuarioService
  * Cubre: obtener perfil, actualizar perfil, foto, cambiar contraseña
@@ -43,7 +44,7 @@ describe('UsuarioService', () => {
     it('debería hacer request a endpoint de usuario actual', () => {
       service.getUsuarioActual().subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/me');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me`);
       expect(req.request.method).toBe('GET');
 
       req.flush({ id: '001', nombre: 'Test' });
@@ -60,7 +61,7 @@ describe('UsuarioService', () => {
         expect(usuario.nombre).toBe('Juan Test');
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/me');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/me`);
       req.flush(mockUsuario);
     });
   });
@@ -76,7 +77,7 @@ describe('UsuarioService', () => {
 
       service.actualizarPerfil(datosCambio).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/perfil');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/perfil`);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(datosCambio);
 
@@ -93,7 +94,7 @@ describe('UsuarioService', () => {
 
       service.actualizarPerfil(datosActualizados).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/perfil');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/perfil`);
       expect(req.request.body.nombre).toBe('Juan Nuevo');
 
       req.flush({ ...datosActualizados, id: '001', email: 'test@test.com' });
@@ -110,7 +111,7 @@ describe('UsuarioService', () => {
 
       service.subirFotoPerfil(mockFile).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/foto');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/foto`);
       expect(req.request.method).toBe('POST');
 
       req.flush({ foto: 'url-de-foto' });
@@ -128,7 +129,7 @@ describe('UsuarioService', () => {
 
       service.cambiarContrasena(oldPass, newPass).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/usuarios/cambiar-contrasena');
+      const req = httpMock.expectOne(`${environment.apiUrl}/usuarios/cambiar-contrasena`);
       expect(req.request.method).toBe('POST');
 
       req.flush({ mensaje: 'actualizada' });

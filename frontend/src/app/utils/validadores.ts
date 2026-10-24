@@ -112,8 +112,8 @@ export class ValidadorUtils {
    */
   static validarURL(url: string): boolean {
     try {
-      new URL(url);
-      return true;
+      const { protocol } = new URL(url);
+      return protocol === 'http:' || protocol === 'https:';
     } catch {
       return false;
     }

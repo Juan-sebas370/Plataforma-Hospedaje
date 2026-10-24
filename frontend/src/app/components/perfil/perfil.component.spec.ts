@@ -99,6 +99,8 @@ describe('PerfilComponent', () => {
     });
 
     it('debería validar email requerido', () => {
+      // El formulario arranca deshabilitado (solo lectura) hasta pulsar Editar.
+      component.perfilForm.enable();
       const control = component.perfilForm.get('email');
       control?.setValue('');
       expect(control?.invalid).toBeTruthy();
@@ -116,6 +118,7 @@ describe('PerfilComponent', () => {
     });
 
     it('debería validar nombre requerido', () => {
+      component.perfilForm.enable();
       const control = component.perfilForm.get('nombre');
       control?.setValue('');
       expect(control?.hasError('required')).toBeTruthy();

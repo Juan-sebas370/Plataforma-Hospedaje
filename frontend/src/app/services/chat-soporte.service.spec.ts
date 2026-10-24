@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 /**
  * Tests unitarios para ChatSoporteService
  * Cubre: conversaciones, mensajería WebSocket, soporte en tiempo real
@@ -77,7 +78,7 @@ describe('ChatSoporteService', () => {
         expect(conversacion.estado).toBe('activa');
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversacion-actual');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversacion-actual`);
       req.flush(mockConversacion);
     });
   });
@@ -86,7 +87,7 @@ describe('ChatSoporteService', () => {
     it('debería obtener historial con conversacionId', () => {
       service.obtenerHistorialConversacion('CONV-001').subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001`);
       expect(req.request.method).toBe('GET');
 
       const mockHistorial: ConversacionDetalle = {
@@ -127,7 +128,7 @@ describe('ChatSoporteService', () => {
         expect(detalle.mensajes[0].contenido).toBe('Hola soporte');
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001`);
       req.flush({ id: 'CONV-001', usuarioId: 'USER-123', estado: 'activa', tema: 'Test', fechaInicio: new Date(), noLeidosCount: 0, mensajes: mockMensajes });
     });
   });
@@ -136,7 +137,7 @@ describe('ChatSoporteService', () => {
     it('debería enviar mensaje con conversacionId y contenido', () => {
       service.enviarMensaje('CONV-001', 'Necesito ayuda').subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001/mensajes');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001/mensajes`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body.contenido).toBe('Necesito ayuda');
 
@@ -167,7 +168,7 @@ describe('ChatSoporteService', () => {
         expect(mensaje.contenido).toBe('Mi pregunta');
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001/mensajes');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001/mensajes`);
       req.flush(mockMensaje);
     });
   });
@@ -176,7 +177,7 @@ describe('ChatSoporteService', () => {
     it('debería obtener todas las conversaciones del usuario', () => {
       service.obtenerConversaciones().subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones`);
       expect(req.request.method).toBe('GET');
 
       req.flush([] as Conversacion[]);
@@ -207,7 +208,7 @@ describe('ChatSoporteService', () => {
         expect(conversaciones[0].tema).toBe('Reserva');
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones`);
       req.flush(mockConversaciones);
     });
   });
@@ -216,7 +217,7 @@ describe('ChatSoporteService', () => {
     it('debería marcar conversación como resuelta', () => {
       service.resolverConversacion('CONV-001').subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001/resolver');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001/resolver`);
       expect(req.request.method).toBe('PUT');
 
       const mockConversacionResuelta: Conversacion = {
@@ -280,7 +281,7 @@ describe('ChatSoporteService', () => {
         }
       );
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversacion-actual');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversacion-actual`);
       req.error(new ErrorEvent('Server error'), { status: 500 });
     });
 
@@ -294,7 +295,7 @@ describe('ChatSoporteService', () => {
         }
       );
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversaciones/CONV-001/mensajes');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversaciones/CONV-001/mensajes`);
       req.error(new ErrorEvent('Network error'), { status: 0 });
     });
   });
@@ -315,7 +316,7 @@ describe('ChatSoporteService', () => {
         expect(conv.noLeidosCount).toBe(3);
       });
 
-      const req = httpMock.expectOne('http://localhost:3000/api/chat/conversacion-actual');
+      const req = httpMock.expectOne(`${environment.apiUrl}/chat/conversacion-actual`);
       req.flush(mockConversacionActiva);
     });
   });

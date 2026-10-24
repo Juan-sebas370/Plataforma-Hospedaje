@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 /**
  * Tests unitarios para AuthService
  * Cubre: login, registro, logout, token management, guards
@@ -55,7 +56,7 @@ describe('AuthService', () => {
 
       service.login(credentials.email, credentials.password).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(credentials);
       req.flush(mockResponse);
@@ -74,10 +75,10 @@ describe('AuthService', () => {
 
       service.login(credentials.email, credentials.password).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       req.flush(mockResponse);
 
-      expect(localStorage.getItem('token')).toBe('mock-jwt-token');
+      expect(localStorage.getItem('auth_token')).toBe('mock-jwt-token');
     });
 
     it('debería hacer request POST con credenciales', () => {
@@ -86,7 +87,7 @@ describe('AuthService', () => {
 
       service.login(testEmail, testPassword).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       expect(req.request.method).toBe('POST');
       req.flush({ token: 'token' });
     });
@@ -94,13 +95,13 @@ describe('AuthService', () => {
 
   describe('Logout', () => {
     beforeEach(() => {
-      localStorage.setItem('token', 'mock-token');
-      localStorage.setItem('usuario', JSON.stringify({ id: '001', nombre: 'Test' }));
+      localStorage.setItem('auth_token', 'mock-token');
+      localStorage.setItem('user_data', JSON.stringify({ id: '001', nombre: 'Test' }));
     });
 
     it('debería limpiar localStorage en logout', () => {
       service.logout();
-      expect(localStorage.getItem('token')).toBeNull();
+      expect(localStorage.getItem('auth_token')).toBeNull();
     });
 
     it('debería ejecutar logout correctamente', () => {
@@ -111,21 +112,21 @@ describe('AuthService', () => {
   describe('Token Management', () => {
     it('debería obtener token del localStorage', () => {
       const testToken = 'test-jwt-token-12345';
-      localStorage.setItem('token', testToken);
+      localStorage.setItem('auth_token', testToken);
 
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('auth_token');
       expect(token).toBe(testToken);
     });
 
     it('debería verificar si hay token guardado', () => {
-      localStorage.setItem('token', 'mock-token');
-      const hasToken = localStorage.getItem('token') !== null;
+      localStorage.setItem('auth_token', 'mock-token');
+      const hasToken = localStorage.getItem('auth_token') !== null;
       expect(hasToken).toBeTruthy();
     });
 
     it('debería no tener token si localStorage vacío', () => {
       localStorage.clear();
-      const hasToken = localStorage.getItem('token') !== null;
+      const hasToken = localStorage.getItem('auth_token') !== null;
       expect(hasToken).toBeFalsy();
     });
   });
@@ -138,27 +139,27 @@ describe('AuthService', () => {
         email: 'juan@test.com',
       };
 
-      localStorage.setItem('usuario', JSON.stringify(mockUsuario));
-      const stored = JSON.parse(localStorage.getItem('usuario') || '{}');
+      localStorage.setItem('user_data', JSON.stringify(mockUsuario));
+      const stored = JSON.parse(localStorage.getItem('user_data') || '{}');
 
       expect(stored.nombre).toBe('Juan Test');
     });
 
     it('debería limpiar localStorage completamente', () => {
-      localStorage.setItem('token', 'token');
-      localStorage.setItem('usuario', 'user');
+      localStorage.setItem('auth_token', 'token');
+      localStorage.setItem('user_data', 'user');
 
       localStorage.clear();
 
-      expect(localStorage.getItem('token')).toBeNull();
-      expect(localStorage.getItem('usuario')).toBeNull();
+      expect(localStorage.getItem('auth_token')).toBeNull();
+      expect(localStorage.getItem('user_data')).toBeNull();
     });
 
     it('debería eliminar item específico del localStorage', () => {
-      localStorage.setItem('token', 'token-value');
-      localStorage.removeItem('token');
+      localStorage.setItem('auth_token', 'token-value');
+      localStorage.removeItem('auth_token');
 
-      expect(localStorage.getItem('token')).toBeNull();
+      expect(localStorage.getItem('auth_token')).toBeNull();
     });
   });
 
@@ -166,7 +167,7 @@ describe('AuthService', () => {
     it('debería hacer POST request a endpoint de login', () => {
       service.login('test@test.com', 'password').subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       expect(req.request.method).toBe('POST');
 
       req.flush({ token: 'mock-token', usuario: { id: '1' } });
@@ -178,7 +179,7 @@ describe('AuthService', () => {
 
       service.login(email, password).subscribe();
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       expect(req.request.body.email).toBe(email);
       expect(req.request.body.password).toBe(password);
 
@@ -197,7 +198,7 @@ describe('AuthService', () => {
         }
       );
 
-      const req = httpMock.expectOne('http://localhost:3000/api/auth/login');
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       req.error(new ErrorEvent('Unauthorized'), { status: 401 });
     });
   });

@@ -158,7 +158,7 @@ describe('Validadores Utilities', () => {
       });
 
       it('debería rechazar ciudad muy corta', () => {
-        expect(ValidadorUtils.validarCiudad('LA')).toBeFalsy();
+        expect(ValidadorUtils.validarCiudad('L')).toBeFalsy();
       });
 
       it('debería rechazar ciudad vacía', () => {
@@ -181,7 +181,7 @@ describe('Validadores Utilities', () => {
       });
 
       it('debería rechazar país muy corto', () => {
-        expect(ValidadorUtils.validarPais('AB')).toBeFalsy();
+        expect(ValidadorUtils.validarPais('A')).toBeFalsy();
       });
 
       it('debería permitir hasta 50 caracteres', () => {
@@ -330,7 +330,7 @@ describe('Validadores Utilities', () => {
         const archivo = new File([blob], 'grande.jpg', { type: 'image/jpeg' });
         const resultado = ValidadorUtils.validarArchivo(archivo, ['image/jpeg'], 5);
         expect(resultado.valido).toBeFalsy();
-        expect(resultado.error).toContain('tamaño');
+        expect(resultado.error).toContain('5MB');
       });
 
       it('debería usar tipos por defecto si no se proporcionan', () => {

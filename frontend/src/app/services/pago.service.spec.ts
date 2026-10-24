@@ -34,11 +34,11 @@ describe('PagoService', () => {
       signature: 'firma-simulada',
     };
 
-    service.iniciarCheckoutWompi(42).subscribe((checkout) => {
+    service.iniciarCheckoutWompi(42, "ABC123").subscribe((checkout) => {
       expect(checkout).toEqual(mockCheckout);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/reservas/42/checkout-wompi`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/reservas/42/checkout-wompi?codigo=ABC123`);
     expect(req.request.method).toBe('GET');
     req.flush(mockCheckout);
   });
