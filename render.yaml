@@ -6,8 +6,13 @@ services:
     name: hospedaje-sebastian-api
     runtime: docker
     plan: free
-    rootDir: backend
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    # Solo redespliega cuando cambia el backend (no con cambios del frontend).
+    buildFilter:
+      paths:
+        - backend/**
+        - render.yaml
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
