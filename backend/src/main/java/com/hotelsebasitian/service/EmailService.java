@@ -16,6 +16,10 @@ public class EmailService {
     @Value("${app.frontend-url:http://localhost:4200}")
     private String frontendUrl;
 
+    /** Remitente (MAIL_FROM, o MAIL_USERNAME con Gmail). Ver application.properties. */
+    @Value("${app.mail.from:}")
+    private String remitente;
+
     /** Enlace que abre la página /reset-password de la web con el token. */
     String enlaceRecuperacion(String resetToken) {
         String base = frontendUrl.endsWith("/") ? frontendUrl.substring(0, frontendUrl.length() - 1) : frontendUrl;
@@ -38,7 +42,7 @@ public class EmailService {
             "Saludos,\n" +
             "Equipo de Hospedaje Sebastian"
         );
-        message.setFrom("noreply@hospedajesebastian.com");
+        message.setFrom(remitente);
         
         try {
             mailSender.send(message);
@@ -58,7 +62,7 @@ public class EmailService {
             "Saludos,\n" +
             "Equipo de Hospedaje Sebastian"
         );
-        message.setFrom("noreply@hospedajesebastian.com");
+        message.setFrom(remitente);
         
         try {
             mailSender.send(message);

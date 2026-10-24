@@ -3,8 +3,8 @@
  */
 export const environment = {
   production: true,
-  apiUrl: 'https://api.hospedaje-sebastian.com/api',
-  wsUrl: 'wss://api.hospedaje-sebastian.com/ws',
+  apiUrl: 'https://api.hospedajesebastianfilandia.com/api',
+  wsUrl: 'wss://api.hospedajesebastianfilandia.com/ws',
 
   // Timeouts
   requestTimeout: 30000,

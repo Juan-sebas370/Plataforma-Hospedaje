@@ -67,8 +67,8 @@ public class CorreoReservaService {
     @Value("${app.frontend-url:http://localhost:4200}")
     private String frontendUrl;
 
-    /** Cuenta de Gmail que envía (MAIL_USERNAME). Sin ella no se envían correos. */
-    @Value("${spring.mail.username:}")
+    /** Dirección que envía (MAIL_FROM, o MAIL_USERNAME con Gmail). Sin ella no se envían correos. */
+    @Value("${app.mail.from:}")
     private String remitente;
 
     public CorreoReservaService(JavaMailSender mailSender, HabitacionRepository habitacionRepository, TaskExecutor executor) {
@@ -134,7 +134,7 @@ public class CorreoReservaService {
     private void enviar(String para, @NonNull String asunto, @NonNull String html, @NonNull String texto, byte[] qr, String codigo) {
         if (para == null || para.isBlank()) return;
         if (remitente == null || remitente.isBlank()) {
-            log.warn("Correo de la reserva {} sin enviar: falta configurar MAIL_USERNAME", codigo);
+            log.warn("Correo de la reserva {} sin enviar: falta configurar MAIL_FROM o MAIL_USERNAME", codigo);
             return;
         }
         executor.execute(() -> {

@@ -11,7 +11,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'habitaciones/:id',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'habitaciones',
@@ -25,38 +25,38 @@ export const serverRoutes: ServerRoute[] = [
     path: 'servicios',
     renderMode: RenderMode.Prerender
   },
-  // Routes with form-based components - use SSR without prerendering
+  // Routes with form-based components: rendered in the browser (static hosting, no Node server)
   {
     path: 'reservas',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'contacto',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'confirmacion',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'perfil',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'cambiar-contrasena',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'chat-soporte',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   {
     path: 'pagos',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   },
   // Catch all other routes
   {
     path: '**',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client
   }
 ];

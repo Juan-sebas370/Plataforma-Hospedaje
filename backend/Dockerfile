@@ -28,4 +28,8 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD wget -qO- "http://localhost:${PORT:-8080}/api/health" || exit 1
 
+# Render (plan gratis) da 512 MB de RAM: se limita el heap y se usa el GC más
+# liviano para que la JVM no se pase y el contenedor no se reinicie.
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -XX:+UseSerialGC -Xss512k -XX:TieredStopAtLevel=1"
+
 CMD ["java", "-jar", "app.jar"]
