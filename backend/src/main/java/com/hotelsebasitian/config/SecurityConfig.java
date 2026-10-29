@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // con token pero sin permisos → 403.
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/health", "/error").permitAll()
+                        .requestMatchers("/", "/health", "/health/db", "/error").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         // Habitaciones, paquetes y promociones: lectura pública, escritura solo admin
                         .requestMatchers(HttpMethod.GET, "/habitaciones/**", "/paquetes/**", "/tarifas", "/tarifas/temporadas", "/hospedaje").permitAll()
