@@ -57,6 +57,20 @@ public class ResendMailSender extends JavaMailSenderImpl {
     }
 
     private void enviar(MimeMessage m) throws Exception {
+        HttpRequest req = HttpRequest.newBuilder(API)
+                .timeout(Duration.ofSeconds(20))
+                .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(cuerpo(m))))
+                .build();
+        HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
+        if (res.statusCode() / 100 != 2) {
+            throw new IllegalStateException("Resend respondió " + res.statusCode() + ": " + res.body());
+        }
+    }
+
+    /** El JSON que se envía a Resend para este mensaje. */
+    Map<String, Object> cuerpo(MimeMessage m) throws Exception {
         // Calcula los Content-Type de cada parte (por SMTP lo hace Transport.send).
         m.saveChanges();
         Map<String, Object> cuerpo = new LinkedHashMap<>();
@@ -74,17 +88,7 @@ public class ResendMailSender extends JavaMailSenderImpl {
         if (c.html != null) cuerpo.put("html", c.html);
         if (c.texto != null) cuerpo.put("text", c.texto);
         if (!c.adjuntos.isEmpty()) cuerpo.put("attachments", c.adjuntos);
-
-        HttpRequest req = HttpRequest.newBuilder(API)
-                .timeout(Duration.ofSeconds(20))
-                .header("Authorization", "Bearer " + apiKey)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(cuerpo)))
-                .build();
-        HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString());
-        if (res.statusCode() / 100 != 2) {
-            throw new IllegalStateException("Resend respondió " + res.statusCode() + ": " + res.body());
-        }
+        return cuerpo;
     }
 
     /** Conserva el nombre visible del mensaje ("Hospedaje Sebastián") con la dirección configurada. */
