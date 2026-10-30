@@ -93,7 +93,7 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     resumen: 'Cama doble y camarote con baño privado.',
     descripcion: 'La habitación principal del primer piso. Cama doble y camarote, baño privado y un ambiente acogedor, ideal para una familia de 4.',
     capacidad: 4, camas: '1 cama doble · 1 camarote', bano: 'Baño privado', banoPrivado: true,
-    precio: 120000, imagenes: ['assets/habitaciones/piso1/hab101.jpg'],
+    precio: 120000, imagenes: ['assets/habitaciones/piso1/hab101.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
     servicios: [...SERVICIOS_BASE, 'Lavandería'], destacado: 'Ideal para familias',
   },
   {
@@ -101,7 +101,7 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     resumen: 'Cama matrimonial, baño compartido con la 103.',
     descripcion: 'Habitación doble, cómoda y tranquila, con cama matrimonial. Comparte baño únicamente con la habitación 103.',
     capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido con la 103', banoPrivado: false,
-    precio: 100000, imagenes: ['assets/habitaciones/piso1/hab102.jpg'],
+    precio: 100000, imagenes: ['assets/habitaciones/piso1/hab102.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
     servicios: SERVICIOS_BASE,
   },
   {
@@ -109,7 +109,7 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     resumen: 'Cama matrimonial, baño compartido con la 102.',
     descripcion: 'Habitación doble con cama matrimonial y ambiente tranquilo. Comparte baño únicamente con la habitación 102.',
     capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido con la 102', banoPrivado: false,
-    precio: 100000, imagenes: ['assets/habitaciones/piso1/hab103.jpg'],
+    precio: 100000, imagenes: ['assets/habitaciones/piso1/hab103.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
     servicios: [...SERVICIOS_BASE, 'Lavandería'],
   },
   {
@@ -119,9 +119,8 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     capacidad: 4, camas: '1 cama doble · 1 camarote', bano: 'Baño privado', banoPrivado: true,
     precio: 80000,
     imagenes: [
-      'assets/habitaciones/piso2/hab201.jpeg',
-      'assets/habitaciones/piso2/hab201-2.jpeg',
-      'assets/habitaciones/piso2/hab201-3.jpeg',
+      'assets/habitaciones/piso2/hab201.jpg',
+      'assets/habitaciones/piso2/hab201-bano.jpg',
     ],
     servicios: [...SERVICIOS_BASE, 'Lavandería'], destacado: 'Mejor precio',
   },
@@ -132,9 +131,8 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido con la 203', banoPrivado: false,
     precio: 110000,
     imagenes: [
-      'assets/habitaciones/piso2/hab202.jpeg',
-      'assets/habitaciones/piso2/hab202-2.jpeg',
-      'assets/habitaciones/piso2/hab202-3.jpeg',
+      'assets/habitaciones/piso2/hab202.jpg',
+      'assets/habitaciones/piso2/hab202-203-bano.jpg',
     ],
     servicios: SERVICIOS_BASE, destacado: 'Para parejas',
   },
@@ -143,7 +141,7 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     resumen: 'Cama matrimonial con vista al paisaje cafetero.',
     descripcion: 'Habitación doble con cama matrimonial y vista al entorno cafetero. Comparte baño únicamente con la habitación 202.',
     capacidad: 2, camas: '1 cama doble', bano: 'Baño compartido con la 202', banoPrivado: false,
-    precio: 110000, imagenes: ['assets/habitaciones/piso2/hab203.jpg'],
+    precio: 110000, imagenes: ['assets/habitaciones/piso2/hab203.jpg', 'assets/habitaciones/piso2/hab202-203-bano.jpg'],
     servicios: [...SERVICIOS_BASE, 'Lavandería'],
   },
   {
@@ -151,7 +149,7 @@ export const CATALOGO_HABITACIONES: HabitacionCatalogo[] = [
     resumen: 'Cama doble y camarote con baño privado.',
     descripcion: 'Cama doble y camarote con baño privado. Acogedora y tranquila, ideal para 4 personas.',
     capacidad: 4, camas: '1 cama doble · 1 camarote', bano: 'Baño privado', banoPrivado: true,
-    precio: 80000, imagenes: ['assets/habitaciones/piso2/hab204.jpg'],
+    precio: 80000, imagenes: ['assets/habitaciones/piso2/hab204.jpg', 'assets/habitaciones/piso2/hab204-bano.jpg'],
     servicios: [...SERVICIOS_BASE, 'Lavandería'], destacado: 'Mejor precio',
   },
 ];
@@ -166,7 +164,7 @@ export const ESPACIOS: Espacio[] = [
   {
     id: 'piso2', nombre: 'Piso 2', subtitulo: 'El piso solo para tu grupo',
     capacidadMax: 12, habitaciones: '4 habitaciones', camas: '4 camas dobles · 2 camarotes',
-    imagen: 'assets/habitaciones/piso2/hab201.jpeg',
+    imagen: 'assets/habitaciones/piso2/hab201.jpg',
     ventajas: ['Nadie más en el piso', 'Dos baños privados', 'Vista al paisaje cafetero'],
   },
   {
@@ -179,7 +177,7 @@ export const ESPACIOS: Espacio[] = [
 
 export const ZONAS_COMUNES = [
   { nombre: 'Sala de estar', imagen: 'assets/galeria/sala-estar.jpg' },
-  { nombre: 'Mezanine', imagen: 'assets/habitaciones/espacios/mezanine.png' },
+  { nombre: 'Mezanine', imagen: 'assets/habitaciones/espacios/mezanine.jpg' },
   { nombre: 'Fachada', imagen: 'assets/galeria/fachada.jpg' },
 ];
 

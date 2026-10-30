@@ -29,3 +29,6 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Fotos originales sin optimizar (las publicadas están en frontend/src/assets)
+fotos-originales/

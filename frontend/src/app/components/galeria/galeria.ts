@@ -61,14 +61,14 @@ export class Galeria {
       id: 5,
       titulo: 'Habitación 201',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso2/hab201.jpeg',
+      imagen: 'assets/habitaciones/piso2/hab201.jpg',
       descripcion: 'Habitación del segundo piso'
     },
     {
       id: 6,
       titulo: 'Habitación 202',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso2/hab202.jpeg',
+      imagen: 'assets/habitaciones/piso2/hab202.jpg',
       descripcion: 'Habitación del segundo piso'
     },
     {
@@ -86,6 +86,41 @@ export class Galeria {
       descripcion: 'Habitación del segundo piso'
     },
     {
+      id: 15,
+      titulo: 'Baño habitación 101',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso1/hab101-bano.jpg',
+      descripcion: 'Baño privado de la habitación 101'
+    },
+    {
+      id: 16,
+      titulo: 'Baño habitaciones 102 y 103',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso1/hab102-103-bano.jpg',
+      descripcion: 'Baño compartido entre las habitaciones 102 y 103'
+    },
+    {
+      id: 17,
+      titulo: 'Baño habitación 201',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab201-bano.jpg',
+      descripcion: 'Baño privado de la habitación 201'
+    },
+    {
+      id: 18,
+      titulo: 'Baño habitaciones 202 y 203',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab202-203-bano.jpg',
+      descripcion: 'Baño compartido entre las habitaciones 202 y 203'
+    },
+    {
+      id: 19,
+      titulo: 'Baño habitación 204',
+      categoria: 'habitaciones',
+      imagen: 'assets/habitaciones/piso2/hab204-bano.jpg',
+      descripcion: 'Baño privado de la habitación 204'
+    },
+    {
       id: 9,
       titulo: 'Sala de estar',
       categoria: 'espacios',
@@ -96,7 +131,7 @@ export class Galeria {
       id: 10,
       titulo: 'Mezanine',
       categoria: 'espacios',
-      imagen: 'assets/habitaciones/espacios/mezanine.png',
+      imagen: 'assets/habitaciones/espacios/mezanine.jpg',
       descripcion: 'Espacio común para compartir y descansar'
     },
     {
