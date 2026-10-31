@@ -159,10 +159,10 @@ export class Home implements OnInit, OnDestroy {
   galeriaFotos = [
     { src: 'assets/habitaciones/piso2/hab201.jpg',   alt: 'Habitación 201' },
     { src: 'assets/habitaciones/piso2/hab202.jpg',   alt: 'Habitación 202' },
-    { src: 'assets/habitaciones/piso2/hab203.jpg',    alt: 'Habitación 203' },
-    { src: 'assets/habitaciones/piso1/hab101.jpg',    alt: 'Habitación 101' },
+    { src: 'assets/habitaciones/piso2/hab203-v2.jpg',    alt: 'Habitación 203' },
+    { src: 'assets/habitaciones/piso1/hab101-v2.jpg',    alt: 'Habitación 101' },
     { src: 'assets/habitaciones/espacios/mezanine.jpg', alt: 'Mezanine' },
-    { src: 'assets/habitaciones/piso1/hab102.jpg',    alt: 'Habitación 102' },
+    { src: 'assets/habitaciones/piso1/hab102-v2.jpg',    alt: 'Habitación 102' },
   ];
 
   // ── Servicios ──────────────────────────────────────────────

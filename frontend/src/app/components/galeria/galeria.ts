@@ -40,21 +40,21 @@ export class Galeria {
       id: 2,
       titulo: 'Habitación 101',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso1/hab101.jpg',
+      imagen: 'assets/habitaciones/piso1/hab101-v2.jpg',
       descripcion: 'Habitación del primer piso'
     },
     {
       id: 3,
       titulo: 'Habitación 102',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso1/hab102.jpg',
+      imagen: 'assets/habitaciones/piso1/hab102-v2.jpg',
       descripcion: 'Habitación del primer piso'
     },
     {
       id: 4,
       titulo: 'Habitación 103',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso1/hab103.jpg',
+      imagen: 'assets/habitaciones/piso1/hab103-v2.jpg',
       descripcion: 'Habitación del primer piso'
     },
     {
@@ -75,14 +75,14 @@ export class Galeria {
       id: 7,
       titulo: 'Habitación 203',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso2/hab203.jpg',
+      imagen: 'assets/habitaciones/piso2/hab203-v2.jpg',
       descripcion: 'Habitación del segundo piso'
     },
     {
       id: 8,
       titulo: 'Habitación 204',
       categoria: 'habitaciones',
-      imagen: 'assets/habitaciones/piso2/hab204.jpg',
+      imagen: 'assets/habitaciones/piso2/hab204-v2.jpg',
       descripcion: 'Habitación del segundo piso'
     },
     {

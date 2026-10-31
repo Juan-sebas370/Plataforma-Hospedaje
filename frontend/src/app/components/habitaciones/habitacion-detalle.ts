@@ -20,7 +20,7 @@ export class HabitacionDetalle implements OnInit {
 
   private datosEjemplo: Habitacion[] = [
     {
-      id: 1,
+      id: 7,
       numero: '101',
       tipo: 'Doble',
       piso: 1,
@@ -28,7 +28,7 @@ export class HabitacionDetalle implements OnInit {
       precioNoche: 120000,
       descripcion: 'Habitación doble con vistas a la ciudad. Cama king size, baño privado con ducha de lluvia.',
       servicios: ['WiFi gratis', 'Aire acondicionado', 'Smart TV', 'Minibar'],
-      imagenes: ['assets/habitaciones/piso1/hab101.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
+      imagenes: ['assets/habitaciones/piso1/hab101-v2.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
       estado: 'DISPONIBLE',
       climatizacion: true,
       television: true,
@@ -37,7 +37,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: true
     },
     {
-      id: 2,
+      id: 8,
       numero: '102',
       tipo: 'Doble',
       piso: 1,
@@ -45,7 +45,7 @@ export class HabitacionDetalle implements OnInit {
       precioNoche: 120000,
       descripcion: 'Habitación doble acogedora con balcón. Ideal para parejas en viaje de negocios.',
       servicios: ['WiFi gratis', 'Aire acondicionado', 'Escritorio', 'Caja fuerte'],
-      imagenes: ['assets/habitaciones/piso1/hab102.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
+      imagenes: ['assets/habitaciones/piso1/hab102-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
       estado: 'DISPONIBLE',
       climatizacion: true,
       television: true,
@@ -54,7 +54,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: false
     },
     {
-      id: 3,
+      id: 9,
       numero: '103',
       tipo: 'Familiar',
       piso: 1,
@@ -62,7 +62,7 @@ export class HabitacionDetalle implements OnInit {
       precioNoche: 180000,
       descripcion: 'Espaciosa habitación familiar con dos camas matrimoniales y área de estar.',
       servicios: ['WiFi gratis', 'TV por cable', 'Sofá cama', 'Área de juegos'],
-      imagenes: ['assets/habitaciones/piso1/hab103.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
+      imagenes: ['assets/habitaciones/piso1/hab103-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
       estado: 'DISPONIBLE',
       climatizacion: true,
       television: true,
@@ -71,7 +71,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: false
     },
     {
-      id: 4,
+      id: 10,
       numero: '201',
       tipo: 'Individual',
       piso: 2,
@@ -88,7 +88,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: false
     },
     {
-      id: 5,
+      id: 11,
       numero: '202',
       tipo: 'Doble',
       piso: 2,
@@ -105,7 +105,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: false
     },
     {
-      id: 6,
+      id: 12,
       numero: '203',
       tipo: 'Doble',
       piso: 2,
@@ -113,7 +113,7 @@ export class HabitacionDetalle implements OnInit {
       precioNoche: 110000,
       descripcion: 'Habitación doble con cama matrimonial y ambiente tranquilo. Comparte baño con la habitación 202.',
       servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
-      imagenes: ['assets/habitaciones/piso2/hab203.jpg', 'assets/habitaciones/piso2/hab202-203-bano.jpg'],
+      imagenes: ['assets/habitaciones/piso2/hab203-v2.jpg', 'assets/habitaciones/piso2/hab202-203-bano.jpg'],
       estado: 'DISPONIBLE',
       climatizacion: false,
       television: false,
@@ -122,7 +122,7 @@ export class HabitacionDetalle implements OnInit {
       minibar: false
     },
     {
-      id: 7,
+      id: 13,
       numero: '204',
       tipo: 'Individual',
       piso: 2,
@@ -130,7 +130,7 @@ export class HabitacionDetalle implements OnInit {
       precioNoche: 80000,
       descripcion: 'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
       servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
-      imagenes: ['assets/habitaciones/piso2/hab204.jpg', 'assets/habitaciones/piso2/hab204-bano.jpg'],
+      imagenes: ['assets/habitaciones/piso2/hab204-v2.jpg', 'assets/habitaciones/piso2/hab204-bano.jpg'],
       estado: 'DISPONIBLE',
       climatizacion: false,
       television: false,
@@ -175,9 +175,11 @@ export class HabitacionDetalle implements OnInit {
 
     this.habitacionService.obtenerPorId(id).subscribe({
       next: (habitacion) => {
-        // Las habitaciones creadas en SOGO pueden no traer fotos: se usan las del catálogo.
-        const imagenes = habitacion.imagenes?.length ? habitacion.imagenes : (habitacionEjemplo?.imagenes ?? []);
-        this.habitacion = { ...habitacion, imagenes, servicios: habitacion.servicios ?? habitacionEjemplo?.servicios ?? [] };
+        // Las habitaciones creadas en SOGO pueden no traer fotos: se usan las del catálogo,
+        // buscadas por número porque el id depende de la base de datos.
+        const delCatalogo = this.datosEjemplo.find((item) => item.numero === habitacion.numero);
+        const imagenes = habitacion.imagenes?.length ? habitacion.imagenes : (delCatalogo?.imagenes ?? []);
+        this.habitacion = { ...habitacion, imagenes, servicios: habitacion.servicios ?? delCatalogo?.servicios ?? [] };
         this.selectedImage = imagenes[0] || '';
         this.cargando = false;
         // La app es zoneless: sin esto la vista no se actualiza al llegar la respuesta.

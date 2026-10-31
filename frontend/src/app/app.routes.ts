@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './components/home/home';
 import { environment } from '../environments/environment';
+import { AuthGuard } from './guards/auth.guard';
 
 /** Mientras el hospedaje se formaliza, /reservas y /pagos muestran el aviso de "aún no recibimos reservas". */
 const avisoPreparacion = () => import('./components/aviso-preparacion/aviso-preparacion').then(m => m.AvisoPreparacion);
@@ -26,13 +27,13 @@ export const routes: Routes = [
     path: 'confirmacion', title: 'Reserva confirmada',
     loadComponent: () => import('./components/confirmacion/confirmacion').then(m => m.Confirmacion),
   },
-  { path: 'perfil', title: 'Mi perfil', loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil) },
+  { path: 'perfil', title: 'Mi perfil', canActivate: [AuthGuard], loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil) },
   {
-    path: 'cambiar-contrasena', title: 'Cambiar contraseña',
+    path: 'cambiar-contrasena', title: 'Cambiar contraseña', canActivate: [AuthGuard],
     loadComponent: () => import('./components/cambiar-contrasena/cambiar-contrasena').then(m => m.CambiarContrasena),
   },
   {
-    path: 'chat-soporte', title: 'Chat de soporte',
+    path: 'chat-soporte', title: 'Chat de soporte', canActivate: [AuthGuard],
     loadComponent: () => import('./components/chat-soporte/chat-soporte').then(m => m.ChatSoporte),
   },
   {

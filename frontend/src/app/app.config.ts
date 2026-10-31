@@ -22,7 +22,7 @@ export function initializeTranslations(translateService: TranslateService) {
   };
 }
 
-// Proveedor condicional del interceptor (solo en navegador)
+// Agrega el token de sesión a las peticiones
 export function provideAuthInterceptor() {
   return {
     provide: HTTP_INTERCEPTORS,
@@ -42,6 +42,7 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptorsFromDi()
     ),
+    provideAuthInterceptor(),
     TranslateService,
     {
       provide: APP_INITIALIZER,

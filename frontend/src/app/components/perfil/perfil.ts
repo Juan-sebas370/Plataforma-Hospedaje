@@ -37,7 +37,7 @@ export class Perfil implements OnInit {
     this.usuario = this.authService.getUser();
 
     if (!this.usuario) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
       return;
     }
 

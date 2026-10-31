@@ -20,9 +20,9 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    // No autorizado - redirigir a login
-    console.warn('Acceso denegado - redirigiendo a login');
-    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    // No autorizado - la web no tiene página de login: se vuelve al inicio
+    console.warn('Acceso denegado - redirigiendo al inicio');
+    this.router.navigate(['/']);
     return false;
   }
 }

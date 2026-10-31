@@ -33,13 +33,13 @@ export class Habitaciones implements OnInit, OnDestroy {
   private isBrowser = false;
 
   private readonly imagenesPorHabitacion: Record<string, string> = {
-    '101': 'assets/habitaciones/piso1/hab101.jpg',
-    '102': 'assets/habitaciones/piso1/hab102.jpg',
-    '103': 'assets/habitaciones/piso1/hab103.jpg',
+    '101': 'assets/habitaciones/piso1/hab101-v2.jpg',
+    '102': 'assets/habitaciones/piso1/hab102-v2.jpg',
+    '103': 'assets/habitaciones/piso1/hab103-v2.jpg',
     '201': 'assets/habitaciones/piso2/hab201.jpg',
     '202': 'assets/habitaciones/piso2/hab202.jpg',
-    '203': 'assets/habitaciones/piso2/hab203.jpg',
-    '204': 'assets/habitaciones/piso2/hab204.jpg',
+    '203': 'assets/habitaciones/piso2/hab203-v2.jpg',
+    '204': 'assets/habitaciones/piso2/hab204-v2.jpg',
   };
 
   // Nuevos filtros avanzados
@@ -295,7 +295,8 @@ export class Habitaciones implements OnInit, OnDestroy {
       precioNoche: Number(habitacion.precioNoche) || 0,
       descripcion: habitacion.descripcion || 'Espacio cómodo para tu estadía en Filandia.',
       servicios: Array.isArray(habitacion.servicios) ? habitacion.servicios : [],
-      imagenes: imagenes.length > 0 ? imagenes : [imagenFallback],
+      // El API no trae fotos: se usan las del catálogo local (habitación y baño).
+      imagenes: imagenes.length > 0 ? imagenes : this.habitaciones.find(h => h.numero === habitacion.numero)?.imagenes ?? [imagenFallback],
     };
   }
 
@@ -436,7 +437,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         precioNoche: 120000,
         descripcion: 'Habitación principal del piso 1 con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor.',
         servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
-        imagenes: ['assets/habitaciones/piso1/hab101.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
+        imagenes: ['assets/habitaciones/piso1/hab101-v2.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
         estado: 'DISPONIBLE',
         climatizacion: false,
         television: false,
@@ -453,7 +454,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         precioNoche: 100000,
         descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 103. Cómoda y tranquila.',
         servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada'],
-        imagenes: ['assets/habitaciones/piso1/hab102.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
+        imagenes: ['assets/habitaciones/piso1/hab102-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
         estado: 'DISPONIBLE',
         climatizacion: false,
         television: false,
@@ -470,7 +471,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         precioNoche: 100000,
         descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 102. Ambiente tranquilo y acogedor.',
         servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
-        imagenes: ['assets/habitaciones/piso1/hab103.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
+        imagenes: ['assets/habitaciones/piso1/hab103-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
         estado: 'DISPONIBLE',
         climatizacion: false,
         television: false,
@@ -531,7 +532,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         descripcion: 'Habitación doble con cama matrimonial y ambiente tranquilo. Comparte baño con la habitación 202. Vistas al entorno cafetero.',
         servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
         imagenes: [
-          'assets/habitaciones/piso2/hab203.jpg',
+          'assets/habitaciones/piso2/hab203-v2.jpg',
 
           'assets/habitaciones/piso2/hab202-203-bano.jpg',
         ],
@@ -552,7 +553,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         descripcion: 'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
         servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
         imagenes: [
-          'assets/habitaciones/piso2/hab204.jpg',
+          'assets/habitaciones/piso2/hab204-v2.jpg',
 
           'assets/habitaciones/piso2/hab204-bano.jpg',
         ],
