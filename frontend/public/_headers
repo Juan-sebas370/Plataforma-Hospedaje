@@ -1,0 +1,5 @@
+# Cloudflare Pages copia los <link rel="modulepreload"> del HTML a una cabecera Link.
+# Las cabeceras ignoran <base href="/">: en /habitaciones/ pedirían
+# /habitaciones/chunk-X.js, que no existe. El HTML ya precarga esos archivos bien.
+/*
+  ! Link
