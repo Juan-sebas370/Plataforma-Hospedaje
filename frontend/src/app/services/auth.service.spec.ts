@@ -218,4 +218,18 @@ describe('AuthService', () => {
       expect(result.subscribe).toBeDefined();
     });
   });
+  describe('Restablecer contraseña', () => {
+    it('acepta la respuesta en texto plano del backend como éxito', () => {
+      let ok = false;
+      let fallo = false;
+      service.resetPassword('token', 'ClaveNueva456', 'ClaveNueva456').subscribe({ next: () => (ok = true), error: () => (fallo = true) });
+
+      const req = httpMock.expectOne(`${environment.apiUrl}/auth/reset-password`);
+      expect(req.request.responseType).toBe('text');
+      req.flush('Contraseña actualizada exitosamente');
+
+      expect(ok).toBe(true);
+      expect(fallo).toBe(false);
+    });
+  });
 });

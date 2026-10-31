@@ -156,7 +156,7 @@ export class AuthService {
 
   requestPasswordReset(email: string): Observable<any> {
     const request: PasswordResetRequest = { email };
-    return this.http.post(`${this.apiUrl}/forgot-password`, request);
+    return this.http.post(`${this.apiUrl}/forgot-password`, request, { responseType: 'text' });
   }
 
   validateResetToken(token: string): Observable<ResetTokenResponse> {
@@ -175,6 +175,7 @@ export class AuthService {
       newPassword,
       confirmPassword,
     };
-    return this.http.post(`${this.apiUrl}/reset-password`, request);
+    // El backend responde texto plano: sin esto Angular intenta leerlo como JSON y lo trata como error.
+    return this.http.post(`${this.apiUrl}/reset-password`, request, { responseType: 'text' });
   }
 }
