@@ -3,28 +3,31 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { Icono } from '../../shared/icono';
 import { HospedajeService } from '../../services/hospedaje.service';
-import { IdPolitica, VIGENTE_DESDE, documentosPoliticas } from '../../data/politicas';
+import { IdPolitica, VIGENTE_DESDE_ISO, documentosPoliticas } from '../../data/politicas';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '../../shared/translate.pipe';
+import { TranslateService } from '../../services/translate.service';
 import { PoliticaDocumento } from './politica-documento';
 
 /** /politicas — Política de reservas, Reglamento interno y Política de datos (una pestaña cada uno; #reserva, #reglamento, #datos). */
 @Component({
   selector: 'app-politicas',
-  imports: [Icono, PoliticaDocumento],
+  imports: [Icono, PoliticaDocumento, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="pol">
       <header class="pol__cabecera">
         <span class="etiqueta">Hospedaje Sebastián</span>
-        <h1>Políticas y reglamento</h1>
-        <p>Lo que aceptas al reservar. Vigente desde el {{ vigente }}.</p>
+        <h1>{{ 'pol.titulo' | translate }}</h1>
+        <p>{{ 'pol.intro' | translate: { fecha: vigente() } }}</p>
       </header>
 
-      <div class="pestanas" role="tablist" aria-label="Documentos">
+      <div class="pestanas" role="tablist" [attr.aria-label]="'pol.documentos' | translate">
         @for (d of documentos(); track d.id) {
           <button type="button" role="tab" class="pestana" [id]="'tab-' + d.id"
                   [attr.aria-selected]="activo() === d.id" [attr.aria-controls]="'panel-' + d.id"
                   [attr.tabindex]="activo() === d.id ? 0 : -1"
-                  (click)="elegir(d.id)" (keydown)="teclado($event)">{{ d.corto }}</button>
+                  (click)="elegir(d.id)" (keydown)="teclado($event)">{{ ('pol.doc.' + d.id + '.corto') | translate }}</button>
         }
       </div>
 
@@ -32,19 +35,22 @@ import { PoliticaDocumento } from './politica-documento';
         @if (activo() === d.id) {
           <article class="pol__doc" role="tabpanel" [id]="'panel-' + d.id" [attr.aria-labelledby]="'tab-' + d.id">
             <div class="pol__doc-cabecera">
-              <h2>{{ d.titulo }}</h2>
+              <h2>{{ ('pol.doc.' + d.id + '.titulo') | translate }}</h2>
               <button type="button" class="imprimir" (click)="imprimir()">
-                <app-icono name="imprimir" [size]="16" [stroke]="2" /> Imprimir
+                <app-icono name="imprimir" [size]="16" [stroke]="2" /> {{ 'pol.imprimir' | translate }}
               </button>
             </div>
-            <app-politica-documento [documento]="d" />
+            @if (soloEspanol()) {
+              <p class="pol__aviso-idioma">{{ 'pol.soloEspanol' | translate }}</p>
+            }
+            <div lang="es"><app-politica-documento [documento]="d" /></div>
           </article>
         }
       }
 
       <p class="pol__contacto">
-        ¿Dudas sobre estas políticas? Escríbenos a <a [href]="'mailto:' + hospedaje.datos().correo">{{ hospedaje.datos().correo }}</a>
-        o por WhatsApp al {{ hospedaje.datos().whatsapp }}.
+        {{ 'pol.dudas' | translate }} <a [href]="'mailto:' + hospedaje.datos().correo">{{ hospedaje.datos().correo }}</a>
+        {{ 'pol.oWhatsapp' | translate: { numero: hospedaje.datos().whatsapp } }}
       </p>
     </section>
   `,
@@ -53,6 +59,7 @@ import { PoliticaDocumento } from './politica-documento';
     .pol { max-width: 880px; margin: 0 auto; padding: calc(85px + 1.75rem) 1.25rem 3rem; }
     .etiqueta { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8A5A12; }
     h1 { margin: .3rem 0 .4rem; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.4rem); color: #0A3D6D; }
+    .pol__aviso-idioma { margin: 0 0 1rem; padding: .75rem 1rem; border-radius: 10px; background: #EAF2FA; color: #0A3D6D; font-size: .92rem; }
     .pol__cabecera p { margin: 0 0 1.5rem; color: #5F5A54; }
     .pestanas { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
     .pestana {
@@ -89,7 +96,12 @@ export class Politicas implements OnInit {
   private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  readonly vigente = VIGENTE_DESDE;
+  private readonly idioma = toSignal(inject(TranslateService).currentLang$, { initialValue: 'es' as const });
+  /** Fecha de vigencia en el idioma elegido ("20 de octubre de 2026", "October 20, 2026"…). */
+  readonly vigente = computed(() => new Intl.DateTimeFormat(this.idioma(), { day: 'numeric', month: 'long', year: 'numeric' })
+    .format(new Date(`${VIGENTE_DESDE_ISO}T12:00:00`)));
+  /** Los documentos legales solo están en español: en otro idioma se avisa. */
+  readonly soloEspanol = computed(() => this.idioma() !== 'es');
   readonly documentos = computed(() => documentosPoliticas(this.hospedaje.datos()));
   readonly activo = signal<IdPolitica>('reserva');
 

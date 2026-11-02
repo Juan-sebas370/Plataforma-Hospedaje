@@ -9,16 +9,19 @@ import { Chatbot } from './components/chatbot/chatbot';
 import { AccesibilidadService } from './services/accesibilidad.service';
 import { AvisoPreparacion } from './components/aviso-preparacion/aviso-preparacion';
 import { environment } from '../environments/environment';
+import { TranslatePipe } from './shared/translate.pipe';
+import { TranslateService } from './services/translate.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Nav, Footer, Chatbot, AvisoPreparacion],
+  imports: [RouterOutlet, Nav, Footer, Chatbot, AvisoPreparacion, TranslatePipe],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   private readonly router = inject(Router);
   private readonly title = inject(Title);
+  private readonly i18n = inject(TranslateService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly contenido = viewChild.required<ElementRef<HTMLElement>>('contenido');
 
@@ -52,7 +55,7 @@ export class App {
       this.ultimaRuta = (e as NavigationEnd).urlAfterRedirects.split('?')[0];
       if (mismaPagina) return;   // solo cambiaron parámetros de la URL
       setTimeout(() => {
-        this.anuncio.set(`Página: ${this.title.getTitle()}`);
+        this.anuncio.set(`${this.i18n.translate('barra.pagina')}: ${this.title.getTitle()}`);
         this.contenido().nativeElement.focus({ preventScroll: true });
       });
     });

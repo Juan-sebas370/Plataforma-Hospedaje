@@ -1,13 +1,15 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy, PLATFORM_ID, Inject, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitacionService, Habitacion } from '../../services/habitacion.service';
 import { ReservaService, Disponibilidad } from '../../services/reserva.service';
+import { TranslateService } from '../../services/translate.service';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
   selector: 'app-habitaciones',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './habitaciones.html',
   styleUrl: './habitaciones.css',
 })
@@ -75,55 +77,55 @@ export class Habitaciones implements OnInit, OnDestroy {
   pisoResumen = [
     {
       piso: 1,
-      titulo: 'PISO 1',
+      titulo: 'habs.piso1',
       descripcion:
-        'En el piso 1 se encuentran 3 habitaciones: 101, 102 y 103. Tiene capacidad para 8 personas, 3 camas dobles y 1 camarote.',
+        'habs.desc1',
       habitaciones: 3,
       capacidad: 8,
       camasDobles: 3,
       camarotes: 1,
       detalles: [
         {
-          nombre: 'Habitación 101',
+          nombre: '101',
           descripcion:
-            'Cama doble, camarote, baño privado, capacidad para 4 personas.',
+            'habs.d101',
         },
         {
-          nombre: 'Habitación 102',
-          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 103.',
+          nombre: '102',
+          descripcion: 'habs.d102',
         },
         {
-          nombre: 'Habitación 103',
-          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 102.',
+          nombre: '103',
+          descripcion: 'habs.d103',
         },
       ],
     },
     {
       piso: 2,
-      titulo: 'PISO 2',
+      titulo: 'habs.piso2',
       descripcion:
-        'En el piso 2 se encuentran 4 habitaciones: 201, 202, 203 y 204. Tiene capacidad para 12 personas, 2 camas dobles y 2 camarotes.',
+        'habs.desc2',
       habitaciones: 4,
       capacidad: 12,
       camasDobles: 2,
       camarotes: 2,
       detalles: [
         {
-          nombre: 'Habitación 201',
+          nombre: '201',
           descripcion:
-            'Cama doble, camarote, baño privado, capacidad para 4 personas.',
+            'habs.d201',
         },
         {
-          nombre: 'Habitación 202',
-          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 203.',
+          nombre: '202',
+          descripcion: 'habs.d202',
         },
         {
-          nombre: 'Habitación 203',
-          descripcion: 'Cama doble para 2 personas. Comparte baño con la habitación 202.',
+          nombre: '203',
+          descripcion: 'habs.d203',
         },
         {
-          nombre: 'Habitación 204',
-          descripcion: 'Cama doble y camarote. Baño privado. Capacidad para 4 personas.',
+          nombre: '204',
+          descripcion: 'habs.d204',
         },
       ],
     },
@@ -218,6 +220,8 @@ export class Habitaciones implements OnInit, OnDestroy {
     { nombre: 'Reserva individual', horario: '3pm a 12am' },
     { nombre: 'Grupo familiar', horario: '3pm a 12am' },
   ];
+
+  private readonly i18n = inject(TranslateService);
 
   constructor(
     private habitacionService: HabitacionService,
@@ -327,17 +331,17 @@ export class Habitaciones implements OnInit, OnDestroy {
     if (!this.tieneBusqueda || this.alternativasEspacio.length === 0) return '';
     const pisoConveniente = this.alternativasEspacio.some(alternativa => alternativa.conveniente);
     if (this.totalHuespedes >= 13) {
-      return 'Por el tamaño de tu grupo, revisa la opción de reservar la casa completa en Reservas para tener mayor comodidad.';
+      return 'habs.recCasa';
     }
     if (this.totalHuespedes >= 9) {
       return pisoConveniente
-        ? 'Para este grupo, un piso completo puede ser más cómodo y conveniente que reservar habitaciones por separado.'
-        : 'Para este grupo, un piso completo ofrece la capacidad necesaria; compara el precio antes de confirmar.';
+        ? 'habs.recPisoComodo'
+        : 'habs.recPisoCapacidad';
     }
     if (this.totalHuespedes >= 5) {
-      return 'Estas opciones tienen capacidad suficiente para tu grupo. Puedes comparar varias habitaciones antes de confirmar.';
+      return 'habs.recOpciones';
     }
-    return 'Te mostramos primero las habitaciones que tienen capacidad para tu grupo.';
+    return 'habs.recPrimero';
   }
 
   get alternativasEspacio() {
@@ -356,9 +360,9 @@ export class Habitaciones implements OnInit, OnDestroy {
     }
 
     const pisos = [
-      { id: 'piso1', nombre: 'Piso 1', capacidad: 8, precio: 550000, ocupado: this.disponibilidad.piso1Ocupado },
-      { id: 'piso2', nombre: 'Piso 2', capacidad: 12, precio: 550000, ocupado: this.disponibilidad.piso2Ocupado },
-      { id: 'completo', nombre: 'Casa completa', capacidad: 20, precio: 1200000, ocupado: this.disponibilidad.piso1Ocupado || this.disponibilidad.piso2Ocupado },
+      { id: 'piso1', nombre: 'habs.altPiso1', capacidad: 8, precio: 550000, ocupado: this.disponibilidad.piso1Ocupado },
+      { id: 'piso2', nombre: 'habs.altPiso2', capacidad: 12, precio: 550000, ocupado: this.disponibilidad.piso2Ocupado },
+      { id: 'completo', nombre: 'habs.altCasa', capacidad: 20, precio: 1200000, ocupado: this.disponibilidad.piso1Ocupado || this.disponibilidad.piso2Ocupado },
     ];
 
     return pisos
@@ -606,7 +610,7 @@ export class Habitaciones implements OnInit, OnDestroy {
       if (capacidadInsuficiente || ocupada) {
         this.motivoNoDisponibilidad.set(
           habitacion.id,
-          ocupada ? 'Ya reservada para las fechas seleccionadas' : 'Sin capacidad suficiente para tu grupo',
+          ocupada ? 'habs.motivoOcupada' : 'habs.motivoCapacidad',
         );
         noDisponibles.push(habitacion);
       } else {
@@ -633,30 +637,44 @@ export class Habitaciones implements OnInit, OnDestroy {
   precioPorPersona(habitacion: Habitacion): string {
     const personas = habitacion.capacidad && habitacion.capacidad > 0 ? habitacion.capacidad : 1;
     const precioPersona = Math.round(habitacion.precioNoche / personas);
-    return `Desde ${this.formatearPrecio(precioPersona)} por persona`;
+    return this.i18n.translate('habs.precioPersona', { precio: this.formatearPrecio(precioPersona) });
   }
 
   tipoCama(tipo: string): string {
     switch (tipo?.toLowerCase()) {
       case 'individual':
-        return 'Cama individual';
+        return this.i18n.translate('habs.camaIndividual');
       case 'doble':
-        return 'Cama doble';
+        return this.i18n.translate('habs.camaDoble');
       case 'suite':
-        return 'Cama king size';
+        return this.i18n.translate('habs.camaKing');
       case 'familiar':
-        return 'Cama doble + sofá cama';
+        return this.i18n.translate('habs.camaSofa');
       default:
-        return 'Cama estándar';
+        return this.i18n.translate('habs.camaEstandar');
     }
   }
 
   tipoBano(tieneBano: boolean): string {
-    return tieneBano ? 'Baño privado' : 'Baño compartido';
+    return this.i18n.translate(tieneBano ? 'habs.banoPrivado' : 'habs.banoCompartido');
   }
 
   tieneCocinaCompartida(habitacion: Habitacion): boolean {
     return habitacion.servicios?.some((servicio) => /cocina/i.test(servicio));
+  }
+
+  /** Descripción en el idioma elegido (por número de habitación); si no hay traducción, la original. */
+  descripcionHab(habitacion: Habitacion): string {
+    const clave = `cuartos.h${habitacion.numero}`;
+    const traducida = this.i18n.translate(clave);
+    return traducida === clave ? habitacion.descripcion : traducida;
+  }
+
+  /** Nombre de un servicio de la habitación en el idioma elegido; si no hay traducción, el original. */
+  servicioHab(servicio: string): string {
+    const clave = `servicioHab.${servicio}`;
+    const traducido = this.i18n.translate(clave);
+    return traducido === clave ? servicio : traducido;
   }
 
   getResumenDescripcion(descripcion: string): string {
@@ -840,7 +858,7 @@ export class Habitaciones implements OnInit, OnDestroy {
   }
 
   motivoNoDisponible(habitacion: Habitacion): string {
-    return this.motivoNoDisponibilidad.get(habitacion.id) || 'No disponible para las fechas seleccionadas';
+    return this.motivoNoDisponibilidad.get(habitacion.id) || 'habs.motivoGenerico';
   }
 
   /**

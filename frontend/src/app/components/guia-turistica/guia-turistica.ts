@@ -4,6 +4,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Icono } from '../../shared/icono';
+import { TranslatePipe } from '../../shared/translate.pipe';
 import { AccesibilidadService } from '../../services/accesibilidad.service';
 import { LUGARES_TURISTICOS, LugarTuristico } from '../../data/guia-turistica';
 
@@ -30,7 +31,7 @@ function intercalar(lugares: LugarTuristico[]): LugarTuristico[] {
  */
 @Component({
   selector: 'app-guia-turistica',
-  imports: [RouterLink, Icono],
+  imports: [RouterLink, Icono, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './guia-turistica.html',
   styleUrl: './guia-turistica.css',

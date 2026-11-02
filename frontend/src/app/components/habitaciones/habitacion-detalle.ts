@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, PLATFORM_ID, Inject, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HabitacionService, Habitacion } from '../../services/habitacion.service';
 import { TranslatePipe } from '../../shared/translate.pipe';
+import { TranslateService } from '../../services/translate.service';
 
 @Component({
   standalone: true,
@@ -24,17 +25,17 @@ export class HabitacionDetalle implements OnInit {
       numero: '101',
       tipo: 'Doble',
       piso: 1,
-      capacidad: 2,
+      capacidad: 4,
       precioNoche: 120000,
-      descripcion: 'Habitación doble con vistas a la ciudad. Cama king size, baño privado con ducha de lluvia.',
-      servicios: ['WiFi gratis', 'Aire acondicionado', 'Smart TV', 'Minibar'],
+      descripcion: 'Habitación principal del piso 1 con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor.',
+      servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
       imagenes: ['assets/habitaciones/piso1/hab101-v2.jpg', 'assets/habitaciones/piso1/hab101-bano.jpg'],
       estado: 'DISPONIBLE',
-      climatizacion: true,
-      television: true,
+      climatizacion: false,
+      television: false,
       wifi: true,
       bano: true,
-      minibar: true
+      minibar: false
     },
     {
       id: 8,
@@ -42,32 +43,32 @@ export class HabitacionDetalle implements OnInit {
       tipo: 'Doble',
       piso: 1,
       capacidad: 2,
-      precioNoche: 120000,
-      descripcion: 'Habitación doble acogedora con balcón. Ideal para parejas en viaje de negocios.',
-      servicios: ['WiFi gratis', 'Aire acondicionado', 'Escritorio', 'Caja fuerte'],
+      precioNoche: 100000,
+      descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 103. Cómoda y tranquila.',
+      servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada'],
       imagenes: ['assets/habitaciones/piso1/hab102-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
       estado: 'DISPONIBLE',
-      climatizacion: true,
-      television: true,
+      climatizacion: false,
+      television: false,
       wifi: true,
-      bano: true,
+      bano: false,
       minibar: false
     },
     {
       id: 9,
       numero: '103',
-      tipo: 'Familiar',
+      tipo: 'Doble',
       piso: 1,
-      capacidad: 4,
-      precioNoche: 180000,
-      descripcion: 'Espaciosa habitación familiar con dos camas matrimoniales y área de estar.',
-      servicios: ['WiFi gratis', 'TV por cable', 'Sofá cama', 'Área de juegos'],
+      capacidad: 2,
+      precioNoche: 100000,
+      descripcion: 'Habitación doble con cama matrimonial. Comparte baño con la habitación 102. Ambiente tranquilo y acogedor.',
+      servicios: ['WiFi gratis', 'Agua caliente', 'Cocina equipada', 'Lavandería'],
       imagenes: ['assets/habitaciones/piso1/hab103-v2.jpg', 'assets/habitaciones/piso1/hab102-103-bano.jpg'],
       estado: 'DISPONIBLE',
-      climatizacion: true,
-      television: true,
+      climatizacion: false,
+      television: false,
       wifi: true,
-      bano: true,
+      bano: false,
       minibar: false
     },
     {
@@ -140,6 +141,8 @@ export class HabitacionDetalle implements OnInit {
     }
   ];
 
+  private readonly i18n = inject(TranslateService);
+
   constructor(
     private route: ActivatedRoute,
     private habitacionService: HabitacionService,
@@ -157,7 +160,7 @@ export class HabitacionDetalle implements OnInit {
   cargarHabitacion() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id || Number.isNaN(id)) {
-      this.error = 'Habitación inválida';
+      this.error = 'habs.invalida';
       this.cargando = false;
       return;
     }
@@ -187,7 +190,7 @@ export class HabitacionDetalle implements OnInit {
       },
       error: () => {
         if (!habitacionEjemplo) {
-          this.error = 'No se pudo cargar la habitación. Intenta nuevamente.';
+          this.error = 'habs.errorCarga';
           this.habitacion = null;
         }
         this.cargando = false;
@@ -214,7 +217,7 @@ export class HabitacionDetalle implements OnInit {
       return;
     }
     const telefono = '573147556717';
-    const mensaje = `Hola, quiero reservar la habitación ${this.habitacion.numero}.`;
+    const mensaje = this.i18n.translate('habs.mensajeWhatsapp', { n: this.habitacion.numero });
     window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
   }
 
@@ -226,32 +229,53 @@ export class HabitacionDetalle implements OnInit {
     }).format(precio);
   }
 
+  /** "Doble" / "Individual" en el idioma elegido. */
+  tipoHab(tipo: string): string {
+    const clave = { doble: 'habs.tipoDoble', individual: 'habs.tipoIndividual' }[tipo?.toLowerCase()] ?? 'habs.tipoHab';
+    return this.i18n.translate(clave);
+  }
+
+  /** Descripción en el idioma elegido (por número de habitación); si no hay traducción, la original. */
+  descripcionHab(): string {
+    if (!this.habitacion) return '';
+    const clave = `cuartos.h${this.habitacion.numero}`;
+    const traducida = this.i18n.translate(clave);
+    return traducida === clave ? this.habitacion.descripcion : traducida;
+  }
+
+  /** Nombre de un servicio de la habitación en el idioma elegido; si no hay traducción, el original. */
+  servicioHab(servicio: string): string {
+    const clave = `servicioHab.${servicio}`;
+    const traducido = this.i18n.translate(clave);
+    return traducido === clave ? servicio : traducido;
+  }
+
   precioDesde(): string {
     if (!this.habitacion) {
       return '';
     }
     const personas = this.habitacion.capacidad > 0 ? this.habitacion.capacidad : 1;
     const precioPersona = Math.round(this.habitacion.precioNoche / personas);
-    return `Desde ${this.formatearPrecio(precioPersona)} por persona`;
+    return this.i18n.translate('habs.precioPersona', { precio: this.formatearPrecio(precioPersona) });
   }
 
   tipoCama(tipo: string): string {
     switch ((tipo || '').toLowerCase()) {
       case 'individual':
-        return 'Cama individual';
+        return this.i18n.translate('habs.camaIndividual');
       case 'doble':
-        return 'Cama doble';
+        return this.i18n.translate('habs.camaDoble');
       case 'suite':
-        return 'Cama king size';
+        return this.i18n.translate('habs.camaKing');
       case 'familiar':
-        return 'Cama doble + sofá cama';
+        return this.i18n.translate('habs.camaSofa');
       default:
-        return 'Cama estándar';
+        return this.i18n.translate('habs.camaEstandar');
     }
   }
 
   tipoBano(): string {
-    return this.habitacion?.bano ? 'Baño privado' : 'Baño compartido';
+    return this.i18n.translate(this.habitacion?.bano ? 'habs.banoPrivado' : 'habs.banoCompartido');
   }
 
   tieneCocinaCompartida(): boolean {

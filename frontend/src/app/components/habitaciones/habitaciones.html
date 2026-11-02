@@ -3,26 +3,26 @@
   <!-- ══ HEADER ══════════════════════════════════════════════ -->
   <section class="habitaciones-header">
     <span class="header-tag">Filandia, Quindío</span>
-    <h1>Nuestras Habitaciones</h1>
-    <p>Dos pisos independientes, 6 habitaciones, para grupos de 2 a 20 personas</p>
+    <h1>{{ 'habs.titulo' | translate }}</h1>
+    <p>{{ 'habs.sub' | translate }}</p>
   </section>
 
   @if (tieneBusqueda) {
     <section class="busqueda-resumen">
-      <strong>Disponibilidad consultada</strong>
+      <strong>{{ 'habs.consultada' | translate }}</strong>
       <span>{{ busqueda.fechaEntrada }} → {{ busqueda.fechaSalida }}</span>
-      <span>{{ busqueda.adultos }} adultos · {{ busqueda.ninos3 + busqueda.ninos10 + busqueda.ninos11 }} niños</span>
+      <span>{{ 'habs.resumenBusqueda' | translate: { a: busqueda.adultos, n: busqueda.ninos3 + busqueda.ninos10 + busqueda.ninos11 } }}</span>
       @if (busqueda.tipoReserva) { <span>Tipo: {{ busqueda.tipoReserva }}</span> }
     </section>
     @if (recomendacion) {
-      <p class="recomendacion-hospedaje">{{ recomendacion }}</p>
+      <p class="recomendacion-hospedaje">{{ recomendacion | translate }}</p>
     }
     @if (alternativasEspacio.length > 0) {
       <section class="alternativas-resumen">
-        <strong>Alternativas disponibles para tu grupo</strong>
+        <strong>{{ 'habs.alternativas' | translate }}</strong>
         <div class="alternativas-lista">
           @for (alternativa of alternativasEspacio; track alternativa.id) {
-            <span>{{ alternativa.nombre }} · hasta {{ alternativa.capacidad }} personas · {{ formatearPrecio(alternativa.precio) }}/noche</span>
+            <span>{{ 'habs.alternativa' | translate: { nombre: (alternativa.nombre | translate), n: alternativa.capacidad, precio: formatearPrecio(alternativa.precio) } }}</span>
           }
         </div>
       </section>
@@ -34,12 +34,12 @@
     <div class="controles-inner">
       <div class="busqueda-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" [(ngModel)]="textoBusqueda" (input)="onBusquedaChange()" placeholder="Buscar habitación..." class="busqueda-input" />
+        <input type="text" [(ngModel)]="textoBusqueda" (input)="onBusquedaChange()" [placeholder]="'habs.buscar' | translate" class="busqueda-input" />
       </div>
       <div class="filtros-wrap">
-        <button class="filtro-btn" [class.active]="filtroActivo === 'Todas'" (click)="aplicarFiltro('Todas')">Todas</button>
-        <button class="filtro-btn" [class.active]="filtroActivo === 'Piso 1'" (click)="aplicarFiltro('Piso 1')">Piso 1</button>
-        <button class="filtro-btn" [class.active]="filtroActivo === 'Piso 2'" (click)="aplicarFiltro('Piso 2')">Piso 2</button>
+        <button class="filtro-btn" [class.active]="filtroActivo === 'Todas'" (click)="aplicarFiltro('Todas')">{{ 'habs.todas' | translate }}</button>
+        <button class="filtro-btn" [class.active]="filtroActivo === 'Piso 1'" (click)="aplicarFiltro('Piso 1')">{{ 'habs.piso' | translate: { n: 1 } }}</button>
+        <button class="filtro-btn" [class.active]="filtroActivo === 'Piso 2'" (click)="aplicarFiltro('Piso 2')">{{ 'habs.piso' | translate: { n: 2 } }}</button>
       </div>
     </div>
   </section>
@@ -50,30 +50,30 @@
     @if (cargando && habitacionesFiltradas.length === 0) {
       <div class="loading-box">
         <div class="spinner"></div>
-        <p>Cargando habitaciones...</p>
+        <p>{{ 'habs.cargando' | translate }}</p>
       </div>
     }
 
     @if (!cargando && habitacionesFiltradas.length === 0 && habitacionesNoDisponibles.length === 0) {
       <div class="no-resultados">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E8DCCB" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>No se encontraron habitaciones</p>
-        <button class="btn-limpiar" (click)="textoBusqueda = ''; filtroActivo = 'Todas'; aplicarFiltros()">Limpiar filtros</button>
+        <p>{{ 'habs.ninguna' | translate }}</p>
+        <button class="btn-limpiar" (click)="textoBusqueda = ''; filtroActivo = 'Todas'; aplicarFiltros()">{{ 'habs.limpiar' | translate }}</button>
       </div>
     }
 
-    <h2 class="sr-only">Lista de habitaciones</h2>
+    <h2 class="sr-only">{{ 'habs.lista' | translate }}</h2>
       @for (hab of habitacionesFiltradas; track hab.id) {
       <article class="hab-card" [class.hab-card--piso2]="hab.piso === 2">
 
         <!-- Imagen -->
            <div class="hab-card__imagen"
              [style.backgroundImage]="'url(' + imagenPrincipal(hab) + ')'">
-          <span class="piso-tag">Piso {{ hab.piso }} · Hab. {{ hab.numero }}</span>
+          <span class="piso-tag">{{ 'habs.pisoHab' | translate: { p: hab.piso, n: hab.numero } }}</span>
           @if (hab.imagenes.length > 1) {
             <span class="fotos-tag">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              {{ hab.imagenes.length }} fotos
+              {{ 'habs.fotos' | translate: { n: hab.imagenes.length } }}
             </span>
           }
         </div>
@@ -84,17 +84,17 @@
           <!-- Título y número -->
           <div class="hab-card__top">
             <div>
-              <h3>Habitación {{ hab.numero }}</h3>
+              <h3>{{ 'habs.habitacion' | translate: { n: hab.numero } }}</h3>
               <p class="hab-sub">{{ tipoCama(hab.tipo) }} · {{ tipoBano(hab.bano) }}</p>
             </div>
             <div class="capacidad-chip">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              {{ hab.capacidad }} pers.
+              {{ 'habs.pers' | translate: { n: hab.capacidad } }}
             </div>
           </div>
 
           <!-- Descripción resumida -->
-          <p class="hab-desc">{{ getResumenDescripcion(hab.descripcion) }}</p>
+          <p class="hab-desc">{{ getResumenDescripcion(descripcionHab(hab)) }}</p>
 
           <!-- Servicios pills -->
           <div class="hab-services">
@@ -107,13 +107,13 @@
             @if (hab.bano) {
               <span class="service-pill">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12V5a2 2 0 0 1 2-2h3"/></svg>
-                Baño privado
+                {{ 'habs.banoPrivado' | translate }}
               </span>
             }
             @if (tieneCocinaCompartida(hab)) {
               <span class="service-pill">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8Z"/></svg>
-                Cocina
+                {{ 'habs.cocina' | translate }}
               </span>
             }
           </div>
@@ -121,17 +121,17 @@
           <!-- Footer de la card -->
           <div class="hab-card__footer">
             <div class="hab-precio">
-              <span class="precio-desde">Desde</span>
+              <span class="precio-desde">{{ 'habs.desde' | translate }}</span>
               <strong>{{ formatearPrecio(hab.precioNoche) }}</strong>
-              <span class="precio-noche">/ noche</span>
+              <span class="precio-noche">{{ 'habs.noche' | translate }}</span>
             </div>
             <div class="hab-card__actions">
               <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">
-                Ver detalle
+                {{ 'habs.verDetalle' | translate }}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
               <button class="btn-reservar-habitacion" (click)="reservarHabitacion(hab)">
-                Reservar
+                {{ 'habs.reservar' | translate }}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
@@ -143,26 +143,26 @@
 
     @if (!cargando && habitacionesNoDisponibles.length > 0) {
       <div class="no-disponibles-heading">
-        <h2>Otras opciones</h2>
-        <p>No disponibles para los criterios seleccionados</p>
+        <h2>{{ 'habs.otras' | translate }}</h2>
+        <p>{{ 'habs.otrasSub' | translate }}</p>
       </div>
       @for (hab of habitacionesNoDisponibles; track hab.id) {
         <article class="hab-card hab-card--no-disponible">
           <div class="hab-card__imagen" [style.backgroundImage]="'url(' + imagenPrincipal(hab) + ')'">
-            <span class="piso-tag">Piso {{ hab.piso }} · Hab. {{ hab.numero }}</span>
-            <span class="estado-no-disponible">No disponible</span>
+            <span class="piso-tag">{{ 'habs.pisoHab' | translate: { p: hab.piso, n: hab.numero } }}</span>
+            <span class="estado-no-disponible">{{ 'habs.noDisponible' | translate }}</span>
           </div>
           <div class="hab-card__body">
             <div class="hab-card__top">
               <div>
-                <h3>Habitación {{ hab.numero }}</h3>
-                <p class="hab-sub">{{ tipoCama(hab.tipo) }} · Capacidad {{ hab.capacidad }}</p>
+                <h3>{{ 'habs.habitacion' | translate: { n: hab.numero } }}</h3>
+                <p class="hab-sub">{{ tipoCama(hab.tipo) }} · {{ 'habs.capacidad' | translate: { n: hab.capacidad } }}</p>
               </div>
             </div>
-            <p class="hab-desc">{{ motivoNoDisponible(hab) }}</p>
+            <p class="hab-desc">{{ motivoNoDisponible(hab) | translate }}</p>
             <div class="hab-card__footer">
-              <span>Disponible con otras fechas o grupo</span>
-              <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">Ver detalle</button>
+              <span>{{ 'habs.conOtras' | translate }}</span>
+              <button class="btn-ver-detalle" (click)="abrirDetalle(hab)">{{ 'habs.verDetalle' | translate }}</button>
             </div>
           </div>
         </article>
@@ -178,7 +178,7 @@
         <!-- Galería de imágenes -->
         <div class="modal-galeria">
           <img [src]="habitacionSeleccionada.imagenes[imagenActivaIdx] || imagenPrincipal(habitacionSeleccionada)"
-               [alt]="'Habitación ' + habitacionSeleccionada.numero" />
+               [alt]="'habs.habitacion' | translate: { n: habitacionSeleccionada.numero }" />
           @if (habitacionSeleccionada.imagenes.length > 1) {
             <div class="galeria-dots">
               @for (img of habitacionSeleccionada.imagenes; track $index) {
@@ -201,47 +201,47 @@
         <div class="modal-content">
           <div class="modal-header">
             <div>
-              <span class="modal-piso-tag">Piso {{ habitacionSeleccionada.piso }}</span>
-              <h2>Habitación {{ habitacionSeleccionada.numero }}</h2>
+              <span class="modal-piso-tag">{{ 'habs.piso' | translate: { n: habitacionSeleccionada.piso } }}</span>
+              <h2>{{ 'habs.habitacion' | translate: { n: habitacionSeleccionada.numero } }}</h2>
             </div>
             <div class="modal-precio">
-              <span>Desde</span>
+              <span>{{ 'habs.desde' | translate }}</span>
               <strong>{{ formatearPrecio(habitacionSeleccionada.precioNoche) }}</strong>
-              <span>/ noche</span>
+              <span>{{ 'habs.noche' | translate }}</span>
             </div>
           </div>
 
           <!-- Descripción completa -->
-          <p class="modal-desc">{{ habitacionSeleccionada.descripcion }}</p>
+          <p class="modal-desc">{{ descripcionHab(habitacionSeleccionada) }}</p>
 
           <!-- Datos clave en chips -->
           <div class="modal-datos">
             <div class="modal-dato">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <span>Capacidad: <strong>{{ habitacionSeleccionada.capacidad }} personas</strong></span>
+              <span>{{ 'habs.mCapacidad' | translate }} <strong>{{ 'habs.mPersonas' | translate: { n: habitacionSeleccionada.capacidad } }}</strong></span>
             </div>
             <div class="modal-dato">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
-              <span>Cama: <strong>{{ tipoCama(habitacionSeleccionada.tipo) }}</strong></span>
+              <span>{{ 'habs.mCama' | translate }} <strong>{{ tipoCama(habitacionSeleccionada.tipo) }}</strong></span>
             </div>
             <div class="modal-dato">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12V5a2 2 0 0 1 2-2h3"/></svg>
-              <span>Baño: <strong>{{ tipoBano(habitacionSeleccionada.bano) }}</strong></span>
+              <span>{{ 'habs.mBano' | translate }} <strong>{{ tipoBano(habitacionSeleccionada.bano) }}</strong></span>
             </div>
             <div class="modal-dato">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              <span>Precio: <strong>{{ formatearPrecio(habitacionSeleccionada.precioNoche) }}/noche</strong></span>
+              <span>{{ 'habs.mPrecio' | translate }} <strong>{{ 'habs.porNoche' | translate: { precio: formatearPrecio(habitacionSeleccionada.precioNoche) } }}</strong></span>
             </div>
           </div>
 
           <!-- Servicios -->
           <div class="modal-servicios">
-            <h3>Servicios incluidos</h3>
+            <h3>{{ 'habs.serviciosIncluidos' | translate }}</h3>
             <ul class="servicios-list">
               @for (s of habitacionSeleccionada.servicios; track $index) {
                 <li>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E5A9C" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  {{ s }}
+                  {{ servicioHab(s) }}
                 </li>
               }
             </ul>
@@ -249,9 +249,9 @@
 
           <!-- Acciones -->
           <div class="modal-actions">
-            <button class="btn-modal-cerrar" (click)="cerrarDetalle()">Volver</button>
+            <button class="btn-modal-cerrar" (click)="cerrarDetalle()">{{ 'habs.volver' | translate }}</button>
             <button class="btn-modal-reservar" (click)="reservarHabitacion(habitacionSeleccionada)">
-              Reservar esta habitación
+              {{ 'habs.reservarEsta' | translate }}
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
@@ -264,40 +264,40 @@
   @if (!tieneBusqueda || esGrupoGrande) {
   <section class="pisos-section">
     <div class="section-header">
-      <span class="section-tag">Distribución</span>
-      <h2>Organización por pisos</h2>
-      <p>Cada piso es independiente y puede reservarse por separado o junto al otro</p>
+      <span class="section-tag">{{ 'habs.pisosEtiqueta' | translate }}</span>
+      <h2>{{ 'habs.pisosTitulo' | translate }}</h2>
+      <p>{{ 'habs.pisosSub' | translate }}</p>
     </div>
     <div class="pisos-grid">
       @for (piso of pisoResumen; track $index) {
         <div class="piso-card">
           <div class="piso-card__header">
-            <h3>{{ piso.titulo }}</h3>
-            <span class="piso-cap-badge">Hasta {{ piso.capacidad }} personas</span>
+            <h3>{{ piso.titulo | translate }}</h3>
+            <span class="piso-cap-badge">{{ 'habs.hastaPersonas' | translate: { n: piso.capacidad } }}</span>
           </div>
-          <p class="piso-desc">{{ piso.descripcion }}</p>
+          <p class="piso-desc">{{ piso.descripcion | translate }}</p>
 
           <!-- Métricas -->
           <div class="piso-metrics">
             <div class="piso-metric">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
               <span class="metric-num">{{ piso.habitaciones }}</span>
-              <span class="metric-label">Habitaciones</span>
+              <span class="metric-label">{{ 'habs.mHabitaciones' | translate }}</span>
             </div>
             <div class="piso-metric">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               <span class="metric-num">{{ piso.capacidad }}</span>
-              <span class="metric-label">Personas</span>
+              <span class="metric-label">{{ 'habs.mPersonasL' | translate }}</span>
             </div>
             <div class="piso-metric">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg>
               <span class="metric-num">{{ piso.camasDobles }}</span>
-              <span class="metric-label">Camas dobles</span>
+              <span class="metric-label">{{ 'habs.mCamas' | translate }}</span>
             </div>
             <div class="piso-metric">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
               <span class="metric-num">{{ piso.camarotes }}</span>
-              <span class="metric-label">Camarotes</span>
+              <span class="metric-label">{{ 'habs.mCamarotes' | translate }}</span>
             </div>
           </div>
 
@@ -307,20 +307,20 @@
               <div class="hab-detalle-item">
                 <span class="hab-detalle-nombre">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  {{ d.nombre }}
+                  {{ 'habs.habitacion' | translate: { n: d.nombre } }}
                 </span>
-                <p>{{ d.descripcion }}</p>
+                <p>{{ d.descripcion | translate }}</p>
               </div>
             }
           </div>
 
           @if (esAlternativaDisponible('piso' + piso.piso)) {
-            <span class="alternativa-badge">Recomendado para tu búsqueda</span>
+            <span class="alternativa-badge">{{ 'habs.recomendado' | translate }}</span>
           }
           <button class="btn-reservar-piso"
                   [disabled]="tieneBusqueda && esGrupoGrande && !esAlternativaDisponible('piso' + piso.piso)"
                   (click)="reservarEspacio('piso' + piso.piso)">
-            Reservar {{ piso.titulo }}
+            {{ 'habs.reservarPiso' | translate: { piso: (piso.titulo | translate) } }}
           </button>
         </div>
       }
@@ -328,39 +328,39 @@
       <!-- Casa completa -->
       <div class="piso-card piso-card--completo">
         <div class="piso-card__header">
-          <h3>Casa Completa</h3>
-          <span class="piso-cap-badge piso-cap-badge--gold">Hasta 20 personas</span>
+          <h3>{{ 'habs.casa' | translate }}</h3>
+          <span class="piso-cap-badge piso-cap-badge--gold">{{ 'habs.hastaPersonas' | translate: { n: 20 } }}</span>
         </div>
-        <p class="piso-desc">Reserva ambos pisos y disfruta de toda la casa. Ideal para grupos grandes, eventos familiares o retiros.</p>
+        <p class="piso-desc">{{ 'habs.descCasa' | translate }}</p>
         <div class="piso-metrics">
           <div class="piso-metric">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
             <span class="metric-num">6</span>
-            <span class="metric-label">Habitaciones</span>
+            <span class="metric-label">{{ 'habs.mHabitaciones' | translate }}</span>
           </div>
           <div class="piso-metric">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span class="metric-num">20</span>
-            <span class="metric-label">Personas</span>
+            <span class="metric-label">{{ 'habs.mPersonasL' | translate }}</span>
           </div>
           <div class="piso-metric">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg>
             <span class="metric-num">5</span>
-            <span class="metric-label">Camas dobles</span>
+            <span class="metric-label">{{ 'habs.mCamas' | translate }}</span>
           </div>
           <div class="piso-metric">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
             <span class="metric-num">3</span>
-            <span class="metric-label">Camarotes</span>
+            <span class="metric-label">{{ 'habs.mCamarotes' | translate }}</span>
           </div>
         </div>
         @if (esAlternativaDisponible('completo')) {
-          <span class="alternativa-badge alternativa-badge--gold">Recomendado para tu búsqueda</span>
+          <span class="alternativa-badge alternativa-badge--gold">{{ 'habs.recomendado' | translate }}</span>
         }
         <button class="btn-reservar-piso btn-reservar-piso--gold"
                 [disabled]="tieneBusqueda && esGrupoGrande && !esAlternativaDisponible('completo')"
                 (click)="reservarEspacio('completo')">
-          Reservar casa completa
+          {{ 'habs.reservarCasa' | translate }}
         </button>
       </div>
     </div>
@@ -370,52 +370,52 @@
   <!-- ══ SERVICIOS GENERALES ═════════════════════════════════ -->
   <section class="servicios-generales-section">
     <div class="section-header section-header--dark">
-      <span class="section-tag section-tag--light">Incluido en todas las habitaciones</span>
-      <h2>Servicios generales</h2>
-      <p>Comodidades disponibles en ambos pisos y áreas comunes</p>
+      <span class="section-tag section-tag--light">{{ 'habs.genEtiqueta' | translate }}</span>
+      <h2>{{ 'habs.genTitulo' | translate }}</h2>
+      <p>{{ 'habs.genSub' | translate }}</p>
     </div>
     <div class="servicios-generales-grid">
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
         </div>
-        <h3>WiFi Gratuito</h3>
-        <p>Disponible en todo el espacio</p>
+        <h3>{{ 'habs.wifi' | translate }}</h3>
+        <p>{{ 'habs.wifiD' | translate }}</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6"/><path d="M6.34 7.34a8 8 0 1 0 11.31 0"/></svg>
         </div>
-        <h3>Agua Caliente</h3>
-        <p>En cada baño, disponible 24 h</p>
+        <h3>{{ 'habs.agua' | translate }}</h3>
+        <p>{{ 'habs.aguaD' | translate }}</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
         </div>
-        <h3>Cocina Equipada</h3>
-        <p>Para preparar tus comidas</p>
+        <h3>{{ 'habs.cocinaE' | translate }}</h3>
+        <p>{{ 'habs.cocinaD' | translate }}</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M6 7h.01M10 7h.01"/></svg>
         </div>
-        <h3>Lavandería</h3>
-        <p>Servicio disponible bajo pedido</p>
+        <h3>{{ 'habs.lavanderia' | translate }}</h3>
+        <p>{{ 'habs.lavanderiaD' | translate }}</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
         </div>
-        <h3>TV en Sala de Estar</h3>
-        <p>Sala común con televisor</p>
+        <h3>{{ 'habs.tv' | translate }}</h3>
+        <p>{{ 'habs.tvD' | translate }}</p>
       </div>
       <div class="sg-item">
         <div class="sg-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         </div>
-        <h3>Lencería Completa</h3>
-        <p>Toallas, almohadas, sábanas y cobijas</p>
+        <h3>{{ 'habs.lenceria' | translate }}</h3>
+        <p>{{ 'habs.lenceriaD' | translate }}</p>
       </div>
     </div>
 
@@ -425,8 +425,8 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="17" cy="13" r="1" fill="currentColor"/><rect x="2" y="6" width="20" height="12" rx="3"/></svg>
       </div>
       <div>
-        <h3>Mezanine — Sala de Juegos</h3>
-        <p>Sala de juegos con varios juegos de mesa y mesa de ping pong para uso de todos los huéspedes.</p>
+        <h3>{{ 'habs.mezanine' | translate }}</h3>
+        <p>{{ 'habs.mezanineD' | translate }}</p>
       </div>
     </div>
   </section>
@@ -437,29 +437,29 @@
       <div class="info-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
-      <h3>Horarios</h3>
-      <p>Check-in: 3:00 p.m. – 10:00 p.m.<br>Pasadía: 10:00 a.m. – 8:00 p.m.</p>
+      <h3>{{ 'habs.horarios' | translate }}</h3>
+      <p>{{ 'habs.horarioCheckin' | translate }}<br>{{ 'habs.horarioPasadia' | translate }}</p>
     </div>
     <div class="info-card">
       <div class="info-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
       </div>
-      <h3>Métodos de pago</h3>
-      <p>Efectivo o transferencia bancaria.<br>Se solicita anticipo para confirmar.</p>
+      <h3>{{ 'habs.pago' | translate }}</h3>
+      <p>{{ 'habs.pago1' | translate }}<br>{{ 'habs.pago2' | translate }}</p>
     </div>
     <div class="info-card">
       <div class="info-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
       </div>
-      <h3>Ubicación</h3>
-      <p>Filandia, Quindío.<br>30 min de Armenia · 45 min de Pereira.</p>
+      <h3>{{ 'habs.ubicacion' | translate }}</h3>
+      <p>{{ 'habs.ubicacion1' | translate }}<br>{{ 'habs.ubicacion2' | translate }}</p>
     </div>
     <div class="info-card">
       <div class="info-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.35 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       </div>
-      <h3>Contacto</h3>
-      <p>+57 (311) 3408867 <br>+57 (314) 7556717 <br>Disponible todos los días</p>
+      <h3>{{ 'habs.contacto' | translate }}</h3>
+      <p>+57 (311) 3408867 <br>+57 (314) 7556717 <br>{{ 'habs.todosDias' | translate }}</p>
     </div>
   </section>
 

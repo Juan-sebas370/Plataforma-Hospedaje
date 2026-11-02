@@ -1,8 +1,8 @@
 <section class="guia" aria-labelledby="guia-titulo">
   <div class="guia__cabecera">
-    <h2 id="guia-titulo">Cosas para hacer en Filandia</h2>
+    <h2 id="guia-titulo">{{ 'guia.titulo' | translate }}</h2>
     <button type="button" class="pausa" (click)="alternar()"
-            [attr.aria-label]="enMovimiento() ? 'Pausar el desfile de fotos' : 'Reanudar el desfile de fotos'">
+            [attr.aria-label]="(enMovimiento() ? 'guia.pausar' : 'guia.reanudar') | translate">
       <app-icono [name]="enMovimiento() ? 'pausa' : 'play'" [size]="14" [stroke]="2.4" />
     </button>
   </div>
@@ -12,7 +12,7 @@
       @for (l of lugares; track l.id) {
         <li class="lugar">
           <a [href]="l.mapsUrl" target="_blank" rel="noopener noreferrer"
-             [attr.aria-label]="l.nombre + ', ver en Google Maps (pestaña nueva)'">
+             [attr.aria-label]="'guia.enMaps' | translate: { lugar: l.nombre }">
             <img [src]="l.imagen" alt="" loading="lazy" />
             <span class="lugar__nombre">{{ l.nombre }}</span>
           </a>
@@ -34,7 +34,7 @@
 
   <div class="guia__pie">
     <a class="guia__enlace" routerLink="/servicios" fragment="guia">
-      Ver la guía completa <app-icono name="arrow-right" [size]="16" [stroke]="2.2" />
+      {{ 'guia.verGuia' | translate }} <app-icono name="arrow-right" [size]="16" [stroke]="2.2" />
     </a>
   </div>
 </section>

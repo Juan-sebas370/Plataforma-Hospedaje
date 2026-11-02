@@ -46,6 +46,21 @@ export const zh = {
     ctaButton: '立即预订'
   },
   rooms: {
+    loading: '加载中...',
+    viewDetails: '查看详情',
+    backToRooms: '返回客房列表',
+    descriptionTitle: '描述',
+    includedTitle: '住宿包含',
+    beforeBookingTitle: '预订前须知',
+    priceTitle: '预估价格',
+    seasonNote: '价格以所选季节为准。',
+    capacityTitle: '可住人数',
+    bedType: '床型',
+    bathroomType: '卫浴类型',
+    statusTitle: '状态',
+    policyOne: '预订以空房情况为准。',
+    policyTwo: '入住前 72 小时以上取消可全额退款。',
+    policyThree: '住宿方保留拒绝入住的权利。',
     title: '我们的客房',
     subtitle: '找到完美的住宿空间',
     search: '按类型、描述、号码或服务搜索...',
@@ -318,6 +333,8 @@ export const zh = {
       mapLink: '在 Google 地图中查看'
     },
     form: {
+      successTitle: '消息发送成功！',
+      successMessage: '我们已收到您的消息。请查看您的电子邮件，等待我们的回复。',
       title: '给我们留言',
       subtitle: '填写表格，我们将与您联系',
       fullNameLabel: '姓名',

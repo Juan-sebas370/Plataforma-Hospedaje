@@ -1,17 +1,17 @@
 <section class="habitacion-detalle" *ngIf="habitacion; else cargandoBloque">
   <div class="detalle-navegacion">
     <a routerLink="/habitaciones" class="back-link">← {{ 'rooms.backToRooms' | translate }}</a>
-    <span class="estado-pill" [ngClass]="estadoClase()">{{ habitacion.estado.toLowerCase() }}</span>
+    <span class="estado-pill" [ngClass]="estadoClase()">{{ ('habs.estado.' + habitacion.estado) | translate }}</span>
   </div>
 
   <div class="detalle-header">
     <div>
-      <span class="habitacion-label">Habitación {{ habitacion.numero }}</span>
-      <h1>{{ habitacion.tipo }} · {{ habitacion.piso }}° piso</h1>
-      <p class="detalle-subtitle">{{ habitacion.capacidad }} {{ habitacion.capacidad === 1 ? 'persona' : 'personas' }} · {{ tipoBano() }}</p>
+      <span class="habitacion-label">{{ 'habs.habitacion' | translate: { n: habitacion.numero } }}</span>
+      <h1>{{ 'habs.dPiso' | translate: { tipo: tipoHab(habitacion.tipo), n: habitacion.piso } }}</h1>
+      <p class="detalle-subtitle">{{ (habitacion.capacidad === 1 ? 'habs.persona' : 'habs.personas') | translate: { n: habitacion.capacidad } }} · {{ tipoBano() }}</p>
     </div>
     <div class="detalle-acciones">
-      <button class="btn-secondary" type="button" (click)="reservarWhatsapp()">Reserva vía WhatsApp</button>
+      <button class="btn-secondary" type="button" (click)="reservarWhatsapp()">{{ 'habs.porWhatsapp' | translate }}</button>
       <button class="btn-reservar" type="button" (click)="reservarAhora()">{{ 'rooms.bookNow' | translate }}</button>
     </div>
   </div>
@@ -19,7 +19,7 @@
   <div class="detalle-grid">
     <aside class="detalle-imagenes">
       <div class="imagen-principal" [style.backgroundImage]="'url(' + (selectedImage || habitacion.imagenes[0] || '/assets/habitaciones/piso1/hab101-v2.jpg') + ')'">
-        <div class="imagen-tag">{{ habitacion.imagenes.length || 0 }} fotos</div>
+        <div class="imagen-tag">{{ 'habs.fotos' | translate: { n: habitacion.imagenes.length || 0 } }}</div>
       </div>
       <div class="miniaturas">
         <button
@@ -28,7 +28,7 @@
           class="miniatura"
           [class.activa]="imagen === selectedImage"
           (click)="elegirImagen(imagen)">
-          <img [src]="imagen" alt="Foto de habitación {{ habitacion.numero }}" />
+          <img [src]="imagen" [alt]="'habs.fotoAlt' | translate: { n: habitacion.numero }" />
         </button>
       </div>
     </aside>
@@ -37,14 +37,14 @@
       <div class="detalle-panel">
         <div class="detalle-card titulo-card">
           <span class="dato-label">{{ 'rooms.priceTitle' | translate }}</span>
-          <strong>{{ formatearPrecio(habitacion.precioNoche) }} / noche</strong>
+          <strong>{{ 'habs.precioNoche' | translate: { precio: formatearPrecio(habitacion.precioNoche) } }}</strong>
           <p class="nota">{{ precioDesde() }}</p>
         </div>
 
         <div class="detalle-card caracteristicas-detalle">
           <div>
             <span class="dato-label">{{ 'rooms.capacityTitle' | translate }}</span>
-            <strong>{{ habitacion.capacidad }} {{ habitacion.capacidad === 1 ? 'persona' : 'personas' }}</strong>
+            <strong>{{ (habitacion.capacidad === 1 ? 'habs.persona' : 'habs.personas') | translate: { n: habitacion.capacidad } }}</strong>
           </div>
           <div>
             <span class="dato-label">{{ 'rooms.bedType' | translate }}</span>
@@ -56,25 +56,25 @@
           </div>
           <div>
             <span class="dato-label">{{ 'rooms.statusTitle' | translate }}</span>
-            <strong>{{ habitacion.estado }}</strong>
+            <strong>{{ ('habs.estado.' + habitacion.estado) | translate }}</strong>
           </div>
         </div>
 
         <div class="detalle-card">
           <h2>{{ 'rooms.includedTitle' | translate }}</h2>
           <ul class="amenities-list">
-            <li *ngIf="habitacion.wifi">WiFi ilimitado</li>
-            <li *ngIf="habitacion.television">Televisión por cable</li>
-            <li *ngIf="habitacion.bano">Agua caliente</li>
-            <li *ngIf="habitacion.minibar">Minibar</li>
-            <li *ngIf="tieneCocinaCompartida()">Cocina compartida</li>
-            <li *ngFor="let servicio of habitacion.servicios || []">{{ servicio }}</li>
+            <li *ngIf="habitacion.wifi">{{ 'habs.wifiIlimitado' | translate }}</li>
+            <li *ngIf="habitacion.television">{{ 'habs.tvCable' | translate }}</li>
+            <li *ngIf="habitacion.bano">{{ 'habs.aguaCaliente' | translate }}</li>
+            <li *ngIf="habitacion.minibar">{{ 'habs.minibar' | translate }}</li>
+            <li *ngIf="tieneCocinaCompartida()">{{ 'habs.cocinaCompartida' | translate }}</li>
+            <li *ngFor="let servicio of habitacion.servicios || []">{{ servicioHab(servicio) }}</li>
           </ul>
         </div>
 
         <div class="detalle-card descripcion-bloque">
           <h2>{{ 'rooms.descriptionTitle' | translate }}</h2>
-          <p>{{ habitacion.descripcion }}</p>
+          <p>{{ descripcionHab() }}</p>
         </div>
 
         <div class="detalle-card">
@@ -92,9 +92,9 @@
 
 <ng-template #cargandoBloque>
   <div class="cargando-contenedor">
-    <p *ngIf="cargando">Cargando habitación...</p>
-    <p *ngIf="!cargando && error">{{ error }}</p>
-    <p *ngIf="!cargando && !error">No se encontró la habitación. Vuelve a la lista para seleccionar otra.</p>
+    <p *ngIf="cargando">{{ 'habs.cargandoUna' | translate }}</p>
+    <p *ngIf="!cargando && error">{{ error | translate }}</p>
+    <p *ngIf="!cargando && !error">{{ 'habs.noEncontrada' | translate }}</p>
     <a routerLink="/habitaciones" class="btn-secondary">{{ 'rooms.backToRooms' | translate }}</a>
   </div>
 </ng-template>

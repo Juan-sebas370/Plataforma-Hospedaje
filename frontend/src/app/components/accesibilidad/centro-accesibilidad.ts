@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy, Component, ElementRef, HostListener, Injector, afterNextRender, inject, signal, viewChild,
 } from '@angular/core';
 import { Icono, IconoNombre } from '../../shared/icono';
+import { TranslatePipe } from '../../shared/translate.pipe';
 import { AccesibilidadService, OpcionAccesibilidad } from '../../services/accesibilidad.service';
 
 interface Opcion {
@@ -18,7 +19,7 @@ interface Opcion {
  */
 @Component({
   selector: 'app-centro-accesibilidad',
-  imports: [Icono],
+  imports: [Icono, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './centro-accesibilidad.html',
   styleUrl: './centro-accesibilidad.css',
@@ -34,26 +35,26 @@ export class CentroAccesibilidad {
 
   readonly grupos: { titulo: string; opciones: Opcion[] }[] = [
     {
-      titulo: 'Visualización',
+      titulo: 'a11y.visualizacion',
       opciones: [
-        { id: 'contraste', titulo: 'Alto contraste', ayuda: 'Colores más intensos y texto más oscuro', icono: 'contraste' },
-        { id: 'grises', titulo: 'Escala de grises', ayuda: 'Quita los colores (útil con daltonismo)', icono: 'gotas' },
-        { id: 'enlaces', titulo: 'Resaltar enlaces', ayuda: 'Subraya y marca todos los enlaces', icono: 'link' },
+        { id: 'contraste', titulo: 'a11y.contraste', ayuda: 'a11y.contrasteD', icono: 'contraste' },
+        { id: 'grises', titulo: 'a11y.grises', ayuda: 'a11y.grisesD', icono: 'gotas' },
+        { id: 'enlaces', titulo: 'a11y.enlaces', ayuda: 'a11y.enlacesD', icono: 'link' },
       ],
     },
     {
-      titulo: 'Lectura',
+      titulo: 'a11y.lectura',
       opciones: [
-        { id: 'espaciado', titulo: 'Más espaciado', ayuda: 'Más espacio entre letras, palabras y líneas', icono: 'espaciado' },
-        { id: 'fuente', titulo: 'Fuente legible', ayuda: 'Letra más simple y fácil de leer', icono: 'tipografia' },
+        { id: 'espaciado', titulo: 'a11y.espaciado', ayuda: 'a11y.espaciadoD', icono: 'espaciado' },
+        { id: 'fuente', titulo: 'a11y.fuente', ayuda: 'a11y.fuenteD', icono: 'tipografia' },
       ],
     },
     {
-      titulo: 'Navegación',
+      titulo: 'a11y.navegacion',
       opciones: [
-        { id: 'foco', titulo: 'Foco reforzado', ayuda: 'Marca muy visible al navegar con teclado', icono: 'teclado' },
-        { id: 'cursor', titulo: 'Cursor grande', ayuda: 'Puntero del mouse más grande', icono: 'cursor' },
-        { id: 'sinAnimacion', titulo: 'Sin animaciones', ayuda: 'Detiene movimientos y carruseles', icono: 'pausa' },
+        { id: 'foco', titulo: 'a11y.foco', ayuda: 'a11y.focoD', icono: 'teclado' },
+        { id: 'cursor', titulo: 'a11y.cursor', ayuda: 'a11y.cursorD', icono: 'cursor' },
+        { id: 'sinAnimacion', titulo: 'a11y.sinAnimacion', ayuda: 'a11y.sinAnimacionD', icono: 'pausa' },
       ],
     },
   ];

@@ -46,6 +46,21 @@ export const fr = {
     ctaButton: 'Faire une Réservation'
   },
   rooms: {
+    loading: 'Chargement...',
+    viewDetails: 'Voir le détail',
+    backToRooms: 'Retour aux chambres',
+    descriptionTitle: 'Description',
+    includedTitle: 'Votre séjour comprend',
+    beforeBookingTitle: 'Avant de réserver',
+    priceTitle: 'Prix estimé',
+    seasonNote: 'Tarifs selon la saison choisie.',
+    capacityTitle: 'Capacité',
+    bedType: 'Type de lit',
+    bathroomType: 'Type de salle de bain',
+    statusTitle: 'État',
+    policyOne: 'Réservation sous réserve de disponibilité.',
+    policyTwo: 'Remboursement intégral en cas d’annulation jusqu’à 72 heures avant l’arrivée.',
+    policyThree: 'L’hébergement se réserve le droit d’admission.',
     title: 'Nos Chambres',
     subtitle: 'Trouvez l\'espace parfait pour votre séjour',
     search: 'Rechercher par type, description, numéro ou services...',
@@ -318,6 +333,8 @@ export const fr = {
       mapLink: 'Voir sur Google Maps'
     },
     form: {
+      successTitle: 'Message envoyé !',
+      successMessage: 'Nous avons bien reçu votre message. Consultez votre e-mail et attendez notre réponse.',
       title: 'Envoyez-nous un message',
       subtitle: 'Remplissez le formulaire et nous vous recontacterons',
       fullNameLabel: 'Nom complet',

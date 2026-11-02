@@ -47,16 +47,16 @@
   <!-- Grid de Imágenes -->
   <div class="galeria-content">
     <div class="galeria-grid">
-      <h2 class="sr-only">Fotos del hospedaje</h2>
+      <h2 class="sr-only">{{ 'gal.fotos' | translate }}</h2>
       @for (imagen of imagenesFiltradas; track imagen.id) {
         <div class="galeria-item">
           <div class="imagen-wrapper">
-            <img [src]="imagen.imagen" [alt]="imagen.titulo" loading="lazy">
+            <img [src]="imagen.imagen" [alt]="imagen.titulo | translate: imagen.p" loading="lazy">
             <div class="imagen-overlay">
               <div class="overlay-content">
-                <h3>{{ imagen.titulo }}</h3>
-                <p>{{ imagen.descripcion }}</p>
-                <span class="categoria-badge">{{ imagen.categoria }}</span>
+                <h3>{{ imagen.titulo | translate: imagen.p }}</h3>
+                <p>{{ imagen.descripcion | translate: imagen.p }}</p>
+                <span class="categoria-badge">{{ ('gal.cat.' + imagen.categoria) | translate }}</span>
               </div>
             </div>
           </div>

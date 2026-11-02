@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, afterNextRender, input, viewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 const VISTO = 'aviso-preparacion-visto';
 
@@ -12,21 +13,21 @@ const VISTO = 'aviso-preparacion-visto';
  */
 @Component({
   selector: 'app-aviso-preparacion',
-  imports: [RouterLink, NgTemplateOutlet],
+  imports: [RouterLink, NgTemplateOutlet, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-template #contenido>
-      <span class="etiqueta">Próximamente</span>
-      <h2 id="aviso-titulo">Aún no recibimos reservas en línea</h2>
-      <p>Hospedaje Sebastián está terminando de preparar su apertura. Muy pronto podrás reservar y pagar tu estadía desde esta página.</p>
-      <p class="aviso__suave">Mientras tanto, te invitamos a conocer nuestras habitaciones y servicios.</p>
+      <span class="etiqueta">{{ 'aviso.etiqueta' | translate }}</span>
+      <h2 id="aviso-titulo">{{ 'aviso.titulo' | translate }}</h2>
+      <p>{{ 'aviso.texto' | translate }}</p>
+      <p class="aviso__suave">{{ 'aviso.suave' | translate }}</p>
     </ng-template>
 
     @if (ventana()) {
       <dialog #dialogo class="aviso aviso--ventana" aria-labelledby="aviso-titulo" (close)="cerrar()">
         <ng-container [ngTemplateOutlet]="contenido" />
         <div class="aviso__acciones">
-          <button type="button" class="boton boton--principal" (click)="cerrar()">Entendido</button>
+          <button type="button" class="boton boton--principal" (click)="cerrar()">{{ 'aviso.entendido' | translate }}</button>
         </div>
       </dialog>
     } @else {
@@ -34,8 +35,8 @@ const VISTO = 'aviso-preparacion-visto';
         <div class="aviso">
           <ng-container [ngTemplateOutlet]="contenido" />
           <div class="aviso__acciones">
-            <a routerLink="/habitaciones" class="boton boton--principal">Ver habitaciones</a>
-            <a routerLink="/" class="boton">Volver al inicio</a>
+            <a routerLink="/habitaciones" class="boton boton--principal">{{ 'aviso.verHabitaciones' | translate }}</a>
+            <a routerLink="/" class="boton">{{ 'aviso.volverInicio' | translate }}</a>
           </div>
         </div>
       </section>

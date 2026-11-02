@@ -7,18 +7,22 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { TranslateService } from './services/translate.service';
-import { es, en, fr, pt, ko, zh } from './config/translations';
+import { es } from './config/translations/es';
+import { paginas as paginasEs } from './config/translations/paginas/es';
 import { isPlatformBrowser } from '@angular/common';
 
 export function initializeTranslations(translateService: TranslateService) {
   return () => {
-    // Cargar todas las traducciones
-    translateService.setTranslations('es', es);
-    translateService.setTranslations('en', en);
-    translateService.setTranslations('fr', fr);
-    translateService.setTranslations('pt', pt);
-    translateService.setTranslations('ko', ko);
-    translateService.setTranslations('zh', zh);
+    // El español va en el paquete inicial; cada otro idioma se descarga solo cuando se elige
+    // (diccionario general + textos de las páginas).
+    translateService.setTranslations('es', { ...es, ...paginasEs });
+    translateService.setLoader('en', () => Promise.all([import('./config/translations/en'), import('./config/translations/paginas/en')]).then(([d, p]) => ({ ...d.en, ...p.paginas })));
+    translateService.setLoader('fr', () => Promise.all([import('./config/translations/fr'), import('./config/translations/paginas/fr')]).then(([d, p]) => ({ ...d.fr, ...p.paginas })));
+    translateService.setLoader('pt', () => Promise.all([import('./config/translations/pt'), import('./config/translations/paginas/pt')]).then(([d, p]) => ({ ...d.pt, ...p.paginas })));
+    translateService.setLoader('ko', () => Promise.all([import('./config/translations/ko'), import('./config/translations/paginas/ko')]).then(([d, p]) => ({ ...d.ko, ...p.paginas })));
+    translateService.setLoader('zh', () => Promise.all([import('./config/translations/zh'), import('./config/translations/paginas/zh')]).then(([d, p]) => ({ ...d.zh, ...p.paginas })));
+    // Si la persona ya había elegido otro idioma, se espera a tenerlo antes de mostrar la página.
+    return translateService.loadCurrent();
   };
 }
 

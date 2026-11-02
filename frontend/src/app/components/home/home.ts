@@ -19,7 +19,9 @@ import { SobreProyecto } from '../sobre-proyecto/sobre-proyecto';
 import { GuiaTuristica } from '../guia-turistica/guia-turistica';
 
 export interface Piso {
+  numero: number;
   nombre: string;
+  ver: string;
   descripcion: string;
   capacidadMin: number;
   capacidadMax: number;
@@ -58,16 +60,16 @@ export class Home implements OnInit, OnDestroy {
    * `encuadre` ajusta qué parte de cada foto se ve dentro del marco.
    */
   readonly fotosPortada = [
-    { src: '/assets/principal/imagen1.jpg', etiqueta: 'Filandia', encuadre: '50% 45%',
-      alt: 'Iglesia de la plaza principal de Filandia' },
-    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.34%20PM.jpeg', etiqueta: 'Sala de estar', encuadre: '50% 60%',
-      alt: 'Sala de estar del Hospedaje Sebastián con sofá, sillas y comedor' },
-    { src: '/assets/principal/imagen2.jpg', etiqueta: 'Calles de Filandia', encuadre: '50% 50%',
-      alt: 'Calle de Filandia con casas de balcones de colores' },
-    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.33%20PM.jpeg', etiqueta: 'Sala de estar', encuadre: '50% 55%',
-      alt: 'Sala y comedor del Hospedaje Sebastián' },
-    { src: '/assets/principal/imagen4.jpg', etiqueta: 'Filandia', encuadre: '50% 50%',
-      alt: 'Interior de la iglesia de Filandia' },
+    { src: '/assets/principal/imagen1.jpg', etiqueta: 'inicio.portada.etFilandia', encuadre: '50% 45%',
+      alt: 'inicio.portada.iglesia' },
+    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.34%20PM.jpeg', etiqueta: 'inicio.portada.etSala', encuadre: '50% 60%',
+      alt: 'inicio.portada.sala1' },
+    { src: '/assets/principal/imagen2.jpg', etiqueta: 'inicio.portada.etCalles', encuadre: '50% 50%',
+      alt: 'inicio.portada.calle' },
+    { src: '/assets/principal/WhatsApp%20Image%202026-08-18%20at%202.29.33%20PM.jpeg', etiqueta: 'inicio.portada.etSala', encuadre: '50% 55%',
+      alt: 'inicio.portada.sala2' },
+    { src: '/assets/principal/imagen4.jpg', etiqueta: 'inicio.portada.etFilandia', encuadre: '50% 50%',
+      alt: 'inicio.portada.interior' },
   ];
   readonly images = this.fotosPortada.map(f => f.src);
   currentImageIndex = 0;
@@ -104,31 +106,31 @@ export class Home implements OnInit, OnDestroy {
   tiposReserva: TipoReserva[] = [
     {
       id: 'individual',
-      nombre: 'Individual',
-      descripcion: 'Para grupos pequeños o familias. Alquila el piso que necesites con horario de ingreso entre 3:00 p.m. y 10:00 p.m.',
-      precio: 'Desde $65.000 por persona',
+      nombre: 'inicio.tipos.individual.nombre',
+      descripcion: 'inicio.tipos.individual.desc',
+      precio: 'inicio.tipos.individual.precio',
       icon: 'user',
     },
     {
       id: 'familiar',
-      nombre: 'Grupo Familiar',
-      descripcion: 'Para familias que desean la casa completa o un piso entero. Ideal para disfrutar juntos sin restricciones.',
-      precio: 'Desde $51.000 por persona',
+      nombre: 'inicio.tipos.familiar.nombre',
+      descripcion: 'inicio.tipos.familiar.desc',
+      precio: 'inicio.tipos.familiar.precio',
       icon: 'users',
       destacado: true,
     },
     {
       id: 'pasadia',
-      nombre: 'Pasadía',
-      descripcion: 'Disfruta las instalaciones sin hospedarte. Ideal para cumpleaños, reuniones e integraciones familiares.',
-      precio: '10 a 15 personas',
+      nombre: 'inicio.tipos.pasadia.nombre',
+      descripcion: 'inicio.tipos.pasadia.desc',
+      precio: 'inicio.tipos.pasadia.precio',
       icon: 'sun',
     },
     {
       id: 'grupal',
-      nombre: 'Reuniones de Grupo',
-      descripcion: 'Para empresas, colegios o equipos de trabajo. Espacios habilitados para conferencias y talleres.',
-      precio: 'Ideal para equipos',
+      nombre: 'inicio.tipos.grupal.nombre',
+      descripcion: 'inicio.tipos.grupal.desc',
+      precio: 'inicio.tipos.grupal.precio',
       icon: 'briefcase',
     },
   ];
@@ -136,8 +138,10 @@ export class Home implements OnInit, OnDestroy {
   // ── Pisos ──────────────────────────────────────────────────
   pisos: Piso[] = [
     {
-      nombre: 'Piso 1',
-      descripcion: 'Acogedor y perfecto para grupos pequeños. Tres habitaciones distribuidas en un espacio cálido y confortable.',
+      numero: 1,
+      nombre: 'inicio.pisos.piso1',
+      ver: 'inicio.pisos.verPiso1',
+      descripcion: 'inicio.pisos.desc1',
       capacidadMin: 6,
       capacidadMax: 8,
       habitaciones: 3,
@@ -145,8 +149,10 @@ export class Home implements OnInit, OnDestroy {
       camarotes: 1,
     },
     {
-      nombre: 'Piso 2',
-      descripcion: 'Amplio y equipado para grupos medianos. Cuatro habitaciones con vistas al paisaje cafetero de Filandia.',
+      numero: 2,
+      nombre: 'inicio.pisos.piso2',
+      ver: 'inicio.pisos.verPiso2',
+      descripcion: 'inicio.pisos.desc2',
       capacidadMin: 8,
       capacidadMax: 12,
       habitaciones: 4,
@@ -157,12 +163,12 @@ export class Home implements OnInit, OnDestroy {
 
   // ── Galería del hospedaje ──────────────────────────────────
   galeriaFotos = [
-    { src: 'assets/habitaciones/piso2/hab201.jpg',   alt: 'Habitación 201' },
-    { src: 'assets/habitaciones/piso2/hab202.jpg',   alt: 'Habitación 202' },
-    { src: 'assets/habitaciones/piso2/hab203-v2.jpg',    alt: 'Habitación 203' },
-    { src: 'assets/habitaciones/piso1/hab101-v2.jpg',    alt: 'Habitación 101' },
-    { src: 'assets/habitaciones/espacios/mezanine.jpg', alt: 'Mezanine' },
-    { src: 'assets/habitaciones/piso1/hab102-v2.jpg',    alt: 'Habitación 102' },
+    { src: 'assets/habitaciones/piso2/hab201.jpg',   alt: 'inicio.galeria.habitacion', n: '201' },
+    { src: 'assets/habitaciones/piso2/hab202.jpg',   alt: 'inicio.galeria.habitacion', n: '202' },
+    { src: 'assets/habitaciones/piso2/hab203-v2.jpg',    alt: 'inicio.galeria.habitacion', n: '203' },
+    { src: 'assets/habitaciones/piso1/hab101-v2.jpg',    alt: 'inicio.galeria.habitacion', n: '101' },
+    { src: 'assets/habitaciones/espacios/mezanine.jpg', alt: 'inicio.galeria.mezanine', n: '' },
+    { src: 'assets/habitaciones/piso1/hab102-v2.jpg',    alt: 'inicio.galeria.habitacion', n: '102' },
   ];
 
   // ── Servicios ──────────────────────────────────────────────
@@ -172,7 +178,7 @@ export class Home implements OnInit, OnDestroy {
     { nombre: 'Lavandería',      icono: 'wash',    descripcion: 'Servicio de lavado para que viajes ligero y cómodo' },
     { nombre: 'Cocina Equipada', icono: 'kitchen', descripcion: 'Cocina completa con utensilios para preparar tus alimentos' },
     { nombre: 'Lencería completa', icono: 'bed',   descripcion: 'Sábanas, cobijas, almohadas y toallas incluidas' },
-    { nombre: 'Sala de estar',   icono: 'tv',      descripcion: 'Espacio común para descansar y compartir con televisor' },
+    { nombre: 'inicio.portada.etSala',   icono: 'tv',      descripcion: 'Espacio común para descansar y compartir con televisor' },
   ];
 
   // ── Testimonios ───────────────────────────────────────────
@@ -180,19 +186,19 @@ export class Home implements OnInit, OnDestroy {
     {
       nombre: 'Laura Gómez',
       ciudad: 'Bogotá',
-      texto: 'Un lugar mágico en el corazón del Quindío. Las vistas son increíbles y el trato fue excelente. Definitivamente regresamos.',
+      texto: 'inicio.opiniones.t1',
       estrellas: 5,
     },
     {
-      nombre: 'Carlos y Familia',
+      nombre: 'inicio.opiniones.familia',
       ciudad: 'Medellín',
-      texto: 'Celebramos el cumpleaños de mi mamá aquí y fue perfecto. La casa tiene todo lo necesario y el ambiente es muy tranquilo.',
+      texto: 'inicio.opiniones.t2',
       estrellas: 5,
     },
     {
-      nombre: 'Equipo Innova S.A.S.',
+      nombre: 'inicio.opiniones.equipo',
       ciudad: 'Cali',
-      texto: 'Realizamos nuestra reunión anual de estrategia aquí. El espacio es ideal, silencioso y con todo lo necesario para trabajar.',
+      texto: 'inicio.opiniones.t3',
       estrellas: 5,
     },
   ];
@@ -284,17 +290,17 @@ export class Home implements OnInit, OnDestroy {
     this.errorBusqueda = '';
 
     if (!this.busqueda.fechaEntrada || !this.busqueda.fechaSalida) {
-      this.errorBusqueda = 'Selecciona la fecha de entrada y la fecha de salida.';
+      this.errorBusqueda = 'inicio.buscador.errorFechas';
       return false;
     }
 
     if (this.busqueda.fechaEntrada < this.fechaMinima) {
-      this.errorBusqueda = 'La fecha de entrada no puede ser anterior a hoy.';
+      this.errorBusqueda = 'inicio.buscador.errorPasado';
       return false;
     }
 
     if (this.busqueda.fechaSalida <= this.busqueda.fechaEntrada) {
-      this.errorBusqueda = 'La fecha de salida debe ser posterior a la fecha de entrada.';
+      this.errorBusqueda = 'inicio.buscador.errorSalida';
       return false;
     }
 

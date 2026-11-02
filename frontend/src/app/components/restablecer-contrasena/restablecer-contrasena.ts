@@ -3,12 +3,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Icono } from '../../shared/icono';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 type Estado = 'validando' | 'invalido' | 'formulario' | 'enviando' | 'listo';
 
 const MINIMO = 8;
-const ENLACE_VENCIDO = 'Este enlace ya venció: dura 24 horas. Solicita uno nuevo.';
-const ENLACE_INVALIDO = 'Este enlace no es válido o ya se usó. Solicita uno nuevo.';
+const ENLACE_VENCIDO = 'rest.vencido';
+const ENLACE_INVALIDO = 'rest.invalido';
 
 /**
  * Página que abre el enlace del correo de recuperación (/reset-password?token=…):
@@ -16,7 +17,7 @@ const ENLACE_INVALIDO = 'Este enlace no es válido o ya se usó. Solicita uno nu
  */
 @Component({
   selector: 'app-restablecer-contrasena',
-  imports: [FormsModule, RouterLink, Icono],
+  imports: [FormsModule, RouterLink, Icono, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './restablecer-contrasena.html',
   styleUrl: './restablecer-contrasena.css',
@@ -39,14 +40,14 @@ export class RestablecerContrasena implements OnInit {
   readonly largoOk = computed(() => this.nueva().length >= MINIMO);
   readonly coinciden = computed(() => this.confirmacion().length > 0 && this.nueva() === this.confirmacion());
   readonly errorNueva = computed(() =>
-    this.intento() && !this.largoOk() ? `La contraseña debe tener al menos ${MINIMO} caracteres.` : '');
+    this.intento() && !this.largoOk() ? 'rest.errorLargo' : '');
   readonly errorConfirmacion = computed(() =>
-    this.intento() && !this.coinciden() ? 'Las dos contraseñas no coinciden.' : '');
+    this.intento() && !this.coinciden() ? 'rest.noCoinciden' : '');
 
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token') ?? '';
     if (!this.token) {
-      this.invalido('El enlace no trae el código de recuperación. Ábrelo directamente desde el correo.');
+      this.invalido('rest.sinCodigo');
       return;
     }
     this.auth.validateResetToken(this.token).subscribe({
@@ -88,10 +89,10 @@ export class RestablecerContrasena implements OnInit {
     const crudo = String(e?.error?.message ?? e?.error?.error ?? (typeof e?.error === 'string' ? e.error : ''));
     if (/expirad/i.test(crudo)) return ENLACE_VENCIDO;
     if (/inválid|invalid/i.test(crudo)) return ENLACE_INVALIDO;
-    if (e?.status === 0) return 'No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.';
+    if (e?.status === 0) return 'rest.sinConexion';
     if (crudo) return crudo;
     return contexto === 'invalido'
-      ? 'No pudimos validar el enlace. Intenta de nuevo en un momento.'
-      : 'No pudimos guardar la contraseña. Intenta de nuevo en un momento.';
+      ? 'rest.errorValidar'
+      : 'rest.errorGuardar';
   }
 }

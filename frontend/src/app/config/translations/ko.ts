@@ -46,6 +46,21 @@ export const ko = {
     ctaButton: '예약하기'
   },
   rooms: {
+    loading: '불러오는 중...',
+    viewDetails: '상세 보기',
+    backToRooms: '객실 목록으로',
+    descriptionTitle: '설명',
+    includedTitle: '숙박 포함 사항',
+    beforeBookingTitle: '예약 전 확인하세요',
+    priceTitle: '예상 요금',
+    seasonNote: '요금은 선택한 시즌에 따라 달라집니다.',
+    capacityTitle: '수용 인원',
+    bedType: '침대 유형',
+    bathroomType: '욕실 유형',
+    statusTitle: '상태',
+    policyOne: '예약 가능 여부에 따라 확정됩니다.',
+    policyTwo: '도착 72시간 전까지 취소하면 전액 환불됩니다.',
+    policyThree: '숙소는 입실을 거절할 권리가 있습니다.',
     title: '객실 안내',
     subtitle: '완벽한 숙박 공간을 찾아보세요',
     search: '유형, 설명, 번호 또는 서비스로 검색...',
@@ -319,6 +334,8 @@ export const ko = {
       mapLink: 'Google 지도에서 보기'
     },
     form: {
+      successTitle: '메시지가 전송되었습니다!',
+      successMessage: '메시지를 받았습니다. 이메일을 확인하고 답변을 기다려 주세요.',
       title: '메시지 보내기',
       subtitle: '양식을 작성하시면 연락드리겠습니다',
       fullNameLabel: '성명',

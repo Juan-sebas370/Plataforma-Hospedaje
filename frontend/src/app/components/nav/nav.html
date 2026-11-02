@@ -1,13 +1,13 @@
-<nav class="navbar" [class.navbar--transparente]="transparente() && !menuOpen" aria-label="Principal">
+<nav class="navbar" [class.navbar--transparente]="transparente() && !menuOpen" [attr.aria-label]="'barra.principal' | translate">
   <!-- Brand Logo -->
   <div class="nav-container">
-    <a routerLink="/" class="nav-brand" aria-label="Hospedaje Sebastián, ir al inicio">
+    <a routerLink="/" class="nav-brand" [attr.aria-label]="'barra.irInicio' | translate">
       <img src="/assets/logo.png" alt="" class="brand-logo">
       <span class="brand-text">Hospedaje Sebastián</span>
     </a>
 
     <!-- Hamburger Menu Button -->
-    <button type="button" class="hamburger" [class.active]="menuOpen" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-controls="menu-principal" [attr.aria-label]="menuOpen ? 'Cerrar menú' : 'Abrir menú'">
+    <button type="button" class="hamburger" [class.active]="menuOpen" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-controls="menu-principal" [attr.aria-label]="(menuOpen ? 'barra.cerrarMenu' : 'barra.abrirMenu') | translate">
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>

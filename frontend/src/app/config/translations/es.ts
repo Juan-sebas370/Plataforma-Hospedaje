@@ -81,7 +81,7 @@ export const es = {
     bathroomType: 'Tipo de baño',
     statusTitle: 'Estado',
     policyOne: 'Reserva sujeta a disponibilidad.',
-    policyTwo: 'Cancelaciones con 24 horas de antelación.',
+    policyTwo: 'Reembolso total si cancelas hasta 72 horas antes de la llegada.',
     policyThree: 'El hotel se reserva el derecho de admisión.',
     bookNow: 'Reservar Ahora',
     privateBathroom: 'Baño Privado',

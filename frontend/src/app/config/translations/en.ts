@@ -81,7 +81,7 @@ export const en = {
     bathroomType: 'Bathroom type',
     statusTitle: 'Status',
     policyOne: 'Booking subject to availability.',
-    policyTwo: 'Cancel 24 hours in advance.',
+    policyTwo: 'Full refund if you cancel up to 72 hours before arrival.',
     policyThree: 'The hotel reserves the right of admission.',
     bookNow: 'Book Now',
     privateBathroom: 'Private Bathroom',
@@ -333,6 +333,8 @@ export const en = {
       mapLink: 'View on Google Maps'
     },
     form: {
+      successTitle: 'Message sent successfully!',
+      successMessage: 'We have received your message. Check your email and wait for our reply.',
       title: 'Send Us a Message',
       subtitle: "Complete the form and we'll get back to you",
       fullNameLabel: 'Full Name',

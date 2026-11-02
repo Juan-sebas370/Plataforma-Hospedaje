@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Icono } from '../../shared/icono';
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 /**
  * Franja discreta al final del inicio sobre el origen del proyecto, con una
@@ -9,7 +10,7 @@ import { Icono } from '../../shared/icono';
  */
 @Component({
   selector: 'app-sobre-proyecto',
-  imports: [RouterLink, Icono],
+  imports: [RouterLink, Icono, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sobre-proyecto.html',
   styleUrl: './sobre-proyecto.css',

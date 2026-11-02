@@ -9,6 +9,8 @@
 
 export const VERSION_POLITICAS = '2026-10-20';
 export const VIGENTE_DESDE = '20 de octubre de 2026';
+/** La misma fecha, para mostrarla en el idioma elegido. */
+export const VIGENTE_DESDE_ISO = '2026-10-20';
 
 /** Datos del hospedaje (GET /api/hospedaje, editables en SOGO). Vacíos → se usan los de por defecto. */
 export interface DatosHospedaje {

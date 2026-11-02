@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../shared/translate.pipe';
+import { TranslateService } from '../../services/translate.service';
 import { CATEGORIAS_LUGAR, CategoriaLugar, LUGARES_TURISTICOS, LugarTuristico } from '../../data/guia-turistica';
 
 export type { CategoriaLugar, LugarTuristico };
@@ -20,7 +22,7 @@ export interface TipoReserva {
 
 @Component({
   selector: 'app-servicios',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './servicios.html',
   styleUrl: './servicios.css',
 })
@@ -35,57 +37,57 @@ export class Servicios {
   readonly tiposReserva: TipoReserva[] = [
     {
       id: 'individual',
-      titulo: 'Reserva Individual',
-      subtitulo: 'Comodidad para uno o dos viajeros',
-      descripcion: 'Disfruta de una estadía cómoda en una de nuestras habitaciones, pensada para que descanses y explores Filandia a tu ritmo.',
+      titulo: 'serv.individual.titulo',
+      subtitulo: 'serv.individual.sub',
+      descripcion: 'serv.individual.desc',
       horario: '3:00 p. m. – 12:00 p. m.',
       capacidad: null,
-      precio: 'Desde $65.000 por persona',
+      precio: 'serv.individual.precio',
       incluye: null,
       disponibilidad: null,
       destacado: false,
     },
     {
       id: 'familiar',
-      titulo: 'Grupo Familiar',
-      subtitulo: 'Una experiencia pensada para familias',
-      descripcion: 'Una opción diseñada para familias y pequeños grupos que quieren compartir la experiencia de Filandia juntos.',
+      titulo: 'serv.familiar.titulo',
+      subtitulo: 'serv.familiar.sub',
+      descripcion: 'serv.familiar.desc',
       horario: '3:00 p. m. – 12:00 p. m.',
-      capacidad: '6 a 8 personas',
-      precio: 'Desde $51.000 por persona',
+      capacidad: 'serv.familiar.capacidad',
+      precio: 'serv.familiar.precio',
       incluye: null,
       disponibilidad: null,
       destacado: true,
     },
     {
       id: 'pasadia',
-      titulo: 'Pasadía',
-      subtitulo: 'Ideal para celebraciones y reuniones',
-      descripcion: 'Perfecto para cumpleaños, celebraciones familiares o simplemente disfrutar un día completo con familia y amigos.',
+      titulo: 'serv.pasadia.titulo',
+      subtitulo: 'serv.pasadia.sub',
+      descripcion: 'serv.pasadia.desc',
       horario: '10:00 a. m. – 8:00 p. m.',
-      capacidad: '10 a 15 personas',
+      capacidad: 'serv.pasadia.capacidad',
       precio: null,
       incluye: [
-        'Sala comedor',
-        'Una habitación',
-        'Baño social',
-        'Acceso al mezanine',
-        'Juegos de mesa',
-        'Mesa de ping pong',
+        'serv.incluye.comedor',
+        'serv.incluye.habitacion',
+        'serv.incluye.bano',
+        'serv.incluye.mezanine',
+        'serv.incluye.juegos',
+        'serv.incluye.pingpong',
       ],
-      disponibilidad: 'Disponible en temporada baja',
+      disponibilidad: 'serv.pasadia.disponibilidad',
       destacado: false,
     },
     {
       id: 'reuniones',
-      titulo: 'Reuniones de Grupo',
-      subtitulo: 'Espacio para equipos de trabajo',
-      descripcion: 'Un ambiente tranquilo y bien equipado para reuniones empresariales, laborales o de equipo.',
+      titulo: 'serv.reuniones.titulo',
+      subtitulo: 'serv.reuniones.sub',
+      descripcion: 'serv.reuniones.desc',
       horario: '8:00 a. m. – 6:00 p. m.',
       capacidad: null,
       precio: null,
       incluye: null,
-      disponibilidad: 'Disponible en temporada media y baja',
+      disponibilidad: 'serv.reuniones.disponibilidad',
       destacado: false,
     },
   ];
@@ -101,6 +103,22 @@ export class Servicios {
 
   setFiltro(cat: CategoriaLugar): void {
     this.filtroActivo = cat;
+  }
+
+  private readonly i18n = inject(TranslateService);
+
+  /** Descripción del lugar en el idioma elegido; en español (o sin traducción), la original. */
+  descripcionLugar(lugar: LugarTuristico): string {
+    const clave = `lugar.d${lugar.id}`;
+    const traducida = this.i18n.translate(clave);
+    return traducida === clave ? lugar.descripcion : traducida;
+  }
+
+  /** "5 min caminando" / "20 min en carro" en el idioma elegido. */
+  distanciaLugar(lugar: LugarTuristico): string {
+    const m = lugar.distancia.match(/^(\d+) min (caminando|en carro)$/);
+    if (!m) return lugar.distancia;
+    return this.i18n.translate(m[2] === 'caminando' ? 'serv.caminando' : 'serv.carro', { n: m[1] });
   }
 
   getEstrellas(cal: number): boolean[] {

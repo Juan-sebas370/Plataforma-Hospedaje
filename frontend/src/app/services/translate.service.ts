@@ -14,6 +14,8 @@ export interface Translation {
 export class TranslateService {
   private currentLang = signal<Language>('es');
   private translations: { [key: string]: Translation } = {};
+  /** Descarga del diccionario de cada idioma que no viene en el paquete inicial. */
+  private loaders: Partial<Record<Language, () => Promise<Translation>>> = {};
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
   
@@ -41,7 +43,29 @@ export class TranslateService {
     this.translations[lang] = translations;
   }
 
-  setLanguage(lang: Language): void {
+  setLoader(lang: Language, loader: () => Promise<Translation>): void {
+    this.loaders[lang] = loader;
+  }
+
+  /** Descarga el idioma guardado si aún no está (se llama al arrancar). */
+  async loadCurrent(): Promise<void> {
+    await this.load(this.currentLang());
+    this.currentLang$.next(this.currentLang());
+  }
+
+  private async load(lang: Language): Promise<void> {
+    const loader = this.loaders[lang];
+    if (this.translations[lang] || !loader) return;
+    try {
+      this.translations[lang] = await loader();
+    } catch {
+      // Sin conexión: se sigue mostrando en español (translate() cae al español)
+    }
+  }
+
+  /** Cambia de idioma cuando su diccionario ya está descargado. */
+  async setLanguage(lang: Language): Promise<void> {
+    await this.load(lang);
     this.currentLang.set(lang);
     this.currentLang$.next(lang);
     
@@ -57,12 +81,14 @@ export class TranslateService {
     return this.currentLang();
   }
 
-  translate(key: string): string {
+  /** Traduce una clave. Los parámetros reemplazan {nombre} en el texto: translate('x', { n: 2 }). */
+  translate(key: string, params?: Record<string, string | number>): string {
     const lang = this.currentLang();
     const value = this.findTranslation(this.translations[lang], key)
-      ?? this.findTranslation(this.translations['es'], key);
+      ?? this.findTranslation(this.translations['es'], key)
+      ?? key;
 
-    return value ?? key;
+    return params ? value.replace(/\{(\w+)\}/g, (m, p) => (p in params ? String(params[p]) : m)) : value;
   }
 
   private findTranslation(translation: Translation | undefined, key: string): string | undefined {

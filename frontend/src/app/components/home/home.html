@@ -28,32 +28,32 @@
       </div>
 
       <!-- Frente: la foto nítida, que cambia sola -->
-      <div class="hero-visor" role="group" aria-roledescription="carrusel" aria-label="Fotos del Hospedaje Sebastián"
+      <div class="hero-visor" role="group" aria-roledescription="carrusel" [attr.aria-label]="'inicio.portada.grupo' | translate"
            (mouseenter)="pausaTemporal.set(true)" (mouseleave)="pausaTemporal.set(false)"
            (focusin)="pausaTemporal.set(true)" (focusout)="pausaTemporal.set(false)">
         <div class="hero-marco">
           @for (f of fotosPortada; track f.src; let i = $index) {
             <img class="hero-foto" [src]="f.src" [style.object-position]="f.encuadre"
                  [class.active]="currentImageIndex === i"
-                 [alt]="f.alt" [attr.aria-hidden]="currentImageIndex !== i"
+                 [alt]="f.alt | translate" [attr.aria-hidden]="currentImageIndex !== i"
                  [attr.fetchpriority]="i === 0 ? 'high' : null" [attr.loading]="i === 0 ? null : 'lazy'" />
           }
-          <span class="hero-etiqueta" aria-hidden="true">{{ fotosPortada[currentImageIndex].etiqueta }}</span>
-          <span class="sr-only" aria-live="polite">Foto {{ currentImageIndex + 1 }} de {{ images.length }}: {{ fotosPortada[currentImageIndex].alt }}</span>
+          <span class="hero-etiqueta" aria-hidden="true">{{ fotosPortada[currentImageIndex].etiqueta | translate }}</span>
+          <span class="sr-only" aria-live="polite">{{ 'inicio.portada.fotoDe' | translate: { n: currentImageIndex + 1, total: images.length } }}: {{ fotosPortada[currentImageIndex].alt | translate }}</span>
 
           <div class="hero-controles">
-            <button type="button" class="hero-control" (click)="fotoAnterior()" aria-label="Foto anterior">
+            <button type="button" class="hero-control" (click)="fotoAnterior()" [attr.aria-label]="'inicio.portada.anterior' | translate">
               <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             </button>
             <button type="button" class="hero-control" (click)="alternarCarrusel()"
-                    [attr.aria-label]="carruselActivo() ? 'Pausar el cambio automático de fotos' : 'Reanudar el cambio automático de fotos'">
+                    [attr.aria-label]="(carruselActivo() ? 'inicio.portada.pausar' : 'inicio.portada.reanudar') | translate">
               @if (carruselActivo()) {
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg>
               } @else {
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M8 5.5v13l10.5-6.5z"/></svg>
               }
             </button>
-            <button type="button" class="hero-control" (click)="fotoSiguiente()" aria-label="Foto siguiente">
+            <button type="button" class="hero-control" (click)="fotoSiguiente()" [attr.aria-label]="'inicio.portada.siguiente' | translate">
               <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
@@ -84,35 +84,35 @@
         <div class="buscador-campo">
           <label for="b-adultos">
             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Adultos
+            {{ 'inicio.buscador.adultos' | translate }}
           </label>
           <select id="b-adultos" [(ngModel)]="busqueda.adultos">
             @for (n of getRange(20); track n) {
-              <option [ngValue]="n + 1">{{ n + 1 }} {{ n === 0 ? 'adulto' : 'adultos' }}</option>
+              <option [ngValue]="n + 1">{{ (n === 0 ? 'inicio.buscador.nAdulto' : 'inicio.buscador.nAdultos') | translate: { n: n + 1 } }}</option>
             }
           </select>
         </div>
         <div class="buscador-campo">
           <label for="b-ninos">
             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M17 13a3 3 0 1 0 0-6"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 16a5 5 0 0 1 6 5"/></svg>
-            Niños (4 a 10 años)
+            {{ 'inicio.buscador.ninos' | translate }}
           </label>
           <select id="b-ninos" [(ngModel)]="busqueda.ninos">
             @for (n of getRange(11); track n) {
-              <option [ngValue]="n">{{ n }} {{ n === 1 ? 'niño' : 'niños' }}</option>
+              <option [ngValue]="n">{{ (n === 1 ? 'inicio.buscador.nNino' : 'inicio.buscador.nNinos') | translate: { n: n } }}</option>
             }
           </select>
         </div>
         <div class="buscador-campo">
           <label for="b-tipo">
             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Tipo de reserva
+            {{ 'inicio.buscador.tipo' | translate }}
           </label>
           <select id="b-tipo" [(ngModel)]="busqueda.tipoReserva">
-            <option value="individual">Individual</option>
-            <option value="familiar">Familiar</option>
-            <option value="pasadia">Pasadía</option>
-            <option value="grupal">Grupo de trabajo</option>
+            <option value="individual">{{ 'inicio.buscador.individual' | translate }}</option>
+            <option value="familiar">{{ 'inicio.buscador.familiar' | translate }}</option>
+            <option value="pasadia">{{ 'inicio.buscador.pasadia' | translate }}</option>
+            <option value="grupal">{{ 'inicio.buscador.grupal' | translate }}</option>
           </select>
         </div>
         <button class="btn-buscar" type="button" (click)="buscarDisponibilidad()">
@@ -122,7 +122,7 @@
       </div>
 
       @if (errorBusqueda) {
-        <p class="buscador-error" id="b-error" role="alert">{{ errorBusqueda }}</p>
+        <p class="buscador-error" id="b-error" role="alert">{{ errorBusqueda | translate }}</p>
       }
 
     </div>
@@ -139,7 +139,7 @@
       @for (tipo of tiposReserva; track tipo.id) {
         <div class="tipo-card" [class.destacado]="tipo.destacado">
           @if (tipo.destacado) {
-            <span class="tipo-badge">Más popular</span>
+            <span class="tipo-badge">{{ 'inicio.tipos.masPopular' | translate }}</span>
           }
           <div class="tipo-icon">
             @if (tipo.icon === 'user') {
@@ -155,9 +155,9 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             }
           </div>
-          <h3>{{ tipo.nombre }}</h3>
-          <p>{{ tipo.descripcion }}</p>
-          <span class="tipo-precio">{{ tipo.precio }}</span>
+          <h3>{{ tipo.nombre | translate }}</h3>
+          <p>{{ tipo.descripcion | translate }}</p>
+          <span class="tipo-precio">{{ tipo.precio | translate }}</span>
           <a class="tipo-link" routerLink="/servicios">
             {{ 'home.viewDetails' | translate }}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -178,30 +178,30 @@
       @for (piso of pisos; track piso.nombre) {
         <div class="piso-card">
           <div class="piso-visual">
-            <div class="piso-numero">{{ piso.nombre }}</div>
-            <div class="piso-capacidad-badge">{{ piso.capacidadMin }}–{{ piso.capacidadMax }} personas</div>
+            <div class="piso-numero">{{ piso.nombre | translate }}</div>
+            <div class="piso-capacidad-badge">{{ 'inicio.pisos.rango' | translate: { min: piso.capacidadMin, max: piso.capacidadMax } }}</div>
           </div>
           <div class="piso-info">
-            <p class="piso-desc">{{ piso.descripcion }}</p>
+            <p class="piso-desc">{{ piso.descripcion | translate }}</p>
             <div class="piso-stats">
               <div class="piso-stat">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
-                <span>{{ piso.habitaciones }} habitaciones</span>
+                <span>{{ 'inicio.pisos.habitaciones' | translate: { n: piso.habitaciones } }}</span>
               </div>
               <div class="piso-stat">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg>
-                <span>{{ piso.camasDobles }} camas dobles</span>
+                <span>{{ 'inicio.pisos.camas' | translate: { n: piso.camasDobles } }}</span>
               </div>
               <div class="piso-stat">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-                <span>{{ piso.camarotes }} camarote{{ piso.camarotes > 1 ? 's' : '' }}</span>
+                <span>{{ (piso.camarotes > 1 ? 'inicio.pisos.camarotes' : 'inicio.pisos.camarote') | translate: { n: piso.camarotes } }}</span>
               </div>
               <div class="piso-stat">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span>Hasta {{ piso.capacidadMax }} huéspedes</span>
+                <span>{{ 'inicio.pisos.huespedes' | translate: { n: piso.capacidadMax } }}</span>
               </div>
             </div>
-            <a class="btn-piso" routerLink="/habitaciones" [queryParams]="{ piso: piso.nombre === 'Piso 1' ? 1 : 2 }">Ver {{ piso.nombre }}</a>
+            <a class="btn-piso" routerLink="/habitaciones" [queryParams]="{ piso: piso.numero }">{{ piso.ver | translate }}</a>
           </div>
         </div>
       }
@@ -209,19 +209,19 @@
       <!-- Casa completa — destacada -->
       <div class="piso-card piso-completo">
         <div class="piso-visual piso-completo-visual">
-          <span class="piso-estrella-badge">⭐ Recomendado</span>
-          <div class="piso-numero">Casa Completa</div>
-          <div class="piso-capacidad-badge">Hasta 20 personas</div>
+          <span class="piso-estrella-badge">⭐ {{ 'inicio.pisos.recomendado' | translate }}</span>
+          <div class="piso-numero">{{ 'inicio.pisos.casa' | translate }}</div>
+          <div class="piso-capacidad-badge">{{ 'inicio.pisos.hastaPersonas' | translate: { n: 20 } }}</div>
         </div>
         <div class="piso-info">
-          <p class="piso-desc">Reserva ambos pisos y disfruta de toda la casa con tu grupo. Máxima privacidad, cocina, mezanine y espacios comunes exclusivos.</p>
+          <p class="piso-desc">{{ 'inicio.pisos.descCasa' | translate }}</p>
           <div class="piso-stats">
-            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg><span>7 habitaciones</span></div>
-            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg><span>7 camas dobles</span></div>
-            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg><span>3 camarotes</span></div>
-            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Hasta 20 huéspedes</span></div>
+            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg><span>{{ 'inicio.pisos.habitaciones' | translate: { n: 7 } }}</span></div>
+            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/></svg><span>{{ 'inicio.pisos.camas' | translate: { n: 7 } }}</span></div>
+            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg><span>{{ 'inicio.pisos.camarotes' | translate: { n: 3 } }}</span></div>
+            <div class="piso-stat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>{{ 'inicio.pisos.huespedes' | translate: { n: 20 } }}</span></div>
           </div>
-          <a class="btn-piso btn-piso-completo" routerLink="/reservas" [queryParams]="{ tipo: 'familiar', espacio: 'completo' }">Reservar casa completa</a>
+          <a class="btn-piso btn-piso-completo" routerLink="/reservas" [queryParams]="{ tipo: 'familiar', espacio: 'completo' }">{{ 'inicio.pisos.reservarCasa' | translate }}</a>
         </div>
       </div>
     </div>
@@ -231,17 +231,17 @@
   <section class="galeria-section">
     <div class="galeria-header">
       <div class="section-header">
-        <span class="section-tag">Fotografías</span>
-        <h2>Conoce nuestro hospedaje</h2>
-        <p>Espacios diseñados para que te sientas como en casa</p>
+        <span class="section-tag">{{ 'inicio.galeria.etiqueta' | translate }}</span>
+        <h2>{{ 'inicio.galeria.titulo' | translate }}</h2>
+        <p>{{ 'inicio.galeria.subtitulo' | translate }}</p>
       </div>
     </div>
     <div class="galeria-grid">
       @for (foto of galeriaFotos; track foto.src; let i = $index) {
         <div class="galeria-item" [class.galeria-item--grande]="i === 0">
-          <img [src]="foto.src" [alt]="foto.alt" loading="lazy" />
+          <img [src]="foto.src" [alt]="foto.alt | translate: { n: foto.n }" loading="lazy" />
           <div class="galeria-overlay">
-            <span>{{ foto.alt }}</span>
+            <span>{{ foto.alt | translate: { n: foto.n } }}</span>
           </div>
         </div>
       }
@@ -249,7 +249,7 @@
     <div class="galeria-footer">
       <button class="btn-galeria" routerLink="/galeria">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Ver toda la galería
+        {{ 'inicio.galeria.verTodo' | translate }}
       </button>
     </div>
   </section>
@@ -258,32 +258,32 @@
   <section class="mezanine-section">
     <div class="mezanine-inner">
       <div class="mezanine-imagen">
-        <img src="assets/habitaciones/espacios/mezanine.jpg" alt="Mezanine Hospedaje Sebastián" loading="lazy" />
+        <img src="assets/habitaciones/espacios/mezanine.jpg" [alt]="'inicio.mezanine.alt' | translate" loading="lazy" />
       </div>
       <div class="mezanine-texto">
-        <span class="section-tag">Espacio único</span>
-        <h2>Un espacio para compartir</h2>
-        <p>Disfruta nuestro mezanine, juega una partida de ping pong o comparte un juego de mesa con familiares y amigos. El lugar perfecto para crear recuerdos durante tu visita a Filandia.</p>
+        <span class="section-tag">{{ 'inicio.mezanine.etiqueta' | translate }}</span>
+        <h2>{{ 'inicio.mezanine.titulo' | translate }}</h2>
+        <p>{{ 'inicio.mezanine.texto' | translate }}</p>
         <ul class="mezanine-lista">
           <li>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Acceso incluido en tu estadía
+            {{ 'inicio.mezanine.l1' | translate }}
           </li>
           <li>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Mesa de ping pong
+            {{ 'inicio.mezanine.l2' | translate }}
           </li>
           <li>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Juegos de mesa
+            {{ 'inicio.mezanine.l3' | translate }}
           </li>
           <li>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Espacio de entretenimiento
+            {{ 'inicio.mezanine.l4' | translate }}
           </li>
         </ul>
         <a class="btn-mezanine" routerLink="/galeria" [queryParams]="{ categoria: 'espacios' }">
-          Conocer nuestros espacios
+          {{ 'inicio.mezanine.boton' | translate }}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -293,9 +293,9 @@
   <!-- ══ SERVICIOS ══════════════════════════════════════════ -->
   <section class="servicios-section">
     <div class="section-header section-header-dark">
-      <span class="section-tag section-tag-light">Incluido</span>
-      <h2>Nuestros servicios</h2>
-      <p>Todo lo que necesitas para una estadía perfecta</p>
+      <span class="section-tag section-tag-light">{{ 'inicio.servicios.etiqueta' | translate }}</span>
+      <h2>{{ 'inicio.servicios.titulo' | translate }}</h2>
+      <p>{{ 'inicio.servicios.subtitulo' | translate }}</p>
     </div>
     <div class="servicios-grid">
       <!-- WiFi -->
@@ -303,48 +303,48 @@
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
         </div>
-        <h3>WiFi Gratuito</h3>
-        <p>Conectividad de alta velocidad en todas las áreas del hospedaje</p>
+        <h3>{{ 'inicio.servicios.wifi' | translate }}</h3>
+        <p>{{ 'inicio.servicios.wifiD' | translate }}</p>
       </div>
       <!-- Agua caliente -->
       <div class="servicio-card">
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6"/><path d="M6.34 7.34a8 8 0 1 0 11.31 0"/><path d="M8 12a4 4 0 0 0 8 0"/></svg>
         </div>
-        <h3>Agua Caliente</h3>
-        <p>Duchas con agua caliente disponibles las 24 horas del día</p>
+        <h3>{{ 'inicio.servicios.agua' | translate }}</h3>
+        <p>{{ 'inicio.servicios.aguaD' | translate }}</p>
       </div>
       <!-- Lavandería -->
       <div class="servicio-card">
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M6 7h.01M10 7h.01"/></svg>
         </div>
-        <h3>Lavandería</h3>
-        <p>Servicio de lavado disponible para que viajes ligero y cómodo</p>
+        <h3>{{ 'inicio.servicios.lavanderia' | translate }}</h3>
+        <p>{{ 'inicio.servicios.lavanderiaD' | translate }}</p>
       </div>
       <!-- Cocina -->
       <div class="servicio-card">
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
         </div>
-        <h3>Cocina Equipada</h3>
-        <p>Cocina completa con todos los utensilios para preparar tus alimentos</p>
+        <h3>{{ 'inicio.servicios.cocina' | translate }}</h3>
+        <p>{{ 'inicio.servicios.cocinaD' | translate }}</p>
       </div>
       <!-- Lencería -->
       <div class="servicio-card">
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>
         </div>
-        <h3>Lencería Completa</h3>
-        <p>Sábanas, cobijas, almohadas y toallas incluidas en tu estadía</p>
+        <h3>{{ 'inicio.servicios.lenceria' | translate }}</h3>
+        <p>{{ 'inicio.servicios.lenceriaD' | translate }}</p>
       </div>
       <!-- Sala de estar -->
       <div class="servicio-card">
         <div class="servicio-icon-wrap">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
         </div>
-        <h3>Sala de Estar</h3>
-        <p>Espacio común con televisor para descansar y compartir</p>
+        <h3>{{ 'inicio.servicios.sala' | translate }}</h3>
+        <p>{{ 'inicio.servicios.salaD' | translate }}</p>
       </div>
     </div>
   </section>
@@ -356,14 +356,14 @@
   <section class="pet-section">
     <div class="pet-inner">
       <div class="pet-icono-wrap">
-        <img src="assets/habitaciones/espacios/petfriendly.jpg" alt="Pet Friendly Hospedaje Sebastián" loading="lazy" />
+        <img src="assets/habitaciones/espacios/petfriendly.jpg" [alt]="'inicio.mascotas.alt' | translate" loading="lazy" />
       </div>
       <div class="pet-texto">
-        <span class="section-tag">Mascotas bienvenidas</span>
-        <h2>¿Viajas con tu mascota?</h2>
-        <p>En Hospedaje Sebastián somos pet friendly. Consulta nuestras habitaciones habilitadas para mascotas y conoce nuestras condiciones.</p>
+        <span class="section-tag">{{ 'inicio.mascotas.etiqueta' | translate }}</span>
+        <h2>{{ 'inicio.mascotas.titulo' | translate }}</h2>
+        <p>{{ 'inicio.mascotas.texto' | translate }}</p>
         <a class="btn-pet" routerLink="/servicios" fragment="mascotas">
-          Ver política de mascotas
+          {{ 'inicio.mascotas.boton' | translate }}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -381,54 +381,54 @@
   <section class="filandia-section">
     <div class="filandia-inner">
       <div class="filandia-texto">
-        <span class="section-tag">¿Dónde estamos?</span>
-        <h2>Descubre Filandia</h2>
-        <p>Hospedaje Sebastián está ubicado cerca del centro de Filandia, permitiéndote disfrutar fácilmente de sus calles, gastronomía, miradores y atractivos turísticos.</p>
+        <span class="section-tag">{{ 'inicio.filandia.etiqueta' | translate }}</span>
+        <h2>{{ 'inicio.filandia.titulo' | translate }}</h2>
+        <p>{{ 'inicio.filandia.texto' | translate }}</p>
         <ul class="filandia-lista">
           <li>
             <span class="filandia-icono"> </span>
             <div>
-              <strong>Parque principal</strong>
-              <span>2 cuadras</span>
+              <strong>{{ 'inicio.filandia.parque' | translate }}</strong>
+              <span>{{ 'inicio.filandia.cuadras' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="filandia-icono"> </span>
             <div>
-              <strong>Restaurantes</strong>
-              <span>≈ 5 minutos caminando</span>
+              <strong>{{ 'inicio.filandia.restaurantes' | translate }}</strong>
+              <span>{{ 'inicio.filandia.caminando5' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="filandia-icono"> </span>
             <div>
-              <strong>Miradores</strong>
-              <span>≈ 10 minutos caminando</span>
+              <strong>{{ 'inicio.filandia.miradores' | translate }}</strong>
+              <span>{{ 'inicio.filandia.caminando10' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="filandia-icono"> </span>
             <div>
               <strong>Armenia</strong>
-              <span>30 minutos</span>
+              <span>{{ 'inicio.filandia.min30' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="filandia-icono"> </span>
             <div>
               <strong>Pereira</strong>
-              <span>45 minutos</span>
+              <span>{{ 'inicio.filandia.min45' | translate }}</span>
             </div>
           </li>
         </ul>
         <div class="filandia-acciones">
           <button class="btn-filandia-primary" routerLink="/servicios">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Explorar Filandia
+            {{ 'inicio.filandia.explorar' | translate }}
           </button>
           <a class="btn-filandia-ghost" href="https://www.google.com/maps/search/Filandia+Quindio+Colombia" target="_blank" rel="noopener noreferrer">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-            Ver en Google Maps
+            {{ 'inicio.filandia.maps' | translate }}
           </a>
         </div>
       </div>
@@ -436,7 +436,7 @@
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15918.12!2d-75.6661!3d4.6737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e38865a3b8d1e3d%3A0x8d4d4d4d4d4d4d4d!2sFilandia%2C%20Quind%C3%ADo!5e0!3m2!1ses!2sco!4v1234567890"
           allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          title="Ubicación Filandia Quindío">
+          [title]="'inicio.filandia.mapa' | translate">
         </iframe>
       </div>
     </div>
@@ -445,22 +445,22 @@
   <!-- ══ TESTIMONIOS ════════════════════════════════════════ -->
   <section class="testimonios-section">
     <div class="section-header section-header-dark">
-      <span class="section-tag section-tag-light">Opiniones</span>
-      <h2>Lo que dicen nuestros huéspedes</h2>
+      <span class="section-tag section-tag-light">{{ 'inicio.opiniones.etiqueta' | translate }}</span>
+      <h2>{{ 'inicio.opiniones.titulo' | translate }}</h2>
     </div>
     <div class="testimonios-grid">
       @for (t of testimonios; track t.nombre) {
         <div class="testimonio-card">
-          <div class="testimonio-estrellas" role="img" [attr.aria-label]="t.estrellas + ' de 5 estrellas'">
+          <div class="testimonio-estrellas" role="img" [attr.aria-label]="'inicio.opiniones.estrellas' | translate: { n: t.estrellas }">
             @for (s of getRange(t.estrellas); track s) {
               <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="#D1902C" stroke="#D1902C" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             }
           </div>
-          <p class="testimonio-texto">"{{ t.texto }}"</p>
+          <p class="testimonio-texto">"{{ t.texto | translate }}"</p>
           <div class="testimonio-autor">
-            <div class="testimonio-avatar" aria-hidden="true">{{ t.nombre.charAt(0) }}</div>
+            <div class="testimonio-avatar" aria-hidden="true">{{ (t.nombre | translate).charAt(0) }}</div>
             <div>
-              <strong>{{ t.nombre }}</strong>
+              <strong>{{ t.nombre | translate }}</strong>
               <span>{{ t.ciudad }}</span>
             </div>
           </div>
@@ -472,11 +472,11 @@
   <!-- ══ CTA FINAL ══════════════════════════════════════════ -->
   <section class="cta-final">
     <div class="cta-content">
-      <h2>Tu próxima experiencia comienza en Filandia</h2>
-      <p>Reserva tu estadía y disfruta de un lugar pensado para descansar, compartir y descubrir el corazón del Quindío.</p>
+      <h2>{{ 'inicio.cierre.titulo' | translate }}</h2>
+      <p>{{ 'inicio.cierre.texto' | translate }}</p>
       <div class="cta-actions">
-        <a class="btn-cta-primary" routerLink="/reservas">Reservar ahora</a>
-        <a class="btn-cta-ghost" routerLink="/contacto">Hablar con nosotros</a>
+        <a class="btn-cta-primary" routerLink="/reservas">{{ 'inicio.cierre.reservar' | translate }}</a>
+        <a class="btn-cta-ghost" routerLink="/contacto">{{ 'inicio.cierre.hablar' | translate }}</a>
       </div>
     </div>
   </section>

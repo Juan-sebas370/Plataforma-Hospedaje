@@ -50,16 +50,13 @@
 
     <!-- Texto principal -->
     <div class="historia__texto">
-      <span class="historia__etiqueta">Detrás de esta página</span>
-      <h2 id="titulo-proyecto">Este sitio web fue creado con mucho esfuerzo y pasión</h2>
-      <p>
-        El desarrollo de esta página y de todo el proyecto fue realizado por una persona con discapacidad
-        auditiva, que encontró en la tecnología una forma de construir su futuro y emprender.
-      </p>
-      <p>Cada visita, reserva o recomendación también ayuda a que este sueño siga creciendo.</p>
+      <span class="historia__etiqueta">{{ 'historia.etiqueta' | translate }}</span>
+      <h2 id="titulo-proyecto">{{ 'historia.titulo' | translate }}</h2>
+      <p>{{ 'historia.p1' | translate }}</p>
+      <p>{{ 'historia.p2' | translate }}</p>
       <button type="button" class="historia__enlace" (click)="abrir()" aria-haspopup="dialog">
         <app-icono name="libro" [size]="20" [stroke]="1.8" />
-        <span>Conoce más sobre esta historia</span>
+        <span>{{ 'historia.boton' | translate }}</span>
         <app-icono name="arrow-right" [size]="18" [stroke]="2" />
       </button>
     </div>
@@ -67,11 +64,8 @@
     <!-- Tarjeta de apoyo -->
     <aside class="historia__apoyo" aria-labelledby="titulo-apoyo">
       <app-icono name="corazon" [size]="34" [stroke]="1.6" />
-      <h3 id="titulo-apoyo">Tu apoyo hace la diferencia</h3>
-      <p>
-        Al utilizar esta página web y ser parte de este proyecto, estás apoyando el desarrollo profesional y el
-        emprendimiento de una persona con discapacidad auditiva.
-      </p>
+      <h3 id="titulo-apoyo">{{ 'historia.apoyoTitulo' | translate }}</h3>
+      <p>{{ 'historia.apoyoTexto' | translate }}</p>
     </aside>
   </div>
 </section>
@@ -81,42 +75,32 @@
     <header class="ventana__cabecera">
       <span class="ventana__icono"><app-icono name="corazon" [size]="22" [stroke]="1.8" /></span>
       <div>
-        <h2 id="ventana-titulo">Mi historia, mi sueño de emprender</h2>
-        <p class="ventana__subtitulo">Una historia de aprendizaje, esfuerzo y nuevas oportunidades.</p>
+        <h2 id="ventana-titulo">{{ 'historia.ventanaTitulo' | translate }}</h2>
+        <p class="ventana__subtitulo">{{ 'historia.subtitulo' | translate }}</p>
       </div>
-      <button type="button" class="ventana__cerrar" (click)="cerrar()" aria-label="Cerrar" autofocus>
+      <button type="button" class="ventana__cerrar" (click)="cerrar()" [attr.aria-label]="'historia.cerrar' | translate" autofocus>
         <app-icono name="close" [size]="18" [stroke]="2.2" />
       </button>
     </header>
 
     <div class="ventana__cuerpo">
-      <p class="ventana__saludo">Hola, gracias por visitar este espacio y por interesarte en la historia que hay detrás de esta página web.</p>
-      <p>
-        Soy una persona con discapacidad auditiva y he encontrado en la tecnología y el desarrollo web una
-        oportunidad para aprender, crear y construir mi propio camino como emprendedor.
-      </p>
-      <p>
-        Crear esta página ha sido parte de un proceso de dedicación, aprendizaje y esfuerzo. Detrás de ella hay
-        muchas horas de trabajo y el deseo de sacar adelante un proyecto propio.
-      </p>
-      <p>
-        Cuando visitas esta página, reservas en nuestro hospedaje o la recomiendas a otras personas, también
-        contribuyes al crecimiento de mi emprendimiento y me animas a seguir aprendiendo y creando nuevas
-        oportunidades.
-      </p>
-      <p>Gracias por apoyar mi trabajo, confiar en nuestro hospedaje y ser parte de esta historia.</p>
+      <p class="ventana__saludo">{{ 'historia.saludo' | translate }}</p>
+      <p>{{ 'historia.c1' | translate }}</p>
+      <p>{{ 'historia.c2' | translate }}</p>
+      <p>{{ 'historia.c3' | translate }}</p>
+      <p>{{ 'historia.c4' | translate }}</p>
 
       <div class="ventana__cierre">
         <app-icono name="corazon" [size]="22" [stroke]="1.8" />
         <div>
-          <strong>Gracias por apoyar este sueño</strong>
-          <span>Tu confianza ayuda a que este emprendimiento siga creciendo.</span>
+          <strong>{{ 'historia.cierreTitulo' | translate }}</strong>
+          <span>{{ 'historia.cierreTexto' | translate }}</span>
         </div>
       </div>
 
       <div class="ventana__acciones">
-        <a class="btn-apoyo btn-apoyo--principal" routerLink="/reservas" (click)="cerrar()">Reservar una estadía</a>
-        <a class="btn-apoyo" routerLink="/contacto" (click)="cerrar()">Escribirnos</a>
+        <a class="btn-apoyo btn-apoyo--principal" routerLink="/reservas" (click)="cerrar()">{{ 'historia.reservar' | translate }}</a>
+        <a class="btn-apoyo" routerLink="/contacto" (click)="cerrar()">{{ 'historia.escribir' | translate }}</a>
       </div>
 
       <p class="ventana__firma">Hospedaje Sebastián · Filandia, Quindío</p>
