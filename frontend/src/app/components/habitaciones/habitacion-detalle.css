@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 2rem;
+  padding: calc(var(--alto-barra) + 1.5rem) 2rem 2rem;
   max-width: 1280px;
   margin: 0 auto;
 }
@@ -248,7 +248,7 @@
 
 @media (max-width: 680px) {
   .habitacion-detalle {
-    padding: 1.25rem;
+    padding: calc(var(--alto-barra) + 1rem) 1.25rem 1.25rem;
   }
 
   .detalle-card {

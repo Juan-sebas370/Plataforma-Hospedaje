@@ -5,45 +5,27 @@
     <img class="flag-icon" [src]="getCurrentLanguage().flag" alt="" />
     <span class="sr-only">Idioma: {{ getCurrentLanguage().name }},</span>
     <span class="lang-code">{{ getCurrentLanguage().code.toUpperCase() }}</span>
-    <span class="arrow" [class.open]="showDropdown" aria-hidden="true">▼</span>
+    <svg class="arrow" [class.open]="showDropdown" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
   </button>
 
   <!-- Language Dropdown Menu -->
-  <div id="lista-idiomas" class="language-dropdown" [class.show]="showDropdown">
-    <!-- Header -->
-    <div class="dropdown-header">
-      <svg aria-hidden="true" class="globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-      </svg>
-      <span class="header-text">{{ 'common.selectLanguage' | translate }}</span>
-    </div>
-
-    <!-- Language Options -->
-    <div class="language-list">
-      @for (lang of languages; track lang.code) {
-        <button
-          class="language-option"
-          [class.active]="currentLang === lang.code"
-          (click)="selectLanguage(lang.code)"
-          type="button"
-          [attr.aria-current]="currentLang === lang.code ? 'true' : null"
-          [attr.lang]="lang.code"
-        >
-          <img class="flag-large" [src]="lang.flag" alt="" />
-          <div class="lang-info">
-            <span class="code-badge" aria-hidden="true">{{ lang.code.toUpperCase() }}</span>
-            <span class="lang-name">{{ lang.name }}</span>
-          </div>
-          @if (currentLang === lang.code) {
-            <span class="checkmark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-          }
-        </button>
-      }
-    </div>
+  <div id="lista-idiomas" class="language-dropdown" [class.show]="showDropdown"
+    role="group" [attr.aria-label]="'common.selectLanguage' | translate">
+    @for (lang of languages; track lang.code) {
+      <button
+        class="language-option"
+        [class.active]="currentLang === lang.code"
+        (click)="selectLanguage(lang.code)"
+        type="button"
+        [attr.aria-current]="currentLang === lang.code ? 'true' : null"
+        [attr.lang]="lang.code"
+      >
+        <img class="flag-small" [src]="lang.flag" alt="" />
+        <span class="lang-name">{{ lang.name }}</span>
+        @if (currentLang === lang.code) {
+          <svg class="checkmark" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        }
+      </button>
+    }
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, HostListener, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, HostListener, PLATFORM_ID, afterNextRender, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -29,6 +29,21 @@ export class Nav {
   );
   private readonly bajoElInicio = signal(this.isBrowser && window.scrollY > 40);
   readonly transparente = computed(() => this.enInicio() && !this.bajoElInicio());
+
+  constructor() {
+    // La barra es fija y su alto cambia con el ancho y con el tamaño de letra: se publica
+    // en --alto-barra para que las páginas, los filtros fijos y el menú no queden tapados.
+    const host = inject(ElementRef<HTMLElement>);
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const barra = host.nativeElement.querySelector('.navbar') as HTMLElement;
+      const publicar = () => document.documentElement.style.setProperty('--alto-barra', `${Math.ceil(barra.getBoundingClientRect().height)}px`);
+      publicar();
+      const observador = new ResizeObserver(publicar);
+      observador.observe(barra);
+      destroyRef.onDestroy(() => observador.disconnect());
+    });
+  }
 
   @HostListener('window:scroll')
   alHacerScroll() {

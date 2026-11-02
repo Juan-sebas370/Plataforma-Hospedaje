@@ -52,6 +52,10 @@
   align-items: start;
 }
 
+/* Las columnas de la grilla pueden encogerse: un correo largo no ensancha la página */
+.contacto-content > * { min-width: 0; }
+.info-card a, .info-card p, .info-card span { overflow-wrap: anywhere; }
+
 /* Información de Contacto */
 .contacto-info {
   display: flex;

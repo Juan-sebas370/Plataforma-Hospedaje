@@ -1,7 +1,9 @@
 /* ══════════════════════════════════════════════
    HOSPEDAJE SEBASTIAN — Design Tokens
    ══════════════════════════════════════════════ */
+/* --alto-barra: alto real de la barra fija (lo actualiza nav.ts) */
 :root {
+  --alto-barra:    80px;
   --primary:       #0E5A9C;   /* Azul colonial */
   --primary-dark:  #0A3D6D;   /* Azul oscuro — hover / títulos */
   --accent:        #D1902C;   /* Dorado — botones / acentos */
