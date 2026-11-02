@@ -48,9 +48,8 @@
   padding: 2rem 2rem 1rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  position: sticky;
-  top: var(--alto-barra);
-  z-index: 10;
+  /* Se queda arriba de las fotos y se va al hacer scroll: fijo tapaba las imágenes en el celular */
+  position: relative;
 }
 
 .filtros-container {
