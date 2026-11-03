@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: 'Our Rooms',
-    sub: 'Two independent floors, 6 rooms, for groups of 2 to 20 people',
+    sub: 'Two independent floors, 7 rooms, for groups of 2 to 20 people',
     consultada: 'Availability checked',
     resumenBusqueda: '{a} adults · {n} children',
     alternativas: 'Available options for your group',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: 'FLOOR 2',
     hastaPersonas: 'Up to {n} people',
     desc1: 'Floor 1 has 3 rooms: 101, 102 and 103. It sleeps 8 people, with 3 double beds and 1 bunk bed.',
-    desc2: 'Floor 2 has 4 rooms: 201, 202, 203 and 204. It sleeps 12 people, with 2 double beds and 2 bunk beds.',
+    desc2: 'Floor 2 has 4 rooms: 201, 202, 203 and 204. It sleeps 12 people, with 4 double beds and 2 bunk beds.',
     mHabitaciones: 'Rooms',
     mPersonasL: 'People',
     mCamas: 'Double beds',

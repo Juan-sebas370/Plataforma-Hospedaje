@@ -107,7 +107,7 @@ export class Habitaciones implements OnInit, OnDestroy {
         'habs.desc2',
       habitaciones: 4,
       capacidad: 12,
-      camasDobles: 2,
+      camasDobles: 4,
       camarotes: 2,
       detalles: [
         {
@@ -487,7 +487,7 @@ export class Habitaciones implements OnInit, OnDestroy {
       {
         id: 5,
         numero: '201',
-        tipo: 'Individual',
+        tipo: 'Doble',
         piso: 2,
         capacidad: 4,
         precioNoche: 80000,

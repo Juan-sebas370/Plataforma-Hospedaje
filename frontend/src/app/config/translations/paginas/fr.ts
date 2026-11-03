@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: 'Nos chambres',
-    sub: 'Deux étages indépendants, 6 chambres, pour des groupes de 2 à 20 personnes',
+    sub: 'Deux étages indépendants, 7 chambres, pour des groupes de 2 à 20 personnes',
     consultada: 'Disponibilité consultée',
     resumenBusqueda: '{a} adultes · {n} enfants',
     alternativas: 'Options disponibles pour votre groupe',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: 'ÉTAGE 2',
     hastaPersonas: 'Jusqu’à {n} personnes',
     desc1: 'L’étage 1 compte 3 chambres : 101, 102 et 103. Il accueille 8 personnes, avec 3 lits doubles et 1 lit superposé.',
-    desc2: 'L’étage 2 compte 4 chambres : 201, 202, 203 et 204. Il accueille 12 personnes, avec 2 lits doubles et 2 lits superposés.',
+    desc2: 'L’étage 2 compte 4 chambres : 201, 202, 203 et 204. Il accueille 12 personnes, avec 4 lits doubles et 2 lits superposés.',
     mHabitaciones: 'Chambres',
     mPersonasL: 'Personnes',
     mCamas: 'Lits doubles',

@@ -381,7 +381,7 @@ CREATE INDEX idx_contacto_fecha ON contactos (fecha_creacion);
 
 INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
 SELECT * FROM (SELECT
-  '101', 'Individual', 1, 4, 80000.00,
+  '101', 'DOBLE', 1, 4, 80000.00,
   'Habitación principal del piso 1 con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor.',
   'DISPONIBLE', 0, 0, 1, 1, 0
 ) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '101');
@@ -402,7 +402,7 @@ SELECT * FROM (SELECT
 
 INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
 SELECT * FROM (SELECT
-  '201', 'Individual', 2, 4, 80000.00,
+  '201', 'DOBLE', 2, 4, 80000.00,
   'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
   'DISPONIBLE', 0, 0, 1, 1, 0
 ) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '201');
@@ -423,7 +423,7 @@ SELECT * FROM (SELECT
 
 INSERT INTO habitaciones (numero, tipo, piso, capacidad, precio_noche, descripcion, estado, climatizacion, television, wifi, bano, minibar)
 SELECT * FROM (SELECT
-  '204', 'Individual', 2, 4, 80000.00,
+  '204', 'DOBLE', 2, 4, 80000.00,
   'Habitación con cama doble y camarote. Baño privado, ideal para 4 personas en un ambiente acogedor y tranquilo.',
   'DISPONIBLE', 0, 0, 1, 1, 0
 ) AS tmp WHERE NOT EXISTS (SELECT 1 FROM habitaciones WHERE numero = '204');

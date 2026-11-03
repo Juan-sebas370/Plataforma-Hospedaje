@@ -74,7 +74,7 @@ export class HabitacionDetalle implements OnInit {
     {
       id: 10,
       numero: '201',
-      tipo: 'Individual',
+      tipo: 'Doble',
       piso: 2,
       capacidad: 4,
       precioNoche: 80000,

@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: '我们的客房',
-    sub: '两层独立楼层，6 间客房，可接待 2 至 20 人的团体',
+    sub: '两层独立楼层，7 间客房，可接待 2 至 20 人的团体',
     consultada: '已查询的空房情况',
     resumenBusqueda: '{a} 位成人 · {n} 名儿童',
     alternativas: '适合您团体的其他选择',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: '二楼',
     hastaPersonas: '最多 {n} 人',
     desc1: '一楼有 3 间客房：101、102 和 103。可住 8 人，有 3 张双人床和 1 张上下铺。',
-    desc2: '二楼有 4 间客房：201、202、203 和 204。可住 12 人，有 2 张双人床和 2 张上下铺。',
+    desc2: '二楼有 4 间客房：201、202、203 和 204。可住 12 人，有 4 张双人床和 2 张上下铺。',
     mHabitaciones: '客房',
     mPersonasL: '人数',
     mCamas: '双人床',

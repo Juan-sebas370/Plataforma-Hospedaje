@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: '객실 안내',
-    sub: '독립된 두 개 층, 객실 6개, 2~20명 단체 이용 가능',
+    sub: '독립된 두 개 층, 객실 7개, 2~20명 단체 이용 가능',
     consultada: '조회한 예약 가능 여부',
     resumenBusqueda: '성인 {a}명 · 어린이 {n}명',
     alternativas: '일행에게 맞는 다른 선택지',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: '2층',
     hastaPersonas: '최대 {n}명',
     desc1: '1층에는 101, 102, 103호 객실 3개가 있습니다. 최대 8명이 머물 수 있으며 더블 침대 3개와 2층 침대 1개가 있습니다.',
-    desc2: '2층에는 201, 202, 203, 204호 객실 4개가 있습니다. 최대 12명이 머물 수 있으며 더블 침대 2개와 2층 침대 2개가 있습니다.',
+    desc2: '2층에는 201, 202, 203, 204호 객실 4개가 있습니다. 최대 12명이 머물 수 있으며 더블 침대 4개와 2층 침대 2개가 있습니다.',
     mHabitaciones: '객실',
     mPersonasL: '인원',
     mCamas: '더블 침대',

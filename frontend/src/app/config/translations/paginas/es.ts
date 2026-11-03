@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: 'Nuestras Habitaciones',
-    sub: 'Dos pisos independientes, 6 habitaciones, para grupos de 2 a 20 personas',
+    sub: 'Dos pisos independientes, 7 habitaciones, para grupos de 2 a 20 personas',
     consultada: 'Disponibilidad consultada',
     resumenBusqueda: '{a} adultos · {n} niños',
     alternativas: 'Alternativas disponibles para tu grupo',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: 'PISO 2',
     hastaPersonas: 'Hasta {n} personas',
     desc1: 'En el piso 1 se encuentran 3 habitaciones: 101, 102 y 103. Tiene capacidad para 8 personas, 3 camas dobles y 1 camarote.',
-    desc2: 'En el piso 2 se encuentran 4 habitaciones: 201, 202, 203 y 204. Tiene capacidad para 12 personas, 2 camas dobles y 2 camarotes.',
+    desc2: 'En el piso 2 se encuentran 4 habitaciones: 201, 202, 203 y 204. Tiene capacidad para 12 personas, 4 camas dobles y 2 camarotes.',
     mHabitaciones: 'Habitaciones',
     mPersonasL: 'Personas',
     mCamas: 'Camas dobles',

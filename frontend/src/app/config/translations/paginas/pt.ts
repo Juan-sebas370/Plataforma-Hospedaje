@@ -247,7 +247,7 @@ export const paginas: Translation = {
   },
   habs: {
     titulo: 'Nossos quartos',
-    sub: 'Dois andares independentes, 6 quartos, para grupos de 2 a 20 pessoas',
+    sub: 'Dois andares independentes, 7 quartos, para grupos de 2 a 20 pessoas',
     consultada: 'Disponibilidade consultada',
     resumenBusqueda: '{a} adultos · {n} crianças',
     alternativas: 'Opções disponíveis para seu grupo',
@@ -290,7 +290,7 @@ export const paginas: Translation = {
     piso2: 'ANDAR 2',
     hastaPersonas: 'Até {n} pessoas',
     desc1: 'No andar 1 ficam 3 quartos: 101, 102 e 103. Comporta 8 pessoas, com 3 camas de casal e 1 beliche.',
-    desc2: 'No andar 2 ficam 4 quartos: 201, 202, 203 e 204. Comporta 12 pessoas, com 2 camas de casal e 2 beliches.',
+    desc2: 'No andar 2 ficam 4 quartos: 201, 202, 203 e 204. Comporta 12 pessoas, com 4 camas de casal e 2 beliches.',
     mHabitaciones: 'Quartos',
     mPersonasL: 'Pessoas',
     mCamas: 'Camas de casal',
