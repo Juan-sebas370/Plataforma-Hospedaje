@@ -8,7 +8,7 @@ export const environment = {
 
   // false mientras el hospedaje se formaliza: se muestra el aviso "aún no recibimos
   // reservas" y /reservas y /pagos quedan cerradas (el backend también las rechaza).
-  reservasHabilitadas: false,
+  reservasHabilitadas: true,
 
   // Timeouts
   requestTimeout: 30000,
