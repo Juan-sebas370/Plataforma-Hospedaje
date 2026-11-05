@@ -728,3 +728,13 @@
 .spin {
   animation: spin 1s linear infinite;
 }
+
+.campo-error {
+  margin: .35rem 0 0;
+  font-size: .85rem;
+  color: #B42318;
+}
+
+.form-group input[aria-invalid="true"] {
+  border-color: #B42318;
+}

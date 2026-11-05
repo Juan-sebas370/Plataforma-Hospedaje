@@ -1,0 +1,214 @@
+{
+  "fecha": "2026-11-05T20:11:16.743Z",
+  "sitio": "http://localhost:4310",
+  "navegador": "msedge 156.0.4314.58",
+  "reservasHabilitadas": true,
+  "aprobadas": 19,
+  "total": 19,
+  "resultados": [
+    {
+      "codigo": "WEB-01",
+      "pantalla": "Inicio",
+      "descripcion": "El inicio carga con su contenido y sin el aviso de \"aún no recibimos reservas\" (las reservas están activas).",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.01-inicio.png"
+      ],
+      "ms": 2459
+    },
+    {
+      "codigo": "WEB-02",
+      "pantalla": "Menú",
+      "descripcion": "El menú tiene las 6 secciones públicas y ninguna opción de iniciar sesión, registrarse o perfil.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.02-menu.png"
+      ],
+      "ms": 1765
+    },
+    {
+      "codigo": "WEB-03",
+      "pantalla": "Habitaciones",
+      "descripcion": "Muestra las habitaciones con foto, los filtros por piso y la opción de casa completa.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.03-habitaciones.png"
+      ],
+      "ms": 2200
+    },
+    {
+      "codigo": "WEB-04",
+      "pantalla": "Habitaciones",
+      "descripcion": "El filtro \"Piso 2\" deja solo las habitaciones del segundo piso.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.04-filtro-piso-2.png"
+      ],
+      "ms": 2582
+    },
+    {
+      "codigo": "WEB-05",
+      "pantalla": "Habitaciones",
+      "descripcion": "\"Ver detalle\" abre la ficha de la habitación con sus fotos, capacidad, cama, baño y precio.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.05-detalle-habitacion.png"
+      ],
+      "ms": 2687
+    },
+    {
+      "codigo": "WEB-06",
+      "pantalla": "Galería",
+      "descripcion": "La galería carga las fotos del hospedaje sin imágenes rotas.",
+      "estado": "Aprobada",
+      "detalle": "19 fotos cargadas",
+      "evidencias": [
+        "figura-8.06-galeria.png"
+      ],
+      "ms": 2993
+    },
+    {
+      "codigo": "WEB-07",
+      "pantalla": "Servicios",
+      "descripcion": "La página de servicios carga.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.07-servicios.png"
+      ],
+      "ms": 2062
+    },
+    {
+      "codigo": "WEB-08",
+      "pantalla": "Contacto",
+      "descripcion": "Con el formulario vacío, el botón \"Enviar Mensaje\" está deshabilitado.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.08-contacto-vacio.png"
+      ],
+      "ms": 17299
+    },
+    {
+      "codigo": "WEB-09",
+      "pantalla": "Contacto",
+      "descripcion": "Con un correo mal escrito (\"correo-sin-arroba\") el formulario no se puede enviar.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.09-contacto-correo-invalido.png"
+      ],
+      "ms": 17794
+    },
+    {
+      "codigo": "WEB-10",
+      "pantalla": "Reservas",
+      "descripcion": "Muestra el asistente de reserva con sus 4 pasos (Tu viaje, Tu espacio, Tus datos, Confirmar y pagar).",
+      "estado": "Aprobada",
+      "detalle": "Pasos: Tu viaje → Tu espacio → Tus datos → Confirmar y pagar",
+      "evidencias": [
+        "figura-8.10-reservas.png"
+      ],
+      "ms": 2638
+    },
+    {
+      "codigo": "WEB-11",
+      "pantalla": "Pagos",
+      "descripcion": "Sin una reserva no se puede pagar: /pagos sin reserva avisa que no la encontró y no muestra el botón de pago.",
+      "estado": "Aprobada",
+      "detalle": "Mensaje: \"No se encontró el ID de la reserva.\"",
+      "evidencias": [
+        "figura-8.17-pagos-sin-reserva.png"
+      ],
+      "ms": 1802
+    },
+    {
+      "codigo": "WEB-12",
+      "pantalla": "Políticas",
+      "descripcion": "La página de políticas y reglamento carga.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.11-politicas.png"
+      ],
+      "ms": 2076
+    },
+    {
+      "codigo": "WEB-13",
+      "pantalla": "Idiomas",
+      "descripcion": "Hay 6 idiomas y al cambiar a inglés el menú se traduce.",
+      "estado": "Aprobada",
+      "detalle": "Menú en inglés: Home, Rooms, Gallery, Services, Contact, Reservations",
+      "evidencias": [
+        "figura-8.12-idioma-ingles.png"
+      ],
+      "ms": 3782
+    },
+    {
+      "codigo": "WEB-14",
+      "pantalla": "Accesibilidad",
+      "descripcion": "El panel de accesibilidad abre y aumenta el tamaño del texto.",
+      "estado": "Aprobada",
+      "detalle": "Texto de 16px a 18px",
+      "evidencias": [
+        "figura-8.13-accesibilidad.png"
+      ],
+      "ms": 3216
+    },
+    {
+      "codigo": "WEB-15",
+      "pantalla": "Asistente",
+      "descripcion": "El asistente de ayuda abre con el saludo y responde una pregunta frecuente.",
+      "estado": "Aprobada",
+      "detalle": "Respuesta: \"Check-in de 3:00 p.m. a 10:00 p.m. y check-out hasta las 12:00 m. Pasadías de 10:00 a.m. a…\"",
+      "evidencias": [
+        "figura-8.14-asistente.png"
+      ],
+      "ms": 3699
+    },
+    {
+      "codigo": "WEB-16",
+      "pantalla": "Sin inicio de sesión",
+      "descripcion": "La dirección /login no existe y lleva al inicio: la página web no tiene inicio de sesión.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [],
+      "ms": 1684
+    },
+    {
+      "codigo": "WEB-17",
+      "pantalla": "Celular",
+      "descripcion": "En vista de celular (390×844) el menú se abre con el botón de hamburguesa.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [
+        "figura-8.15-celular-menu.png"
+      ],
+      "ms": 2486
+    },
+    {
+      "codigo": "WEB-18",
+      "pantalla": "Prerenderizado",
+      "descripcion": "Inicio, Habitaciones, Galería y Servicios traen su contenido en el HTML: funcionan para buscadores y aunque el API esté caído.",
+      "estado": "Aprobada",
+      "detalle": "/: 6934 caracteres · /habitaciones: 4782 caracteres · /galeria: 2428 caracteres · /servicios: 7198 caracteres",
+      "evidencias": [],
+      "ms": 74
+    },
+    {
+      "codigo": "WEB-19",
+      "pantalla": "Transversal",
+      "descripcion": "Ninguna pantalla recorrida dejó errores de JavaScript en la consola.",
+      "estado": "Aprobada",
+      "detalle": "",
+      "evidencias": [],
+      "ms": 0
+    }
+  ],
+  "revisionRutasDW2": "figura-8.16-reset-password.png"
+}

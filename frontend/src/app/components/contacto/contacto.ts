@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../shared/translate.pipe';
 import { ContactoService, ContactoRequest } from '../../services/contacto.service';
+import { ValidadorUtils } from '../../utils/validadores';
 
 type EstadoEnvio = 'idle' | 'enviando' | 'ok' | 'error';
 
@@ -103,11 +104,18 @@ export class Contacto {
   get enviado():  boolean  { return this.estadoEnvio === 'ok';       }
   get hayError(): boolean  { return this.estadoEnvio === 'error';    }
 
+  /** Hay un correo escrito pero sin formato válido (ej. "correo-sin-arroba"). */
+  get emailInvalido(): boolean {
+    const email = this.form.email.trim();
+    return !!email && !ValidadorUtils.validarEmail(email);
+  }
+
   // ── Formulario válido ─────────────────────────────────────
   get formularioValido(): boolean {
     return !!(
       this.form.nombre.trim() &&
       this.form.email.trim()  &&
+      !this.emailInvalido     &&
       this.form.asunto        &&
       this.form.mensaje.trim() &&
       this.form.politica
